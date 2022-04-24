@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         height: "calc(100vh - 112px)",
         [theme.breakpoints.down('sm')]: {
-            height: "calc(100vh - 373px)",
+            height: "calc(100vh - 273px)",
         },
     },
     colabTile: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
         height: "200px",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
         borderRadius: generalStyles.borderRadius,
         cursor: "pointer",
         flexDirection: "column",
