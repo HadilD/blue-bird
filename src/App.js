@@ -18,6 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import AboutUs from './AboutUs';
+import { generalStyles } from './generalStyles';
 
 const drawerWidth = 240;
 
@@ -78,14 +79,10 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
-  const style = {
-    background: '#2E3B55',
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar className={style} position="fixed" open={open}>
+      <AppBar style={{ backgroundColor: generalStyles.primaryColor }} position="fixed" open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
