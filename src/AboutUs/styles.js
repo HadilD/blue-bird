@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import { generalStyles } from '../generalStyles';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         width: "100%",
         display: "flex",
@@ -9,6 +9,9 @@ const useStyles = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         height: "calc(100vh - 112px)",
+        [theme.breakpoints.down('sm')]: {
+            height: "calc(100vh - 373px)",
+        },
     },
     colabTile: {
         backgroundColor: "#bfd7ea",
@@ -21,6 +24,9 @@ const useStyles = makeStyles({
         cursor: "pointer",
         flexDirection: "column",
         margin: "0px 0px 10px 0px",
+        [theme.breakpoints.down('sm')]: {
+            width: "80%",
+        },
     },
     colabImg: {
         width: "150px",
@@ -39,6 +45,6 @@ const useStyles = makeStyles({
         fontSize: 25,
         fontFamily: generalStyles.openSans,
     },
-})
+}))
 
 export default useStyles
