@@ -1,7 +1,6 @@
 import React from 'react'
 import { Typography } from '@mui/material';
 import useStyles from './styles';
-import deepakImage from "./../images/deepak.png"
 
 const AboutUs = () => {
 
