@@ -11,7 +11,9 @@ To run this Project, follow the commands below:
 
 - Deepak Heman Das (Team Lead)
 - Mutee ur Rehman (Frontend Lead)
-- Gulshair Butt (Backend Lead)
+- Gul shair Butt (Backend Lead)
+  email: gul-shair.butt1@informatik.hs-fulda.de
+  Github username: segullshairbutt
 - Hadil Bader (Git Master)
 - Trushar Mandaviya - TBD
 
