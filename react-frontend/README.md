@@ -9,7 +9,9 @@ To run this Project, follow the commands below:
 
 ## Contributing
 
-- Deepak Heman Das (Team Lead)
+- <b>Deepak Heman Das (Team Lead)</b> </br>
+  email: deepak.heman-das@informatik.hs-fulda.de</br>
+  Github username: deepakrajpal27</br>
 - Mutee ur Rehman (Frontend Lead)
 - <b>Gul shair Butt (Backend Lead)</b> </br>
   email: gul-shair.butt1@informatik.hs-fulda.de</br>
