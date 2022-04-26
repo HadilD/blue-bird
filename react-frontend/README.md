@@ -12,7 +12,9 @@ To run this Project, follow the commands below:
 - <b>Deepak Heman Das (Team Lead)</b> </br>
   email: deepak.heman-das@informatik.hs-fulda.de</br>
   Github username: deepakrajpal27</br>
-- Mutee ur Rehman (Frontend Lead)
+- <b>Mutee ur Rehman (Frontend Lead)</b> </br>
+  email: mutee.ur-rehman@informatik.hs-fulda.de</br>
+  Github username: murrehman</br>
 - <b>Gul shair Butt (Backend Lead)</b> </br>
   email: gul-shair.butt1@informatik.hs-fulda.de</br>
   Github username: segullshairbutt</br>
