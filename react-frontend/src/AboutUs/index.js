@@ -9,12 +9,26 @@ const AboutUs = () => {
             name: "Deepak Heman Das",
             pos: "Team Lead",
             link: "https://deepakrajpal27.github.io/",
-            // image: "./../"
         },
         {
             name: "Gulshair Butt",
             pos: "Backend Lead",
             link: "https://segullshairbutt.github.io/"
+        },
+        {
+            name: "Mutee Ur Rehman",
+            pos: "Frontend Lead",
+            link: "https://murrehman.github.io/CV/"
+        },
+        {
+            name: "Hadil Bader",
+            pos: "Git Master",
+            link: "https://hadild.github.io/",
+        },
+        {
+            name: "Trushar Mandaviya",
+            pos: "Backend Developer",
+            link: "https://trushar07.github.io/CV/"
         }
     ]
 
@@ -28,7 +42,7 @@ const AboutUs = () => {
                 </div> */}
             {
                 colabList.map((item, index) => {
-                    return <div key={index} onClick={() => window.location.href = item.link} className={classes.colabTile}>
+                    return <div key={index} onClick={() => window.location.href = item.link && item.link} className={classes.colabTile}>
                         <div className={classes.colabDetails}>
                             <Typography className={classes.colabName}>{item.name}</Typography>
                             <Typography className={classes.colabTitle}>{item.pos}</Typography>

@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     colabTile: {
         backgroundColor: "#bfd7ea",
         width: "30%",
-        height: "200px",
+        // height: "200px",
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
