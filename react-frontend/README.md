@@ -19,7 +19,9 @@ To run this Project, follow the commands below:
   email: gul-shair.butt1@informatik.hs-fulda.de</br>
   Github username: segullshairbutt</br>
 - Hadil Bader (Git Master)
-- Trushar Mandaviya - TBD
+- <b>Trushar Shaileshbhai Mandaviya (Backend Developer)<b></br>
+  email: trushar-shaileshbhai.mandaviya@informatik.hs-fulda.de</br>
+  Github username: Trushar07</br>
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
