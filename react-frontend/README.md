@@ -18,7 +18,9 @@ To run this Project, follow the commands below:
 - <b>Gul shair Butt (Backend Lead)</b> </br>
   email: gul-shair.butt1@informatik.hs-fulda.de</br>
   Github username: segullshairbutt</br>
-- Hadil Bader (Git Master)
+- <b>Hadil Bader (Git Master)</b> </br>
+  email: hadil.bader@informatik.hs-fulda.de</br>
+  Github username: HadilD</br>
 - <b>Trushar Shaileshbhai Mandaviya (Backend Developer)</b></br>
   email: trushar-shaileshbhai.mandaviya@informatik.hs-fulda.de</br>
   Github username: Trushar07</br>
