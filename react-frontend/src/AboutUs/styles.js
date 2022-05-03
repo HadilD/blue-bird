@@ -23,11 +23,12 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gridColumn: "2",
-        gridRow: "1",
         backgroundColor: "#bfd7ea",
         borderRadius: generalStyles.borderRadius,
         cursor: "pointer",
+        width: '30%',
+        marginLeft: '1%',
+        marginRight: '1%'
     },
     two: {
         display: "flex",
@@ -94,6 +95,23 @@ const useStyles = makeStyles(theme => ({
         fontSize: 25,
         fontFamily: generalStyles.openSans,
     },
+    container: {
+        display: 'flex', 
+        flexDirection: 'column'
+    },
+    subContainer: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-around',
+    },
+    moduleHeadingContainer: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginTop: '10%', 
+        marginBottom: '10%'
+    }
 }))
 
 export default useStyles
