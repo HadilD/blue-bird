@@ -1,5 +1,0 @@
-node_modules
-build
-.firebase
-!build/build.xml
-.idea
