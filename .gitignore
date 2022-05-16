@@ -1,5 +1,2 @@
 .idea
-django_backend/env/
-django_backend/.env
-django_backend/db.sqlite3
-django_backend/__pycache__/
+env
