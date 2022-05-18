@@ -5,14 +5,21 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from "@mui/styles"
 import { createTheme, } from "@mui/material/styles"
+import { store } from './redux/store/store'
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 let theme = createTheme();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <Router>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
