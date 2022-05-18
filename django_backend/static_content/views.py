@@ -45,4 +45,4 @@ class MediaListCreateView(ListCreateAPIView):
         if ext:
             final_media |= all_media.filter(uri__endswith=ext).order_by("id")
 
-        return Response(UploadedMediaSerializer(final_media, many=True).data)
+        return Response(UploadedMediaSerializer(all_media | final_media, many=True).data)
