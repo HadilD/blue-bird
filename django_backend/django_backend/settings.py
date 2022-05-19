@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    'vp'
+    'vp',
+    'static_content'
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# S3 BUCKET CREDENTIALS
+AWS_ACCESS_KEY = config("AWS_ACCESS_KEY")
+AWS_SECRET_KEY = config("AWS_SECRET_KEY")
+AWS_BUCKET_NAME = config("AWS_BUCKET_NAME")
