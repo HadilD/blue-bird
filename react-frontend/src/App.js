@@ -16,6 +16,7 @@ import About from './pages/about'
 import { useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
 import { Routes, Route } from 'react-router-dom'
+import VerticalPrototype from './pages/verticalPrototype';
 
 const drawerWidth = 240;
 
@@ -118,11 +119,13 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/about' element={<About />} />
-          </Routes>
+        <Routes>
+          {/* <Route path='/' element={<Home />} /> */}
+          <Route path='/' element={<VerticalPrototype />} />
+          <Route path='/about' element={<About />} />
+          {/* <Route path='/vertical-prototype' element={<VerticalPrototype />} /> */}
+        </Routes>
       </Main>
-    </Box>
+    </Box >
   );
 }
