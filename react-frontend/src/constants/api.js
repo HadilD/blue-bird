@@ -8,6 +8,7 @@ const PathPram = {
 
 const Request = {
   GET_USERS: 'users/',
+  UPLOAD_MEDIA: 'api/media'
 }
 
 export {
