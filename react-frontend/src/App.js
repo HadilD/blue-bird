@@ -120,10 +120,9 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <DrawerHeader />
         <Routes>
-          {/* <Route path='/' element={<Home />} /> */}
-          <Route path='/' element={<VerticalPrototype />} />
+          <Route path='/' element={<Home />} />
           <Route path='/about' element={<About />} />
-          {/* <Route path='/vertical-prototype' element={<VerticalPrototype />} /> */}
+          <Route path='/vertical-prototype' element={<VerticalPrototype />} />
         </Routes>
       </Main>
     </Box >
