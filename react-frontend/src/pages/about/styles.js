@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { generalStyles } from '../generalStyles';
+import { generalStyles } from '../../generalStyles';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -96,22 +96,22 @@ const useStyles = makeStyles(theme => ({
         fontFamily: generalStyles.openSans,
     },
     container: {
-        display: 'flex', 
+        display: 'flex',
         flexDirection: 'column'
     },
     subContainer: {
-        display: 'flex', 
-        flexDirection: 'row', 
+        display: 'flex',
+        flexDirection: 'row',
         justifyContent: 'space-around',
     },
     moduleHeadingContainer: {
-        display: 'flex', 
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        marginTop: '10%', 
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '10%',
         marginBottom: '10%'
-    }
+    },
 }))
 
 export default useStyles
