@@ -4,7 +4,6 @@ from static_content.models import UploadedMedia, Video
 
 
 class UploadedMediaSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UploadedMedia
         fields = "name", "uri"

@@ -19,4 +19,4 @@ class UploadedMediaForm(forms.ModelForm):
 
     class Meta:
         model = UploadedMedia
-        exclude = "uri",
+        exclude = ("uri",)

@@ -12,7 +12,7 @@ class UploadedMediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UploadedMedia
-        fields = "id", "name", "url", "created_at"
+        fields = "id", "name", "url", "content_type", "created_at"
 
 
 class UploadedMediaCreateSerializer(serializers.ModelSerializer):

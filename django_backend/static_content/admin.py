@@ -10,20 +10,24 @@ class UploadedMediaModelAdmin(admin.ModelAdmin):
     list_display = "name", "uri", "get_url", "created_at"
     fields = "name", "thumbnail_preview", "image", "created_at"
     readonly_fields = "created_at", "thumbnail_preview"
-    list_display_links = "name",
+    list_display_links = ("name",)
     sortable_by = "created_at"
 
     form = UploadedMediaForm
 
     def get_url(self, obj):
         url = get_public_link(obj.uri)
-        return format_html("""<a target='_blank' href='{0}'><img width="20px" src='{0}'/></a>""", url)
+        return format_html(
+            """<a target='_blank' href='{0}'><img width="20px" src='{0}'/></a>""", url
+        )
 
     get_url.short_description = "Preview & Link"
 
     def thumbnail_preview(self, obj):
         url = get_public_link(obj.uri)
-        return format_html("""<a target="_blank" href="{0}"><img width="100px" src='{0}'/></a>""", url)
+        return format_html(
+            """<a target="_blank" href="{0}"><img width="100px" src='{0}'/></a>""", url
+        )
 
     thumbnail_preview.short_description = "Preview"
 
