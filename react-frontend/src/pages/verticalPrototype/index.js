@@ -7,6 +7,7 @@ import { Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import UploadModal from '../../components/uploadModal'
 import { setUploadModal } from '../../redux/slice/uploadModal'
+import SearchBar from '../../components/searchBar';
 
 const VerticalPrototype = () => {
 
@@ -19,8 +20,12 @@ const VerticalPrototype = () => {
         dispatch(setPageName("Home"))
     })
 
-    async function fetchMedia() {
-        const response = await getMedia()
+    const fetchMedia = async(searchTerm=null, category=null) => {
+        let params={}
+        if (searchTerm !== null && searchTerm !== '') params['name'] = searchTerm
+        if (category !== 'all' && category !== null) params['type'] = category
+        console.log('Params:', params)
+        const response = await getMedia(params)
         setMedia(response);
     }
 
@@ -36,21 +41,26 @@ const VerticalPrototype = () => {
     console.log({displayUploadModal})
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-            {
-                displayUploadModal
-                ?
-                    <UploadModal closeModal={closeModal} />
-                : 
-                    null
-            }
-            {(media && media.length !== 0) && media.map((mediaItem, index) => {
-                return <div key={index} className={classes.imageCard} >
-                    <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.url} />
-                    <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
-                </div>
-            })}
+        <div className={classes.container}>
+            <SearchBar fetchMedia={fetchMedia}/>
+            <div className={classes.root}>
+                {
+                    displayUploadModal
+                    ?
+                        <UploadModal closeModal={closeModal} />
+                    : 
+                        null
+                }
+                {(media && media.length !== 0) && media.map((mediaItem, index) => {
+                    return <div key={index} className={classes.imageCard} >
+                        <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.url} />
+                        <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
+                    </div>
+                })}
+            </div>
         </div>
+
+        
     )
 }
 
