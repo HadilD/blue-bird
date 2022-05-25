@@ -2,6 +2,13 @@ import { makeStyles } from '@mui/styles';
 // import { generalStyles } from '../../generalStyles';
 
 const useStyles = makeStyles(theme => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     root: {
         display: "flex",
         flexWrap: "wrap",
