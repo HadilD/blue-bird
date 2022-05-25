@@ -1,11 +1,16 @@
 from rest_framework import status
 from rest_framework.exceptions import UnsupportedMediaType
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
 from static_content.models import UploadedMedia
 from static_content.s3_service import upload_file
 from static_content.serializers import UploadedMediaSerializer
+
+
+class MediaRetreiveAPIView(RetrieveAPIView):
+    serializer_class = UploadedMediaSerializer
+    queryset = UploadedMedia.objects.all()
 
 
 class MediaListCreateView(ListCreateAPIView):
