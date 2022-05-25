@@ -43,7 +43,7 @@ class MediaListCreateView(ListCreateAPIView):
         try:
             file = request.data.get("file")
             # if file.content_type == 'image/png' or file.content_type == 'image/jpeg':
-            if file.content_type in allowed_file_types:
+            if file and file.content_type in allowed_file_types:
                 file_name = request.data.get("name", file.name)
 
                 uploaded_uri = upload_file(file)
