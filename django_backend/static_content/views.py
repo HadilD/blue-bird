@@ -73,15 +73,14 @@ class MediaListCreateView(ListCreateAPIView):
         if name:
             final_media |= all_media.filter(name__icontains=name).order_by("id")
 
-        ext = request.GET.get("ext")
-        if ext:
-            final_media |= all_media.filter(uri__endswith=ext).order_by("id")
-
         media_type = request.GET.get("type")
         if media_type in all_types.keys():
-            final_media |= all_media.filter(content_type__in=all_types[media_type])
+            if final_media:
+                final_media &= all_media.filter(content_type__in=all_types[media_type])
+            else:
+                final_media |= all_media.filter(content_type__in=all_types[media_type])
 
-        if not (ext or name or media_type):
+        if not (name or media_type):
             final_media = all_media
 
         return Response(UploadedMediaSerializer(final_media, many=True).data)
