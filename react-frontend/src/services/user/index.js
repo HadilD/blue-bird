@@ -15,9 +15,9 @@ export const getUsers = async (values) => {
   }
 }
 
-export const getMedia = async () => {
+export const getMedia = async (params) => {
   try {
-    const res = await openAxios.get(Request.GET_MEDIA);
+    const res = await openAxios.get(Request.GET_MEDIA, {params});
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
