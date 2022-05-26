@@ -1,6 +1,7 @@
 import Store from '../../redux/store/store'
 import { setAllUsers } from '../../redux/slice/user'
-import { PathPram, Request } from '../../constants/api'
+import { Request } from '../../constants/api'
+// import { PathPram, Request } from '../../constants/api'
 import { openAxios } from '../instance'
 
 export const getUsers = async (values) => {
@@ -17,7 +18,7 @@ export const getUsers = async (values) => {
 
 export const getMedia = async (params) => {
   try {
-    const res = await openAxios.get(Request.GET_MEDIA, {params});
+    const res = await openAxios.get(Request.GET_MEDIA, { params });
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
@@ -31,9 +32,10 @@ export const uploadImageMediaService = async (values) => {
     const res = await openAxios.post(Request.UPLOAD_MEDIA, body, {
       headers: {
         'Content-Type': 'multipart/form-data',
-      }})
+      }
+    })
     return res.data
-  } catch(err){
+  } catch (err) {
     console.log(JSON.stringify(err))
     throw err
   }

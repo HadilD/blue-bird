@@ -43,9 +43,17 @@ const useStyles = makeStyles(theme => ({
         },
     },
     mediaName: {
+        color: "#000",
+    },
+    iconLabel: {
         position: "absolute",
         bottom: 25,
-        color: "#000",
+        display: "flex",
+        justifyContent: "space-between",
+        width: "80%",
+    },
+    viewIcon: {
+        cursor: "pointer",
     }
 }))
 
