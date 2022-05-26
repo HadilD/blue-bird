@@ -45,7 +45,6 @@ function SearchBar(props) {
                     <MenuItem value={'image'}>Image</MenuItem>
                     <MenuItem value={'video'}>Video</MenuItem>
                     <MenuItem value={'audio'}>Audio</MenuItem>
-                    <MenuItem value={'file'}>File</MenuItem>
                 </Select>
             </FormControl>
             <div className={classes.searchButtonContainer}>
