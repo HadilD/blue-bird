@@ -22,11 +22,10 @@ class UserRegistrationView(generics.CreateAPIView):
         try:
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
-            User.objects.create_user(username=serializer.validated_data['username'],
+            User.objects.create_user(email=serializer.validated_data['email'],
                                      password=request.data['password'],
                                      first_name=serializer.validated_data['first_name'],
                                      last_name=serializer.validated_data['last_name'],
-                                     address=serializer.validated_data['address'],
                                     )
             return Response(serializer.data, status=201)
         except Exception as ex:

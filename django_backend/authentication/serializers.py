@@ -11,7 +11,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
 
         # Add custom claims
-        token['username'] = user.username
+        token['email'] = user.email
         return token
 
     def validate(self, attrs):
@@ -24,12 +24,14 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
-        if attrs['username'][len(attrs['username'])-12:] != '.hs-fulda.de':
-            raise serializers.ValidationError({"email": "Should be a member of Fulda organization"})
+        if attrs['email'][len(attrs['email'])-12:] != '.hs-fulda.de':
+            raise serializers.ValidationError({"error": "Should be a member of Fulda organization"})
+
+        return attrs
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'address']
+        fields = ['email', 'first_name', 'last_name']
         extra_kwargs = {'password': {'write_only': True}}
 
 
