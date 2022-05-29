@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'vp',
-    'static_content'
+    'static_content',
+    'authentication',
 ]
 
 
@@ -68,6 +69,8 @@ MIDDLEWARE = [
 
 # allowing the requests from all origins
 CORS_ALLOW_ALL_ORIGINS = True
+
+AUTH_USER_MODEL = 'authentication.User'
 
 ROOT_URLCONF = 'django_backend.urls'
 

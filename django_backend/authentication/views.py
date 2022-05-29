@@ -1,9 +1,11 @@
-from .serializers import MyTokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.models import User
-from .serializers import RegisterSerializer
 from rest_framework import generics
+from rest_framework.response import Response
+
+from .models import User
+from .serializers import MyTokenObtainPairSerializer
+from .serializers import UserRegistrationSerializer
 
 
 class MyObtainTokenPairView(TokenObtainPairView):
@@ -11,7 +13,23 @@ class MyObtainTokenPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-class RegisterView(generics.CreateAPIView):
+class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+    serializer_class = UserRegistrationSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            User.objects.create_user(username=serializer.validated_data['username'],
+                                     password=request.data['password'],
+                                     first_name=serializer.validated_data['first_name'],
+                                     last_name=serializer.validated_data['last_name'],
+                                     address=serializer.validated_data['address'],
+                                    )
+            return Response(serializer.data, status=201)
+        except Exception as ex:
+            print(ex)
+            return Response({'error': str(ex)}, status=400)
+
