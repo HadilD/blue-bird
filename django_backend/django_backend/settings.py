@@ -153,8 +153,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
-    # 'ROTATE_REFRESH_TOKENS': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
 
 # S3 BUCKET CREDENTIALS
