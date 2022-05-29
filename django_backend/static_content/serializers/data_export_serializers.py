@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from static_content.models import UploadedMedia, Video
+from static_content.models import Media, Video
 
 
-class UploadedMediaSerializer(serializers.ModelSerializer):
+class MediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UploadedMedia

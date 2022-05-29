@@ -1,6 +1,6 @@
 from django import forms
 
-from static_content.models import UploadedMedia
+from static_content.models import Media
 from static_content.s3_service import upload_file
 
 
@@ -18,5 +18,5 @@ class UploadedMediaForm(forms.ModelForm):
         return obj
 
     class Meta:
-        model = UploadedMedia
+        model = Media
         exclude = "uri",

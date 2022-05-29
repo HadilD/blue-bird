@@ -1,21 +1,35 @@
 from rest_framework import serializers
 
-from static_content.models import UploadedMedia
+from static_content.models import Media, Attachment
 from static_content.s3_service import get_public_link
 
 
-class UploadedMediaSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField("get_url")
-
-    def get_url(self, obj: UploadedMedia):
-        return get_public_link(obj.uri)
+class AttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = UploadedMedia
-        fields = "name", "url", "created_at"
+        model = Attachment
+        fields = ["id", "name", "uri", "format"]
 
 
-class UploadedMediaCreateSerializer(serializers.ModelSerializer):
+class MediaSerializer(serializers.ModelSerializer):
+    attachments = AttachmentSerializer(many=True, read_only=True, source="attachment_set")
+
     class Meta:
-        model = UploadedMedia
-        fields = "__all__"
+        model = Media
+        fields = ["id", "name", "description", "attachments", "cost"]
+
+# class MediaSerializer(serializers.ModelSerializer):
+#     url = serializers.SerializerMethodField("get_url")
+#
+#     def get_url(self, obj: Media):
+#         return get_public_link(obj.uri)
+#
+#     class Meta:
+#         model = Media
+#         fields = "name", "url", "created_at"
+#
+#
+# class MediaCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Media
+#         fields = "__all__"
