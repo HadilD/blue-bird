@@ -10,7 +10,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import { uploadImageMediaService } from '../../services/user'
+import { uploadImageMediaService } from '../../services/media'
 
 function UploadModal(props) {
   const { closeModal } = props

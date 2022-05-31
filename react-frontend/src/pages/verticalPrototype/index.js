@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { setPageName } from '../../redux/slice/pagename';
 import useStyles from './styles';
-import { getMedia } from './../../services/user';
 import { Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import UploadModal from '../../components/uploadModal'
 import { setUploadModal } from '../../redux/slice/uploadModal'
 import SearchBar from '../../components/searchBar';
 import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { fetchMedia } from '../../services/media'
 
 const VerticalPrototype = () => {
 
     const displayUploadModal = useSelector((state) => state.uploadModal.displayUploadModal)
-
-    const dispatch = useDispatch();
-    const [media, setMedia] = useState([]);
+    const dispatch = useDispatch()
+    const mediaItems = useSelector((state) => state.media.mediaItems)
     const [mediaPreviewModal, setMediaPreviewModal] = useState(false);
     const [mediaPreviewModalData, setMediaPreviewModalData] = useState([]);
 
@@ -24,23 +22,9 @@ const VerticalPrototype = () => {
         dispatch(setPageName("Home"))
     })
 
-    const fetchMedia = async (searchTerm = null, category = null) => {
-        let params = {}
-        if (searchTerm !== null && searchTerm !== '') params['name'] = searchTerm
-        if (category !== 'all' && category !== null) params['type'] = category
-        console.log('Params:', params)
-        const response = await getMedia(params)
-        setMedia(response);
-    }
-
-    useEffect(() => {
-        fetchMedia();
-    }, [])
-
     const closeModal = () => {
         dispatch(setUploadModal(false))
         fetchMedia();
-
     }
 
     const handleMediaPreview = (mediaItem) => {
@@ -54,7 +38,7 @@ const VerticalPrototype = () => {
             <SearchBar fetchMedia={fetchMedia} />
             <div className={classes.root}>
 
-                {(media && media.length !== 0) && media.map((mediaItem, index) => {
+                {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
                     return <div key={index} className={classes.imageCard} >
                         <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.url} />
                         <div className={classes.iconLabel}>
