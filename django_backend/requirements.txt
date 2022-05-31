@@ -2,7 +2,6 @@ asgiref==3.5.1
 backports.zoneinfo==0.2.1
 boto3==1.23.2
 botocore==1.26.2
-
 django-cors-headers==3.12.0
 djangorestframework==3.13.1
 jmespath==1.0.0
@@ -14,3 +13,5 @@ s3transfer==0.5.2
 six==1.16.0
 sqlparse==0.4.2
 urllib3==1.26.9
+djangorestframework-simplejwt==5.2.0
+Django~=4.0.4

@@ -14,6 +14,7 @@ from ctypes import cast
 from email.policy import default
 from pathlib import Path
 from decouple import AutoConfig
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,8 +45,19 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'vp',
-    'static_content'
+    'static_content',
+    'authentication',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,6 +72,8 @@ MIDDLEWARE = [
 
 # allowing the requests from all origins
 CORS_ALLOW_ALL_ORIGINS = True
+
+AUTH_USER_MODEL = 'authentication.User'
 
 ROOT_URLCONF = 'django_backend.urls'
 
@@ -137,6 +151,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
 
 # S3 BUCKET CREDENTIALS
 AWS_ACCESS_KEY = config("AWS_ACCESS_KEY")
