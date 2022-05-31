@@ -8,7 +8,7 @@ class Media(models.Model):
     name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=500)
     is_enabled = models.BooleanField(default=False)
     cost = models.DecimalField(decimal_places=3, max_digits=6, default=0)
@@ -35,7 +35,7 @@ class Attachment(models.Model):
         ("mpeg", _("audio/mpeg")),
     )
     name = models.CharField(max_length=30, blank=False)
-    media = models.ForeignKey(Media, on_delete=models.CASCADE)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True)
     uri = models.CharField(max_length=500)
     format = models.CharField(max_length=10,
                               choices=ALLOWED_FORMATS,
