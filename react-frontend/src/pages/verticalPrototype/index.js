@@ -10,6 +10,7 @@ import { setUploadModal } from '../../redux/slice/uploadModal'
 import SearchBar from '../../components/searchBar';
 import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Paginate from '../../components/Pagination/Pagination';
 
 const VerticalPrototype = () => {
 
@@ -52,7 +53,7 @@ const VerticalPrototype = () => {
     return (
         <div className={classes.container}>
             <SearchBar fetchMedia={fetchMedia} />
-            <div className={classes.root}>
+            {/* <div className={classes.root}>
 
                 {(media && media.length !== 0) && media.map((mediaItem, index) => {
                     return <div key={index} className={classes.imageCard} >
@@ -63,19 +64,20 @@ const VerticalPrototype = () => {
                         </div>
                     </div>
                 })}
-            </div>
+            </div> */}
             {
                 displayUploadModal &&
                 <UploadModal closeModal={closeModal} />
             }
-            {
+            {/*
                 mediaPreviewModal &&
                 <MediaPreviewModal
                     open={mediaPreviewModal}
                     handleClose={setMediaPreviewModal}
                     mediaPreviewModalData={mediaPreviewModalData}
                 />
-            }
+        */}
+            <Paginate itemsPerPage={10} items={media} />
         </div>
 
 
