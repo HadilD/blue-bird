@@ -9,6 +9,7 @@ import SearchBar from '../../components/searchBar';
 import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
+import {logoutUser} from '../../services/login'
 
 const VerticalPrototype = () => {
 
@@ -21,6 +22,10 @@ const VerticalPrototype = () => {
     useEffect(() => {
         dispatch(setPageName("Home"))
     })
+
+    useEffect(() => {
+        fetchMedia()
+    },[])
 
     const closeModal = () => {
         dispatch(setUploadModal(false))
@@ -36,6 +41,7 @@ const VerticalPrototype = () => {
     return (
         <div className={classes.container}>
             <SearchBar fetchMedia={fetchMedia} />
+            <p onClick={() => logoutUser()}>Logout</p>
             <div className={classes.root}>
 
                 {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
