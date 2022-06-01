@@ -9,7 +9,7 @@ import SearchBar from '../../components/searchBar';
 import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
-import {logoutUser} from '../../services/login'
+import {logoutUser} from '../../services/auth'
 
 const VerticalPrototype = () => {
 
