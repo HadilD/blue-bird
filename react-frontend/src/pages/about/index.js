@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Typography } from '@mui/material';
 import useStyles from './styles';
+import { useDispatch } from 'react-redux'
+import { setPageName } from '../../redux/slice/pagename'
 
 const Collaber = (props) => {
     const classes = useStyles();
@@ -16,6 +18,11 @@ const Collaber = (props) => {
 }
 
 const AboutUs = () => {
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(setPageName("About Us"))
+    })
 
     const colabList = [
         {
