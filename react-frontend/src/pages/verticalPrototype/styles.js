@@ -2,6 +2,13 @@ import { makeStyles } from '@mui/styles';
 // import { generalStyles } from '../../generalStyles';
 
 const useStyles = makeStyles(theme => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     root: {
         display: "flex",
         flexWrap: "wrap",
@@ -36,9 +43,17 @@ const useStyles = makeStyles(theme => ({
         },
     },
     mediaName: {
+        color: "#000",
+    },
+    iconLabel: {
         position: "absolute",
         bottom: 25,
-        color: "#000",
+        display: "flex",
+        justifyContent: "space-between",
+        width: "80%",
+    },
+    viewIcon: {
+        cursor: "pointer",
     }
 }))
 

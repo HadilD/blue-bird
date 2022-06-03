@@ -1,3 +1,4 @@
-const APIEndpoint = 'http://35.158.112.45:8000/'
+const APIEndpoint = 'https://bluebird.no-ip.org/'
+
 
 export default APIEndpoint

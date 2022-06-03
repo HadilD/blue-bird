@@ -8,15 +8,17 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Home from './pages/home'
 import About from './pages/about'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
 import { Routes, Route } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
+import { setUploadModal } from './redux/slice/uploadModal';
 
 const drawerWidth = 240;
 
@@ -69,6 +71,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const pageName = useSelector(state => state.pageName.pageName)
+  const dispatch = useDispatch()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -82,19 +85,24 @@ export default function PersistentDrawerLeft() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar style={{ backgroundColor: generalStyles.primaryColor }} position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {pageName}
-          </Typography>
+        <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <div style={{display: 'flex', flexDirection: 'row'}}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              {pageName}
+            </Typography>
+          </div>
+          <div>
+            <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -120,9 +128,9 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <DrawerHeader />
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<VerticalPrototype />} />
+          {/* <Route path='/' element={<Home />} /> */}
           <Route path='/about' element={<About />} />
-          <Route path='/vertical-prototype' element={<VerticalPrototype />} />
         </Routes>
       </Main>
     </Box >
