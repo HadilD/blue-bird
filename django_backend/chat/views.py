@@ -8,6 +8,6 @@ def index(request):
 
 def room(request, room_name):
     username = request.GET.get('username', 'Anonymous')
-    messages = Message.objects.filter(room=room_name)[0:25]
+    messages = Message.objects.filter(room__room_id=room_name)[0:25]
     context = {'room_name': room_name, 'username': username, "messages": messages}
     return render(request, 'chat/room.html', context)
