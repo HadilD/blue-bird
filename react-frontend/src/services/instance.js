@@ -1,6 +1,6 @@
 import axios from 'axios';
 import APIEndpoint from '../config'
-import { APIConstant, Request } from '../constants/api'
+import { APIConstant } from '../constants/api'
 
 //Instance to be used for un-authenticated resources
 const openAxios = axios.create({
