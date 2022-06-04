@@ -36,8 +36,3 @@ class User(AbstractUser, PermissionsMixin):
     # Tells Django that the UserManager class defined above should manage
     # objects of this type.
     objects = UserManager()
-
-    class Meta:
-        db_table = "User"
-
-
