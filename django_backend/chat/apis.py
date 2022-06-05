@@ -1,9 +1,9 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
-from .models import Room
-from .serializers import RoomListSerializer, RoomCreateSerializer
+from .models import Room, Message
+from .serializers import RoomListSerializer, RoomCreateSerializer, MessageListSerializer
 from .exceptions import RoomAlreadyExistsError, NotAValidToUserError
 
 
@@ -18,7 +18,7 @@ class RoomListCreateAPIView(ListCreateAPIView):
 
     def get_queryset(self):
         if self.request.method == "POST":
-            return Room.objects.filter(from_user=self.request.user).order_by("created_at")
+            return Room.objects.filter(from_user=self.request.user).order_by("-created_at")
         else:
             return Room.objects.all()
 
@@ -39,3 +39,11 @@ class RoomListCreateAPIView(ListCreateAPIView):
             response = Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return response
+
+
+class MessageListApiView(RetrieveAPIView):
+    queryset = Message.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        messages = Message.objects.filter(room__room_id=kwargs.get("room_id")).order_by("-created_at")
+        return Response(MessageListSerializer(messages, many=True).data)

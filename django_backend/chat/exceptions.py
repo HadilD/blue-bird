@@ -10,3 +10,8 @@ class NotAValidToUserError(ValidationError):
     def __init__(self):
         super(NotAValidToUserError, self).__init__("you can not create the room for yourself")
 
+
+class RoomNotFound(ValidationError):
+    def __init__(self, room_id: int):
+        super(RoomNotFound, self).__init__("room with %s: is not found" % room_id)
+
