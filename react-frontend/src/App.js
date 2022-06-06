@@ -12,13 +12,15 @@ import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import Home from './pages/home'
+import Login from './pages/Login'
 import About from './pages/about'
 import { useDispatch, useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
 import { Routes, Route } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
+import { Constants } from './constants/api';
+import { setLoginStatus } from './redux/slice/user'
 
 const drawerWidth = 240;
 
@@ -71,7 +73,15 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const pageName = useSelector(state => state.pageName.pageName)
+  const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
   const dispatch = useDispatch()
+
+  React.useEffect(() => {
+    let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+    if (accessToken) {
+      dispatch(setLoginStatus(true))
+    }
+  },[])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -128,8 +138,7 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <DrawerHeader />
         <Routes>
-          <Route path='/' element={<VerticalPrototype />} />
-          {/* <Route path='/' element={<Home />} /> */}
+          <Route path='/' element={isUserLoggedIn ? <VerticalPrototype /> : <Login />} />
           <Route path='/about' element={<About />} />
         </Routes>
       </Main>
