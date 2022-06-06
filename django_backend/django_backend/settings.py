@@ -31,6 +31,8 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = ["https://bluebird.no-ip.org"]
+
 
 # Application definition
 
