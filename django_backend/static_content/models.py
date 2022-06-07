@@ -6,7 +6,7 @@ from django_backend import settings
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -22,8 +22,8 @@ class Media(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=500, blank=True)
     is_enabled = models.BooleanField(default=False)
-    cost = models.DecimalField(decimal_places=3, max_digits=6, default=0)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
+    cost = models.DecimalField(decimal_places=2, max_digits=6, default=0)
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.name

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from static_content.models import Media, Attachment
+from static_content.models import Media, Attachment, Tag
 from static_content.forms import AttachmentForm
 from static_content.s3_service import get_public_link, delete_remote_file as delete_file
 
@@ -35,3 +35,4 @@ from static_content.s3_service import get_public_link, delete_remote_file as del
 
 admin.site.register(Media)
 admin.site.register(Attachment)
+admin.site.register(Tag)
