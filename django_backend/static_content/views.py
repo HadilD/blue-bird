@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 
 from static_content.s3_service import upload_file
-from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer
+from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, AttachmentUploadSerializer
 from rest_framework import generics
 from static_content.models import Media, Attachment
 from static_content.filters import MediaFilter
@@ -50,16 +50,16 @@ class AttachmentCreate(generics.CreateAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
-    # def create(self, request):
-    #     serializer = FileSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         file = request.data.get("file")
-    #         file_name = request.data.get("name", file.name)
-    #         uri = upload_file(file)
-    #         attachment = Attachment.objects.create(name=file_name, format=file.content_type, uri=uri)
-    #         return Response({"id": attachment.id}, status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def create(self, request):
+        serializer = AttachmentUploadSerializer(data=request.data)
+        if serializer.is_valid():
+            file = request.data.get("file")
+            file_name = request.data.get("name", file.name)
+            uri = upload_file(file)
+            attachment = Attachment.objects.create(name=file_name, format=file.content_type, uri=uri)
+            return Response({"id": attachment.id}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):

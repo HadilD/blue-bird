@@ -21,7 +21,15 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attachment
-        fields = ["id", "name", "format", "url"]
+        fields = ["id", "name", "format", "url", ]
+
+
+class AttachmentUploadSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(allow_empty_file=False, required=True)
+
+    class Meta:
+        model = Attachment
+        fields = ["file"]
 
 
 class MediaSerializer(serializers.ModelSerializer):
