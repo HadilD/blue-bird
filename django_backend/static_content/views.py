@@ -16,7 +16,6 @@ class MediaList(generics.ListCreateAPIView):
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = MediaFilter
-    # filterset_fields = ['is_enabled', 'tag']
     search_fields = ['name', 'description']
 
     def create(self, request):
