@@ -8,14 +8,15 @@ from rest_framework import generics
 from static_content.forms import AttachmentForm
 from static_content.models import Media, Attachment
 from static_content.filters import MediaListFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
 
 class MediaList(generics.ListCreateAPIView):
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['is_enabled']
-    filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'description']
 
     def create(self, request):
@@ -61,3 +62,7 @@ class AttachmentCreate(generics.CreateAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Attachment.objects.all()
+    serializer_class = AttachmentSerializer

@@ -9,10 +9,14 @@ class FileSerializer(serializers.Serializer):
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField("get_url")
+
+    def get_url(self, obj: Media):
+        return get_public_link(obj.uri)
 
     class Meta:
         model = Attachment
-        fields = ["id", "name", "uri", "format"]
+        fields = ["id", "name", "format", "url"]
 
 
 class MediaSerializer(serializers.ModelSerializer):

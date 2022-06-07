@@ -2,16 +2,28 @@ from django.db import models
 from django.contrib.auth.models import User
 from model_utils import Choices
 from django.utils.translation import gettext_lazy as _
+from django_backend import settings
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Tag"
 
 
 class Media(models.Model):
     name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=500, blank=True)
     is_enabled = models.BooleanField(default=False)
     cost = models.DecimalField(decimal_places=3, max_digits=6, default=0)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
