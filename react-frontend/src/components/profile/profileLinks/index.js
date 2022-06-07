@@ -6,25 +6,46 @@ import ChatIcon from '@mui/icons-material/Chat';
 import AdUnitsIcon from '@mui/icons-material/AdUnits';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Drawer from '@mui/material/Drawer';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 
 function ProfileLinks(props) {
     const classes = useStyles();
 
     return (
-        <Stack>
-            <Button variant="outlined" startIcon={<ChatIcon />}>
-                Messages
-            </Button>
-            <Button variant="outlined" startIcon={<AdUnitsIcon />}>
-                My Ads
-            </Button>
-            <Button variant="outlined" startIcon={<ShoppingCartIcon />}>
-                My Cart
-            </Button>
-            <Button variant="outlined" startIcon={<LogoutIcon />}>
-                Logout
-            </Button>
-        </Stack>
+
+        <Stack className={classes.container}>
+            <div className={classes.msgContainer}>
+                <Button className={classes.blinks} variant="text" startIcon={<ChatIcon />} >
+                    Messages
+                    <ArrowForwardIosIcon sx={{ marginLeft: 'auto' }} />
+                </Button>
+            </div>
+            <div className={classes.msgContainer}>
+                <Button className={classes.blinks} variant="text" size='large' startIcon={<AdUnitsIcon />} >
+                    My Ads
+                    <ArrowForwardIosIcon sx={{ marginLeft: '25px' }} />
+                </Button>
+            </div>
+            <div className={classes.msgContainer}>
+                <Button className={classes.blinks} variant="text" startIcon={<ShoppingCartIcon />} >
+                    My Cart
+                    <ArrowForwardIosIcon sx={{ marginLeft: '20px' }} />
+                </Button>
+            </div>
+            <div className={classes.msgContainer}>
+                <Button className={classes.blinks} variant="text" startIcon={<LogoutIcon />} >
+                    Logout
+                    <ArrowForwardIosIcon sx={{ marginLeft: '13px' }} />
+                </Button>
+            </div>
+        </Stack >
     )
 }
 

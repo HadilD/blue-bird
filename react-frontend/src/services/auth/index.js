@@ -9,6 +9,7 @@ export const loginUser = async (values) => {
     const res = await openAxios.post(Request.LOGIN_USER, values)
     saveUserDetails(res.data)
     Store.dispatch(setLoginStatus(true))
+    console.log(res)
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
@@ -40,7 +41,7 @@ export const registerUser = async (values) => {
 }
 
 export const refreshAccessToken = async () => {
-  try{
+  try {
     const refreshToken = localStorage.getItem(Constants.STORAGE_ITEM_REFRESH_TOKEN)
     const res = await openAxios.post(Request.REFRESH_TOKEN, { refresh: refreshToken })
     saveUserDetails(res.data)

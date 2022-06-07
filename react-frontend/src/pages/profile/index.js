@@ -16,10 +16,10 @@ function Profile() {
                 <Grid container item xs={12}>
                     <ProfileHeader></ProfileHeader>
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={8} md={8}>
                     <ProfileDetails></ProfileDetails>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={4} md={4}>
                     <ProfileLinks></ProfileLinks>
                 </Grid>
             </Grid>

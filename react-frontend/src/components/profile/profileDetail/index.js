@@ -1,8 +1,9 @@
 //https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1293744/
-import { Button, Grid, Skeleton, Stack } from '@mui/material';
+import { Button, Grid, Skeleton, Stack, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import useStyles from './styles';
 import avatar from './avatar.png';
+import Divider from '@mui/material/Divider';
 
 function ProfileDetails(props) {
     const classes = useStyles();
@@ -16,48 +17,49 @@ function ProfileDetails(props) {
 
         <Grid container className={classes.container}>
             <Grid item xs={6}>
-                <img src={avatar} style={{ width: '80%' }} />
+                <img src={avatar} className={classes.imgcls} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} className={classes.infogrid}>
                 <Stack>
-                    <div>
+                    <div style={{ fontFamily: 'fantasy', fontSize: 21 }}>
                         {
                             editing ?
-                                <input value={name} onChange={(e) => { setName(e.target.value) }}></input> : "John Doe"
+                                <TextField label="Name" variant="standard" type="text" value={name} onChange={(e) => { setName(e.target.value) }} /> : name
                         }
                     </div>
-                    <div>
+                    <div style={{ fontFamily: 'cursive' }}>
                         {
                             editing ?
-                                <input value={email} onChange={(e) => { setEmail(e.target.value) }}></input> : "johndoe@hs-fulda.de"
+                                <TextField label="Email" variant="standard" value={email} onChange={(e) => { setEmail(e.target.value) }} /> : email
                         }
                     </div>
-                    <div>
+                    {/* <div style={{ fontFamily: 'cursive' }}>
                         {
                             editing ?
-                                <input value={phone} onChange={(e) => { setPhone(e.target.value) }}></input> : "+49 461928 172893"
+                                <TextField label="Phone" variant="standard" value={phone} onChange={(e) => { setPhone(e.target.value) }} /> : phone
                         }
-                    </div>
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <Button
-                                variant='outlined'
+                    </div> */}
+                    <Grid container className={classes.blinks}>
+                        <Grid item xs={12} md={6}>
+                            <Button style={{ fontFamily: 'cursive', marginRight: 'auto', fontSize: 10 }}
+                                variant='contained'
+                                size='small'
                                 onClick={() => {
-                                    setEditing(true)
-                                }}
-                            >
-                                Edit Details
+                                    setEditing(prevEditing => !prevEditing)
+                                }}> {editing ? "Apply Changes" : "Edit Details"}
                             </Button>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Button variant='outlined'
+                        {/* <Grid item xs={12} md={6}>
+                            <Button style={{ fontFamily: 'cursive' }}
+                                variant='contained'
+                                size='small'
                                 onClick={() => {
                                     setEditing(false)
-                                }}>Apply Changes</Button></Grid>
+                                }}>Apply Changes</Button></Grid> */}
                     </Grid>
                 </Stack>
             </Grid>
-        </Grid>
+        </Grid >
 
     )
 }
