@@ -7,7 +7,7 @@ export const handleAPIError = (errorValue = {}, errorMessage="Something went wro
 
     let defaultErrorDialog = {
       message: errorMessage,
-      title: 'Alert',
+      title: 'Message',
     }
     let errorDialog = {}
     
