@@ -4,6 +4,10 @@ from static_content.models import Media, Attachment
 from static_content.s3_service import get_public_link
 
 
+class FileSerializer(serializers.Serializer):
+    file = serializers.FileField()
+
+
 class AttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -17,6 +21,10 @@ class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
         fields = ["id", "name", "description", "attachments", "cost"]
+
+
+
+
 
 # class MediaSerializer(serializers.ModelSerializer):
 #     url = serializers.SerializerMethodField("get_url")

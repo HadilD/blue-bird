@@ -9,7 +9,7 @@ class Media(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, blank=True)
     is_enabled = models.BooleanField(default=False)
     cost = models.DecimalField(decimal_places=3, max_digits=6, default=0)
 

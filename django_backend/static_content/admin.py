@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from static_content.models import Media, Attachment
-from static_content.forms import UploadedMediaForm
+from static_content.forms import AttachmentForm
 from static_content.s3_service import get_public_link, delete_remote_file as delete_file
 
 #
