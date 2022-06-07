@@ -5,9 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer
 from rest_framework import generics
-from static_content.forms import AttachmentForm
 from static_content.models import Media, Attachment
-from static_content.filters import MediaListFilter
+from static_content.filters import MediaFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
@@ -16,7 +15,8 @@ class MediaList(generics.ListCreateAPIView):
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['is_enabled']
+    filterset_class = MediaFilter
+    # filterset_fields = ['is_enabled', 'tag']
     search_fields = ['name', 'description']
 
     def create(self, request):
