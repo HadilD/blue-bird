@@ -37,13 +37,13 @@ class MediaSerializer(serializers.ModelSerializer):
     attachments = AttachmentSerializer(many=True, read_only=True, source="attachment_set")
     tags = CustomSlugRelatedField(many=True,
                                   queryset=Tag.objects.all(),
-                                  slug_field="name")
-    # owner = serializers.SlugRelatedField(queryset=User.objects.all(),
-    #                                      slug_field="first_name")
+                                  slug_field="name",
+                                  required=False)
+    owner = serializers.SlugRelatedField(slug_field="full_name", read_only=True)
 
     class Meta:
         model = Media
-        fields = ["id", "name", "description", "attachments", "cost", "tags",]
+        fields = ["id", "name", "description", "attachments", "cost", "tags", "owner"]
 
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])

@@ -36,3 +36,7 @@ class User(AbstractUser):
     # Tells Django that the UserManager class defined above should manage
     # objects of this type.
     objects = UserManager()
+
+    @property
+    def full_name(self):
+        return self.first_name + " " + self.last_name
