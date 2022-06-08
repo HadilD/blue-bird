@@ -3,6 +3,7 @@ import { setLoginStatus } from '../../redux/slice/user'
 import { Request, Constants } from '../../constants/api'
 import { openAxios } from '../instance'
 import { saveUserDetails } from '../../utils'
+import { handleAPIError } from '../../utils/dialogErrorHandler'
 
 export const loginUser = async (values) => {
   try {
@@ -11,6 +12,7 @@ export const loginUser = async (values) => {
     Store.dispatch(setLoginStatus(true))
     return res.data
   } catch (err) {
+    handleAPIError(err, 'Username or password is incorrect !')
     console.log(JSON.stringify(err))
     throw err
   }
@@ -34,6 +36,7 @@ export const registerUser = async (values) => {
     const res = await openAxios.post(Request.REGISTER_USER, body);
     return res.data
   } catch (err) {
+    handleAPIError(err, 'Something went wrong while registering user. Try again later..')
     console.log(JSON.stringify(err))
     throw err
   }
