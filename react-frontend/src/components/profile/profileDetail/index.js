@@ -1,9 +1,11 @@
 //https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1293744/
 import { Button, Grid, Skeleton, Stack, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
 import avatar from './avatar.png';
 import Divider from '@mui/material/Divider';
+import { Constants } from '../../../constants/api';
+import { getUsers } from '../../../services/user';
 
 function ProfileDetails(props) {
     const classes = useStyles();
@@ -11,7 +13,17 @@ function ProfileDetails(props) {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState('John Doe')
     const [email, setEmail] = useState('johndoe@hs-fulda.de')
-    const [phone, setPhone] = useState('+49 461928 172893')
+    // const [phone, setPhone] = useState('+49 461928 172893')
+
+
+    useEffect(async () => {
+        let token = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+        let res = await getUsers(token)
+        console.log(res)
+        setName(res.first_name + " " + res.last_name)
+        setEmail(res.email)
+    }, [])
+
 
     return (
 
@@ -40,22 +52,25 @@ function ProfileDetails(props) {
                         }
                     </div> */}
                     <Grid container className={classes.blinks}>
-                        <Grid item xs={12} md={6}>
-                            <Button style={{ fontFamily: 'cursive', marginRight: 'auto', fontSize: 10 }}
-                                variant='contained'
-                                size='small'
-                                onClick={() => {
-                                    setEditing(prevEditing => !prevEditing)
-                                }}> {editing ? "Apply Changes" : "Edit Details"}
-                            </Button>
-                        </Grid>
-                        {/* <Grid item xs={12} md={6}>
-                            <Button style={{ fontFamily: 'cursive' }}
-                                variant='contained'
-                                size='small'
-                                onClick={() => {
-                                    setEditing(false)
-                                }}>Apply Changes</Button></Grid> */}
+
+                        {editing ?
+                            <Grid item xs={12} md={6}>
+                                <Button style={{ fontFamily: 'cursive' }}
+                                    variant='contained'
+                                    size='small'
+                                    onClick={() => {
+                                        setEditing(false)
+                                    }}>Apply Changes</Button>
+                            </Grid> :
+                            <Grid item xs={12} md={6}>
+                                <Button style={{ fontFamily: 'cursive', marginRight: 'auto', fontSize: 10 }}
+                                    variant='contained'
+                                    size='small'
+                                    onClick={() => {
+                                        setEditing(true)
+                                    }}> Edit Details
+                                </Button>
+                            </Grid>}
                     </Grid>
                 </Stack>
             </Grid>

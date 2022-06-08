@@ -13,16 +13,19 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useNavigate } from 'react-router-dom';
 
 
 function ProfileLinks(props) {
+
+    const navigate = useNavigate()
     const classes = useStyles();
 
     return (
 
         <Stack className={classes.container}>
             <div className={classes.msgContainer}>
-                <Button className={classes.blinks} variant="text" startIcon={<ChatIcon />} >
+                <Button onClick={() => { navigate('/chat') }} className={classes.blinks} variant="text" startIcon={<ChatIcon />} >
                     Messages
                     <ArrowForwardIosIcon sx={{ marginLeft: 'auto' }} />
                 </Button>

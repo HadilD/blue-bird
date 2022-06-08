@@ -10,7 +10,6 @@ export const loginUser = async (values) => {
     saveUserDetails(res.data)
     Store.dispatch(setLoginStatus(true))
     console.log(res)
-    return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
     throw err
