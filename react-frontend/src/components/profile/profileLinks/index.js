@@ -14,6 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router-dom';
+import { logoutUser } from '../../../services/auth';
 
 
 function ProfileLinks(props) {
@@ -43,7 +44,10 @@ function ProfileLinks(props) {
                 </Button>
             </div>
             <div className={classes.msgContainer}>
-                <Button className={classes.blinks} variant="text" startIcon={<LogoutIcon />} >
+                <Button className={classes.blinks} onClick={() => {
+                    logoutUser()
+                    navigate('/')
+                }} variant="text" startIcon={<LogoutIcon />} >
                     Logout
                     <ArrowForwardIosIcon sx={{ marginLeft: '13px' }} />
                 </Button>
