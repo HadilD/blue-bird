@@ -15,9 +15,7 @@ class AttachmentFormatFilter(filters.CharFilter):
         if value:
             media_types = [media_type.strip() for media_type in value.split(",")]
             queryset = queryset.filter(attachment__format__in=media_types).distinct()
-            # queryset = queryset.raw("SELECT DISTINCT * FROM static_content_media INNER JOIN static_content_attachment "
-            #                         "ON (static_content_media.id = static_content_attachment.media_id) WHERE "
-            #                         "SUBSTRING_INDEX(static_content_attachment.format, '/', 1) IN (application)"), [index.id])
+
         return queryset
 
 

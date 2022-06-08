@@ -21,7 +21,7 @@ class MediaList(generics.ListCreateAPIView):
     def create(self, request):
         serializer = MediaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        media = serializer.save()
+        media = serializer.save(owner=self.request.user,)
         attachments = request.data.get("attachments")
         for id in attachments:
             try:
