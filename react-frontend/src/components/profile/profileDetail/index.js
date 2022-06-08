@@ -6,20 +6,21 @@ import avatar from './avatar.png';
 import Divider from '@mui/material/Divider';
 import { Constants } from '../../../constants/api';
 import { getUsers } from '../../../services/user';
+import { setUsers } from '../../../services/user';
 
 function ProfileDetails(props) {
     const classes = useStyles();
 
     const [editing, setEditing] = useState(false)
-    const [name, setName] = useState('John Doe')
-    const [email, setEmail] = useState('johndoe@hs-fulda.de')
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
     // const [phone, setPhone] = useState('+49 461928 172893')
 
 
     useEffect(async () => {
-        let token = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
-        let res = await getUsers(token)
-        console.log(res)
+        // let token = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+        let res = await getUsers()
+        // console.log(res)
         setName(res.first_name + " " + res.last_name)
         setEmail(res.email)
     }, [])
@@ -42,7 +43,7 @@ function ProfileDetails(props) {
                     <div style={{ fontFamily: 'cursive' }}>
                         {
                             editing ?
-                                <TextField label="Email" variant="standard" value={email} onChange={(e) => { setEmail(e.target.value) }} /> : email
+                                <TextField label="Email" variant="standard" value={email} /> : email
                         }
                     </div>
                     {/* <div style={{ fontFamily: 'cursive' }}>
@@ -60,6 +61,8 @@ function ProfileDetails(props) {
                                     size='small'
                                     onClick={() => {
                                         setEditing(false)
+                                        const [first_name, last_name] = name.split(' ')
+                                        setUsers(first_name, last_name)
                                     }}>Apply Changes</Button>
                             </Grid> :
                             <Grid item xs={12} md={6}>

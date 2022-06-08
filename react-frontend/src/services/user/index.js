@@ -21,15 +21,15 @@ export const getUsers = async () => {
   }
 }
 
-export const setUsers = async (fname, lname) => {
+export const setUsers = async (first_name, last_name) => {
   try {
-    let body = { fname, lname }
-    const res = await openAxios.post(Request.SET_USERS, {
-      data: body,
+    let body = { first_name, last_name }
+    const res = await openAxios.put(Request.SET_USERS, body, {
       headers: {
-        authorization: localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+        authorization: "Bearer " + localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
       }
     })
+    return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
     throw err
