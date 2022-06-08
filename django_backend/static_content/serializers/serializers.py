@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from static_content.models import Media, Attachment, Tag
 from static_content.s3_service import get_public_link
+from authentication.models import User
 
 
 class CustomSlugRelatedField(serializers.SlugRelatedField):
@@ -37,10 +38,12 @@ class MediaSerializer(serializers.ModelSerializer):
     tags = CustomSlugRelatedField(many=True,
                                   queryset=Tag.objects.all(),
                                   slug_field="name")
+    # owner = serializers.SlugRelatedField(queryset=User.objects.all(),
+    #                                      slug_field="first_name")
 
     class Meta:
         model = Media
-        fields = ["id", "name", "description", "attachments", "cost", "tags"]
+        fields = ["id", "name", "description", "attachments", "cost", "tags",]
 
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])
