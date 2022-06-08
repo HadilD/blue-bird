@@ -46,12 +46,19 @@ class Attachment(models.Model):
         ("mp3", _("audio/mp3")),
         ("mpeg", _("audio/mpeg")),
     )
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=100, blank=False)
     media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True)
     uri = models.CharField(max_length=500)
-    format = models.CharField(max_length=10,
+    format = models.CharField(max_length=100,
                               choices=ALLOWED_FORMATS,
                               blank=False)
+    # type = Choices(
+    #     ("image", _("image")),
+    #     ("video", _("video")),
+    #     ("audio", _("audio")),
+    #     ("application", _("application")),
+    #
+    # )
 
     def __str__(self):
         return self.name

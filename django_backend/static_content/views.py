@@ -56,7 +56,12 @@ class AttachmentCreate(generics.CreateAPIView):
             file = request.data.get("file")
             file_name = request.data.get("name", file.name)
             uri = upload_file(file)
-            attachment = Attachment.objects.create(name=file_name, format=file.content_type, uri=uri)
+            media_id = request.data.get("media")
+            if media_id:
+                attachment = Attachment.objects.create(name=file_name, format=file.content_type, uri=uri,
+                                                       media=Media.objects.get(id=media_id))
+            else:
+                attachment = Attachment.objects.create(name=file_name, format=file.content_type, uri=uri)
             return Response({"id": attachment.id}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -65,3 +70,4 @@ class AttachmentCreate(generics.CreateAPIView):
 class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
+
