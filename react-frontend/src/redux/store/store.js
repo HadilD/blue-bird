@@ -4,6 +4,7 @@ import pageNameReducer from '../slice/pagename'
 import userReducer from '../slice/user'
 import uploadModalReducer from '../slice/uploadModal'
 import mediaReducer from '../slice/media'
+import error from '../slice/error'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
       user: userReducer,
       uploadModal: uploadModalReducer,
       media: mediaReducer,
+      error,
   },
 })
 

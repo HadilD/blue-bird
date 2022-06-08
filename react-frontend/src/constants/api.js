@@ -17,7 +17,8 @@ const Request = {
   GET_MEDIA: 'api/media',
   LOGIN_USER: 'api/auth/login',
   REGISTER_USER: 'api/auth/register',
-  REFRESH_TOKEN: 'api/auth/login/refresh'
+  REFRESH_TOKEN: 'api/auth/login/refresh',
+  ADMIN: 'admin',
 }
 
 export {
