@@ -14,7 +14,7 @@ const Constants = {
 const Request = {
   GET_USERS: 'users/',
   UPLOAD_MEDIA: 'api/media',
-  GET_MEDIA: 'api/media',
+  GET_MEDIA: 'api/medias/',
   LOGIN_USER: 'api/auth/login',
   REGISTER_USER: 'api/auth/register',
   REFRESH_TOKEN: 'api/auth/login/refresh',

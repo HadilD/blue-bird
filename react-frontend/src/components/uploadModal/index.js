@@ -40,7 +40,6 @@ function UploadModal(props) {
       return
     }
     let formdata = new FormData()
-    console.log('Media Name:', mediaName)
     if (mediaName.length > 0) {
       formdata.append('file', file, mediaName)
     }
