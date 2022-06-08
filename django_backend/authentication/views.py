@@ -47,8 +47,11 @@ class UserDetailsUpdateView(generics.UpdateAPIView):
             if data.get("password"):
                 user.set_password(data["password"])
 
-            user.first_name = data["first_name"]
-            user.last_name = data["last_name"]
+            if data.get("first_name"):
+                user.first_name = data["first_name"]
+
+            if data.get("last_name"):
+                user.last_name = data["last_name"]
 
             user.save()
             return Response(UserDetailsSerializer(user).data)
