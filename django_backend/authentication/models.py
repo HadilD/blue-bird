@@ -27,7 +27,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractUser, PermissionsMixin):
+class User(AbstractUser):
     username = None
     email = models.EmailField(max_length=200, null=False, blank=False, unique=True)
     USERNAME_FIELD = 'email'
@@ -36,8 +36,3 @@ class User(AbstractUser, PermissionsMixin):
     # Tells Django that the UserManager class defined above should manage
     # objects of this type.
     objects = UserManager()
-
-    class Meta:
-        db_table = "User"
-
-

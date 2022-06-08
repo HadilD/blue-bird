@@ -31,6 +31,9 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = ["https://bluebird.no-ip.org"]
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,9 +46,13 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'corsheaders',
+
     'django_filters',
 
-    'vp',
+    'channels',
+
+
+    'chat',
     'static_content',
     'authentication',
 ]
@@ -85,6 +92,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_backend.wsgi.application'
+
+
+ASGI_APPLICATION = "django_backend.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(config('REDIS_HOST'), config("REDIS_PORT"))],
+        }
+    }
+}
+
+
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

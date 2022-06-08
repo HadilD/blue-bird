@@ -16,10 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
+api_url = [
+    path('auth/', include('authentication.urls')),
+    path('chat/', include("chat.urls")),
+    path('', include("static_content.urls")),
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('vp.urls')),
-    path('api/', include('static_content.urls')),
-    path('auth/', include('authentication.urls')),
+
+    path('chat/', include('chat.urls')),
+
+    # api urls
+    path('api/', include(api_url)),
 
 ]
