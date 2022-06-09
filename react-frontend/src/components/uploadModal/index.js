@@ -2,15 +2,12 @@ import React, { useState } from 'react'
 import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box'
-// import FormControl from '@mui/material/FormControl'
-// import FormControlLabel from '@mui/material/FormControlLabel'
-// import FormLabel from '@mui/material/FormLabel'
-// import Radio from '@mui/material/Radio'
-// import RadioGroup from '@mui/material/RadioGroup'
 import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
+import useStyles from './styles';
 import { uploadImageMediaService, uploadAttachmentService } from '../../services/media'
+import Chip from '@mui/material/Chip';
 
 function UploadModal(props) {
   const { closeModal } = props
@@ -19,6 +16,8 @@ function UploadModal(props) {
   const [acceptedFileTypes, setAcceptedFilesType] = useState('.png, .jpg, .jpeg')
   const [displayMessage, setDisplayMessage] = useState(false)
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false)
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
 
   const resetModal = () => {
     setMediaName(null)
@@ -46,14 +45,12 @@ function UploadModal(props) {
     }
     return arr
   }
-    // async function uploadAttachment() {
-    //   const response = await uploadImageMediaService(formdata)
  
     let attachmentIds = await getAttachmentIds([])
     let body = {
       name: mediaName,
       attachments: attachmentIds,
-      tags: ['xyz']
+      tags
     }
     let mediaResponse =  await uploadImageMediaService(body)
     if (mediaResponse) {
@@ -66,45 +63,78 @@ function UploadModal(props) {
     }
   }
 
+  const handleTagChange = (e) => {
+
+    if (e.key === 'Enter' && tagInput !== ""){
+      let tagName = e.target.value
+      setTags([...tags, tagName])
+      setTagInput("");
+    }
+
+  }
+
+  const handleTagDelete = (tagTodelete) => {
+    const newTags = tags.filter(x => x !== tagTodelete);
+    setTags(newTags)
+  }
+
+  const classes = useStyles();
+
   return (
     <Modal
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      className={classes.uploadModalContainer}
       open={true}
       onClose={() => closeModal()}
       aria-labelledby="Upload Media Modal"
       aria-describedby="Modal form that will be used to upload media to backend"
     >
-      <Box sx={{ display: 'flex', width: '40%', height: '30rem', backgroundColor: 'white', borderRadius: 3 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', margin: '1em', width: '100%', marginBottom: '10%' }}>
+      <Box className={classes.box}>
+        <div className={classes.box1}>
           <div style={{ borderBottom: '1px solid black', marginBottom: '5%' }}>
             <p>Upload Media</p>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '10%' }}>
-            <InputLabel sx={{ marginRight: '5%' }}>Enter Media Name:</InputLabel>
-            <TextField id="outlined-basic" label="Media Name" variant="outlined" sx={{ width: '60%' }} onChange={(e) => handleMediaNameChange(e)} />
+          <div className={classes.inputContainer}>
+            <InputLabel>Media Name</InputLabel>
+            <TextField 
+              id="outlined-basic" 
+              label="Media Name" 
+              variant="outlined" 
+              sx={{ width: '60%' }} 
+              onChange={(e) => handleMediaNameChange(e)} 
+            />
           </div>
-          {/* <FormControl sx={{ marginBottom: '10%' }}>
-            <FormLabel id="demo-controlled-radio-buttons-group">Select Media Type:</FormLabel>
-            <RadioGroup
-              row
-              value={mediaType}
-              defaultValue={"image"}
-              onChange={(e, value) => {
-                setMediaType(value)
-                if (value === "image") setAcceptedFilesType('.png, .jpg, .jpeg')
-                if (value === "video") setAcceptedFilesType('.mp4')
-                if (value === "file") setAcceptedFilesType('.pdf, .doc, .docx, .xlsx')
-                if (value === "audio") setAcceptedFilesType('.mp3')
-              }}
-            >
-              <FormControlLabel value="image" control={<Radio />} label="Images" />
-              <FormControlLabel value="video" control={<Radio />} label="Videos" />
-              <FormControlLabel value="audio" control={<Radio />} label="Audios" />
-              <FormControlLabel value="file" control={<Radio />} label="Files" />
-            </RadioGroup>
-          </FormControl> */}
+          <div className={classes.inputContainer}>
+            <InputLabel>Media Description</InputLabel>
+            <TextField 
+              variant="outlined" 
+              label="Media Description" 
+              placeholder="Media Description" 
+              style={{ width:'60%' }}
+            />
+          </div>
+          <div className={classes.inputContainer}>
+            <InputLabel>Tags</InputLabel>
+            <TextField 
+              variant="outlined" 
+              label="Tag" 
+              placeholder="Create a tag" 
+              style={{ width:'60%' }}
+              value={tagInput}
+              onChange={(e)=> setTagInput(e.target.value)}
+              onKeyDown={(e) => handleTagChange(e)}
+            />
+          </div>
+          <div>
+            {
+              tags.map((tag, index) => {
+                return (
+                  <Chip label={tag} key={index} variant="outlined" onDelete={(e) => handleTagDelete(tag)} />
+                )
+              })
+            }
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+            <div className={classes.buttonsContainer}>
               <input
                 accept={acceptedFileTypes}
                 style={{ display: 'none' }}
@@ -113,7 +143,6 @@ function UploadModal(props) {
                 multiple={true}
                 onChange={(e) => {
                   setDisplayErrorMessage(false)
-                  console.log('these are target files:', e.target.files[0])
                   let files = e.target.files
                   setFiles(files)
                 }}
