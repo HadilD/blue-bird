@@ -2,31 +2,27 @@ import React, { useState } from 'react'
 import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormLabel from '@mui/material/FormLabel'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
+// import FormControl from '@mui/material/FormControl'
+// import FormControlLabel from '@mui/material/FormControlLabel'
+// import FormLabel from '@mui/material/FormLabel'
+// import Radio from '@mui/material/Radio'
+// import RadioGroup from '@mui/material/RadioGroup'
 import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import { uploadImageMediaService } from '../../services/media'
+import { uploadImageMediaService, uploadAttachmentService } from '../../services/media'
 
 function UploadModal(props) {
   const { closeModal } = props
   const [mediaName, setMediaName] = useState("")
-  const [uploadedFileName, setUploadedFileName] = useState("")
-  const [file, setFile] = useState(null)
-  const [mediaType, setMediaType] = useState("image")
+  const [files, setFiles] = useState(null)
   const [acceptedFileTypes, setAcceptedFilesType] = useState('.png, .jpg, .jpeg')
   const [displayMessage, setDisplayMessage] = useState(false)
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false)
 
   const resetModal = () => {
     setMediaName(null)
-    setUploadedFileName("")
-    setFile(null)
-    setMediaType("image")
+    setFiles(null)
     setAcceptedFilesType('.png, .jpg, .jpeg')
   }
 
@@ -34,31 +30,40 @@ function UploadModal(props) {
     setMediaName(e.target.value)
   }
 
-  const handleUpload = (e) => {
-    if (file === null) {
+  const handleUpload = async(e) => {
+    if (files === null) {
       setDisplayErrorMessage(true)
       return
     }
-    let formdata = new FormData()
-    if (mediaName.length > 0) {
-      formdata.append('file', file, mediaName)
-    }
-    else {
-      formdata.append('file', file)
-    }
 
-    async function uploadImageMedia() {
-      const response = await uploadImageMediaService(formdata)
-      if (response) {
-        setDisplayMessage(true)
-        setTimeout(() => {
-          setDisplayMessage(false)
-          resetModal()
-          closeModal()
-        }, 3000)
-      }
+  const getAttachmentIds = async(arr) => {
+    for (let i=0; i<files.length; i++) {
+      let attachmentToUpload = files[i]
+      let formdata = new FormData()
+      formdata.append('file', attachmentToUpload)
+      const res = await uploadAttachmentService(formdata)
+      arr = [...arr, res.id]
     }
-    uploadImageMedia();
+    return arr
+  }
+    // async function uploadAttachment() {
+    //   const response = await uploadImageMediaService(formdata)
+ 
+    let attachmentIds = await getAttachmentIds([])
+    let body = {
+      name: mediaName,
+      attachments: attachmentIds,
+      tags: ['xyz']
+    }
+    let mediaResponse =  await uploadImageMediaService(body)
+    if (mediaResponse) {
+      setDisplayMessage(true)
+      setTimeout(() => {
+        setDisplayMessage(false)
+        resetModal()
+        closeModal()
+      }, 3000)
+    }
   }
 
   return (
@@ -78,7 +83,7 @@ function UploadModal(props) {
             <InputLabel sx={{ marginRight: '5%' }}>Enter Media Name:</InputLabel>
             <TextField id="outlined-basic" label="Media Name" variant="outlined" sx={{ width: '60%' }} onChange={(e) => handleMediaNameChange(e)} />
           </div>
-          <FormControl sx={{ marginBottom: '10%' }}>
+          {/* <FormControl sx={{ marginBottom: '10%' }}>
             <FormLabel id="demo-controlled-radio-buttons-group">Select Media Type:</FormLabel>
             <RadioGroup
               row
@@ -97,7 +102,7 @@ function UploadModal(props) {
               <FormControlLabel value="audio" control={<Radio />} label="Audios" />
               <FormControlLabel value="file" control={<Radio />} label="Files" />
             </RadioGroup>
-          </FormControl>
+          </FormControl> */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
               <input
@@ -105,11 +110,12 @@ function UploadModal(props) {
                 style={{ display: 'none' }}
                 id="raised-button-file"
                 type="file"
+                multiple={true}
                 onChange={(e) => {
-                  let file = e.target.files[0]
-                  setUploadedFileName(file['name'])
-                  console.log("This is file name:", file['name'])
-                  setFile(file)
+                  setDisplayErrorMessage(false)
+                  console.log('these are target files:', e.target.files[0])
+                  let files = e.target.files
+                  setFiles(files)
                 }}
               />
               <label htmlFor="raised-button-file">
@@ -120,7 +126,6 @@ function UploadModal(props) {
                 <Button variant="raised" component="span" onClick={e => handleUpload(e)}>Upload</Button>
               </label>
             </div>
-            <p style={{ marginTop: '1%', marginLeft: '15%' }}>{uploadedFileName}</p>
           </div>
           {
             displayMessage &&

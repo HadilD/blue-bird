@@ -28,7 +28,18 @@ const getMedia = async (params) => {
 export const uploadImageMediaService = async (values) => {
   try {
     let body = values
-    const res = await protectedAxios.post(Request.UPLOAD_MEDIA, body, {
+    const res = await protectedAxios.post(Request.UPLOAD_MEDIA, body)
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}
+
+export const uploadAttachmentService = async (values) => {
+  try {
+    let body = values
+    const res = await protectedAxios.post(Request.UPLOAD_ATTACHMENT, body, {
       headers: {
         'Content-Type': 'multipart/form-data',
       }
