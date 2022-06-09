@@ -97,8 +97,10 @@ export default function PersistentDrawerLeft() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar style={{ backgroundColor: generalStyles.primaryColor }} position="fixed" open={open}>
-        <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+        {
+          isUserLoggedIn &&
+          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <div style={{display: 'flex', flexDirection: 'row'}}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -108,14 +110,14 @@ export default function PersistentDrawerLeft() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" noWrap component="div" sx={{marginTop: '3%'}}>
               {pageName}
             </Typography>
           </div>
           <div>
             <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
           </div>
-        </Toolbar>
+        </Toolbar>}
       </AppBar>
       <Drawer
         sx={{

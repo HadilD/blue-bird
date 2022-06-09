@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import useStyles from './styles';
 import SignIn from '../../components/signIn';
 import SignUp from '../../components/signUp';
+import AlertDialog from '../../errorBoundary';
 
 function Login () {
 
@@ -11,6 +12,7 @@ function Login () {
 
 	return (
 		<div className={classes.container}>
+			<AlertDialog />
 			{
 				signInDisplay
 				?
