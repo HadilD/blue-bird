@@ -9,7 +9,8 @@ import SearchBar from '../../components/searchBar';
 import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
-import {logoutUser} from '../../services/auth'
+import {logoutUser} from '../../services/auth';
+import PlacehoderImage from "./../../assests/placeholder.png";
 
 const VerticalPrototype = () => {
 
@@ -37,6 +38,8 @@ const VerticalPrototype = () => {
         setMediaPreviewModalData(mediaItem);
     }
 
+    console.log(mediaItems[0])
+
     const classes = useStyles();
     return (
         <div className={classes.container}>
@@ -46,7 +49,8 @@ const VerticalPrototype = () => {
 
                 {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
                     return <div key={index} className={classes.imageCard} >
-                        <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.url} />
+                        {console.log(mediaItem)}
+                       { (mediaItem.attachments && mediaItem.attachments.length !== 0) ?  <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.attachments[0].url}/> :  <img alt={mediaItem.name} className={classes.imageProps} src={PlacehoderImage}/>}
                         <div className={classes.iconLabel}>
                             <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
                             <VisibilityIcon onClick={() => { handleMediaPreview(mediaItem) }} className={classes.viewIcon} />
