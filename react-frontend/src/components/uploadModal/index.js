@@ -12,6 +12,8 @@ import Chip from '@mui/material/Chip';
 function UploadModal(props) {
   const { closeModal } = props
   const [mediaName, setMediaName] = useState("")
+  const [mediaDescription, setMediaDescription] = useState("")
+  const [mediaPrice, setMediaPrice] = useState("")
   const [files, setFiles] = useState(null)
   const [acceptedFileTypes, setAcceptedFilesType] = useState('.png, .jpg, .jpeg')
   const [displayMessage, setDisplayMessage] = useState(false)
@@ -27,6 +29,14 @@ function UploadModal(props) {
 
   const handleMediaNameChange = (e) => {
     setMediaName(e.target.value)
+  }
+
+  const handleMediaDescriptionChange= (e) => {
+    setMediaDescription(e.target.value)
+  }
+
+  const handleMediaPriceChange = (e) => {
+    setMediaPrice(e.target.value)
   }
 
   const handleUpload = async(e) => {
@@ -49,6 +59,8 @@ function UploadModal(props) {
     let attachmentIds = await getAttachmentIds([])
     let body = {
       name: mediaName,
+      description: mediaDescription,
+      cost: mediaPrice,
       attachments: attachmentIds,
       tags
     }
@@ -110,6 +122,18 @@ function UploadModal(props) {
               label="Media Description" 
               placeholder="Media Description" 
               style={{ width:'60%' }}
+              onChange={(e) => handleMediaDescriptionChange(e)} 
+            />
+          </div>
+          <div className={classes.inputContainer}>
+            <InputLabel>Price</InputLabel>
+            <TextField
+              type={"number"} 
+              variant="outlined" 
+              label="Price" 
+              placeholder="0" 
+              style={{ width:'60%' }}
+              onChange={(e) => handleMediaPriceChange(e)} 
             />
           </div>
           <div className={classes.inputContainer}>
