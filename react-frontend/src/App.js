@@ -21,6 +21,7 @@ import { Routes, Route } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
 import { Constants } from './constants/api';
+import { logoutUser } from './services/auth';
 import { setLoginStatus, setUserRole } from './redux/slice/user'
 
 const drawerWidth = 240;
@@ -116,9 +117,16 @@ export default function PersistentDrawerLeft() {
               {pageName}
             </Typography>
           </div>
-          <div>
-            <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
-          </div>
+          {
+            userRole === 'admin'
+            ?
+              <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
+            :
+              <div>
+                <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+              </div>
+          }
+
         </Toolbar>}
       </AppBar>
       <Drawer
