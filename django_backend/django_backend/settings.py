@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'channels',
 
-    'vp',
+    'chat',
     'static_content',
     'authentication',
 ]
@@ -94,6 +95,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_backend.wsgi.application'
+
+ASGI_APPLICATION = "django_backend.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(config('REDIS_HOST'), config("REDIS_PORT"))],
+        }
+    }
+}
 
 
 # Database
