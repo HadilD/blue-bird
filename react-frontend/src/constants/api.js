@@ -9,6 +9,7 @@ const PathPram = {
 const Constants = {
   STORAGE_ITEM_ACCESS_TOKEN: 'accessToken',
   STORAGE_ITEM_REFRESH_TOKEN: 'refreshToken',
+  STORAGE_ITEM_USER_ROLE: 'userRole'
 } 
 
 const Request = {

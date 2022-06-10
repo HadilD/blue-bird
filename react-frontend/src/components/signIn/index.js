@@ -2,9 +2,6 @@ import React from 'react'
 import { Formik } from 'formik';
 import { loginUser } from '../../services/auth'
 import useStyles from './styles';
-import Checkbox from '@mui/material/Checkbox';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 function SignIn (props) {
   const classes = useStyles();
@@ -71,17 +68,14 @@ function SignIn (props) {
             />
             <p className={classes.errorMsg}>{errors.password && touched.password && errors.password}</p>
           </div>
-          <div className={classes.formControl}>
-            <FormGroup>
-              <FormControlLabel 
-                control={<Checkbox 
-                  checked={values.isAdmin} 
-                  name="isAdmin" 
-                  onChange={handleChange}
-                />} 
-                label="Are you an Administrator ?" 
-              />
-            </FormGroup>
+          <div className={classes.adminFormControl}>
+            <input
+              type={'checkbox'} 
+              checked={values.isAdmin} 
+              name="isAdmin" 
+              onChange={handleChange}
+            />
+            <label className={classes.adminLabel}>Are you an Administrator ?</label>
           </div>
           <button type="submit" disabled={false} className={classes.button}>
             Submit

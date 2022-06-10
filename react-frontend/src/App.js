@@ -21,7 +21,7 @@ import { Routes, Route } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
 import { Constants } from './constants/api';
-import { setLoginStatus } from './redux/slice/user'
+import { setLoginStatus, setUserRole } from './redux/slice/user'
 
 const drawerWidth = 240;
 
@@ -80,8 +80,10 @@ export default function PersistentDrawerLeft() {
 
   React.useEffect(() => {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+    let userRole = localStorage.getItem(Constants.STORAGE_ITEM_USER_ROLE)
     if (accessToken) {
       dispatch(setLoginStatus(true))
+      dispatch(setUserRole(userRole))
     }
   },[])
 

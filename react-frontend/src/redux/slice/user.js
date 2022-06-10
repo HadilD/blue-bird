@@ -18,7 +18,7 @@ export const userSlice = createSlice({
             state.isUserLoggedIn = action.payload
         },
         setUserRole: (state, action) => {
-            state.setUserRole = action.payload
+            state.userRole = action.payload
         }
     }
 })
