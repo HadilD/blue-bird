@@ -1,13 +1,12 @@
 import React from 'react'
 import useStyles from './styles'
-import SearchByName from '../searchByName';
+
 
 function AdminMedia(){
   const approveStatus = true
   const classes = useStyles();
   return (
     <div className={classes.mainContainer}>
-      <SearchByName />
       <div className={classes.adContainer}>
         <div className={classes.imageContainer}>
           <img

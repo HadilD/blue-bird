@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import useStyles from './styles'
 import { useDispatch } from 'react-redux';
 import AdminMedia from '../../components/adminMedia';
+import SearchByName from '../../components/searchByName'
 import {setPageName} from '../../redux/slice/pagename'
 
 function Admin() {
@@ -16,6 +17,7 @@ function Admin() {
     })
     return (
         <div className={classes.container}>
+            <SearchByName />
             <AdminMedia />
             <AdminMedia />
             <AdminMedia />
