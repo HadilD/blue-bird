@@ -13,6 +13,7 @@ import { logoutUser } from '../../services/auth'
 import ProfileDetails from '../../components/profile/profileDetail';
 import user from '../../redux/slice/user';
 import { useNavigate } from 'react-router-dom';
+import PlacehoderImage from "./../../assests/placeholder.png";
 
 const VerticalPrototype = () => {
     const navigate = useNavigate();
@@ -40,6 +41,8 @@ const VerticalPrototype = () => {
         setMediaPreviewModalData(mediaItem);
     }
 
+    console.log(mediaItems[0])
+
     const classes = useStyles();
     return (
         <div className={classes.container}>
@@ -52,7 +55,8 @@ const VerticalPrototype = () => {
 
                 {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
                     return <div key={index} className={classes.imageCard} >
-                        <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.url} />
+                        {console.log(mediaItem)}
+                        {(mediaItem.attachments && mediaItem.attachments.length !== 0) ? <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.attachments[0].url} /> : <img alt={mediaItem.name} className={classes.imageProps} src={PlacehoderImage} />}
                         <div className={classes.iconLabel}>
                             <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
                             <VisibilityIcon onClick={() => { handleMediaPreview(mediaItem) }} className={classes.viewIcon} />
