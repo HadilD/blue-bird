@@ -3,11 +3,10 @@ import { makeStyles } from '@mui/styles'
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         margin: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        border: '1px solid red'
     }
 }))
 
