@@ -1,5 +1,5 @@
 import Store from '../../redux/store/store'
-import { setLoginStatus } from '../../redux/slice/user'
+import { setLoginStatus, setUserRole } from '../../redux/slice/user'
 import { Request, Constants } from '../../constants/api'
 import { openAxios } from '../instance'
 import { saveUserDetails } from '../../utils'
@@ -10,6 +10,7 @@ export const loginUser = async (values) => {
     const res = await openAxios.post(Request.LOGIN_USER, values)
     saveUserDetails(res.data)
     Store.dispatch(setLoginStatus(true))
+    Store.dispatch(setUserRole(res.role))
     return res.data
   } catch (err) {
     handleAPIError(err, 'Username or password is incorrect !')

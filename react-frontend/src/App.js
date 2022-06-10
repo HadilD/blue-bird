@@ -14,6 +14,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Login from './pages/Login'
 import About from './pages/about'
+import Admin from './pages/admin'
 import { useDispatch, useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
 import { Routes, Route } from 'react-router-dom'
@@ -74,6 +75,7 @@ export default function PersistentDrawerLeft() {
   const [open, setOpen] = React.useState(false);
   const pageName = useSelector(state => state.pageName.pageName)
   const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
+  const userRole = useSelector(state => state.user.userRole)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
@@ -140,7 +142,12 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <DrawerHeader />
         <Routes>
-          <Route path='/' element={isUserLoggedIn ? <VerticalPrototype /> : <Login />} />
+          <Route path='/' element={
+            isUserLoggedIn 
+            ? userRole === 'admin'
+              ?   <Admin />
+              :  <VerticalPrototype />
+            : <Login />} />
           <Route path='/about' element={<About />} />
         </Routes>
       </Main>
