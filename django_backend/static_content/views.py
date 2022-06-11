@@ -1,4 +1,7 @@
+import json
+
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -73,7 +76,24 @@ class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AttachmentSerializer
 
 
-class UnApproavedMediaListView(generics.ListAPIView):
-    queryset = Attachment.objects.all()
-    serializer_class = AttachmentSerializer
+class NotApprovedMediaListView(generics.ListCreateAPIView):
+    permission_classes = IsAdminUser,
+    serializer_class = MediaSerializer
 
+    def get_queryset(self):
+        is_approved: str = self.request.GET.get("is_approved")
+        if is_approved:
+            is_approved = json.loads(is_approved)
+            return Media.objects.filter(is_approved=is_approved)
+        else:
+            return Media.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        media_ids: list = request.data.get("ids")
+        approve: bool = request.data.get("approve", True)
+        if not media_ids:
+            return Response(data={"error": "please provide 'ids' list to approve"})
+
+        Media.objects.filter(id__in=media_ids).update(is_approved=approve)
+
+        return Response(MediaSerializer(Media.objects.all(), many=True).data)
