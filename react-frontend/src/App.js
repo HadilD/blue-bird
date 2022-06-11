@@ -22,6 +22,8 @@ import { setUploadModal } from './redux/slice/uploadModal';
 import MyAds from './pages/myAds';
 import { Constants } from './constants/api';
 import { setLoginStatus } from './redux/slice/user'
+import Home from './pages/home';
+import Profile from './pages/profile';
 
 const drawerWidth = 240;
 
@@ -82,7 +84,7 @@ export default function PersistentDrawerLeft() {
     if (accessToken) {
       dispatch(setLoginStatus(true))
     }
-  },[])
+  }, [])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,6 +146,8 @@ export default function PersistentDrawerLeft() {
           <Route path='/' element={isUserLoggedIn ? <VerticalPrototype /> : <Login />} />
           <Route path='/myads' element={<MyAds />} />
           <Route path='/about' element={<About />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Main>
     </Box >
