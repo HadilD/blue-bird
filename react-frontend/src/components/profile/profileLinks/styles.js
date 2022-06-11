@@ -1,6 +1,4 @@
 import { makeStyles } from '@mui/styles';
-import { borderLeft } from '@mui/system';
-// import { generalStyles } from '../../generalStyles';
 
 const useStyles = makeStyles(theme => ({
     container: {

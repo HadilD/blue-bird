@@ -10,8 +10,6 @@ import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
 import { logoutUser } from '../../services/auth'
-import ProfileDetails from '../../components/profile/profileDetail';
-import user from '../../redux/slice/user';
 import { useNavigate } from 'react-router-dom';
 import PlacehoderImage from "./../../assests/placeholder.png";
 
