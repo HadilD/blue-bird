@@ -72,3 +72,8 @@ class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
+
+class UnApproavedMediaListView(generics.ListAPIView):
+    queryset = Attachment.objects.all()
+    serializer_class = AttachmentSerializer
+
