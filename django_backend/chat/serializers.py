@@ -18,9 +18,22 @@ class RoomCreateSerializer(serializers.ModelSerializer):
 
 
 class RoomListSerializer(serializers.ModelSerializer):
+    from_user = serializers.SerializerMethodField("_from_user")
+    to_user = serializers.SerializerMethodField("_to_user")
+    latest_message = serializers.SerializerMethodField("_latest_message")
+
+    def _from_user(self, obj: Room):
+        return UserListingSerializerForChat(obj.from_user).data
+
+    def _to_user(self, obj: Room):
+        return UserListingSerializerForChat(obj.to_user).data
+
+    def _latest_message(self, obj: Room):
+        return MessageDetailSerializer(obj.message_set.order_by("-created_at").first()).data
+
     class Meta:
         model = Room
-        fields = "to_user", "from_user", "room_id", "created_at"
+        fields = "to_user", "from_user", "room_id", "latest_message", "created_at"
 
 
 class MessageCreateSerializer(serializers.ModelSerializer):
@@ -58,7 +71,9 @@ class MessageListSerializer(serializers.ModelSerializer):
         return str(obj.room.room_id)
 
 
+class MessageDetailSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Message
-        fields = "content", "room_id", "from_user", "to_user"
+        fields = "content", "created_at"
 
