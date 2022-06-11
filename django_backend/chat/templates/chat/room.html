@@ -64,10 +64,10 @@
 
   console.log(window.location.host);
   const chatSocket = new WebSocket(
-    'ws://'
+    'wss://'
     {#+ 'localhost:8001'#}
-    {#+ 'bluebird.no-ip.org'#}
-    + '35.158.112.45:8001'
+    + 'bluebird.no-ip.org'
+    {#+ '35.158.112.45:8001'#}
     + '/ws/'
     + roomId
     + '/'

@@ -17,6 +17,7 @@ class RoomListCreateAPIView(ListCreateAPIView):
             return RoomListSerializer
 
     def get_queryset(self):
+        current_user = self.request.user
         if self.request.method == "POST":
             return Room.objects.filter(from_user=self.request.user).order_by("-created_at")
         else:
