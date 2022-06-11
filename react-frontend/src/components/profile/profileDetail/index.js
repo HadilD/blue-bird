@@ -1,14 +1,13 @@
-//https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1293744/
 import { Button, Grid, Stack, TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
+import { generalStyles } from '../../../generalStyles';
 import avatar from './avatar.png';
 import { getUsers } from '../../../services/user';
 import { setUsers } from '../../../services/user';
 
 function ProfileDetails(props) {
     const classes = useStyles();
-
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -32,23 +31,23 @@ function ProfileDetails(props) {
             </Grid>
             <Grid item xs={6} className={classes.infogrid}>
                 <Stack>
-                    <div style={{ fontFamily: 'fantasy', fontSize: 21 }}>
+                    <div style={{ fontFamily: generalStyles.openSans, fontSize: 21 }}>
                         {
                             editing ?
                                 <TextField label="Name" variant="standard" type="text" value={name} onChange={(e) => { setName(e.target.value) }} /> : name
                         }
                     </div>
-                    <div style={{ fontFamily: 'cursive' }}>
+                    <div style={{ fontFamily: generalStyles.openSans, marginTop: '5%' }}>
                         {
                             editing ?
-                                <TextField label="Email" variant="standard" value={email} /> : email
+                                <TextField label="Email" variant="standard" value={email} disabled /> : email
                         }
                     </div>
                     <Grid container className={classes.blinks}>
 
                         {editing ?
                             <Grid item xs={12} md={6}>
-                                <Button style={{ fontFamily: 'cursive' }}
+                                <Button style={{ fontFamily: generalStyles.openSans }}
                                     variant='contained'
                                     size='small'
                                     onClick={() => {
@@ -58,7 +57,7 @@ function ProfileDetails(props) {
                                     }}>Apply Changes</Button>
                             </Grid> :
                             <Grid item xs={12} md={6}>
-                                <Button style={{ fontFamily: 'cursive', marginRight: 'auto', fontSize: 10 }}
+                                <Button style={{ fontFamily: generalStyles.openSans, marginRight: 'auto', fontSize: 10 }}
                                     variant='contained'
                                     size='small'
                                     onClick={() => {
