@@ -24,6 +24,8 @@ import { Constants } from './constants/api';
 import { setLoginStatus } from './redux/slice/user'
 import Home from './pages/home';
 import Profile from './pages/profile';
+import { useNavigate } from 'react-router-dom';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const drawerWidth = 240;
 
@@ -78,6 +80,7 @@ export default function PersistentDrawerLeft() {
   const pageName = useSelector(state => state.pageName.pageName)
   const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
@@ -115,8 +118,14 @@ export default function PersistentDrawerLeft() {
               {pageName}
             </Typography>
           </div>
-          <div>
+          <div style={{width: '12%', display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+            <IconButton 
+              aria-label="profile"
+              onClick={() => navigate('/profile')} 
+            >
+              <AccountCircleOutlinedIcon fontSize="large" sx={{color: 'white'}}/>
+            </IconButton>
           </div>
         </Toolbar>}
       </AppBar>

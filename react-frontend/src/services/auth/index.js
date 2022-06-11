@@ -10,7 +10,6 @@ export const loginUser = async (values) => {
     const res = await openAxios.post(Request.LOGIN_USER, values)
     saveUserDetails(res.data)
     Store.dispatch(setLoginStatus(true))
-    console.log(res)
   } catch (err) {
     handleAPIError(err, 'Username or password is incorrect !')
     console.log(JSON.stringify(err))

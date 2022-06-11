@@ -8,8 +8,7 @@ export const fetchMedia = async (searchTerm = null, category = null) => {
     let params = {}
     if (searchTerm !== null && searchTerm !== '') params['search'] = searchTerm
     // if (category !== 'all' && category !== null) params['type'] = category
-    const response = await getMedia(params)
-    console.log('New API response:', response)
+    await getMedia(params)
 }
 
 

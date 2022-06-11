@@ -3,7 +3,6 @@ import useStyles from './styles';
 import { Button, Stack } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import AdUnitsIcon from '@mui/icons-material/AdUnits';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';

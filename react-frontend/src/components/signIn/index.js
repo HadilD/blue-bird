@@ -31,7 +31,6 @@ function SignIn (props) {
       }}
       
       onSubmit={(values, actions) => {
-        console.log('submit clicked:', values)
         loginUser(values)
         actions.resetForm({
           values: {email: '', password: ''}
