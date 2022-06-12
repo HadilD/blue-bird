@@ -43,7 +43,6 @@ const VerticalPrototype = () => {
         setMediaPreviewModalData(mediaItem);
     }
 
-    console.log(mediaItems[0])
 
     const classes = useStyles();
     return (
