@@ -14,8 +14,6 @@ import {
 import { getAllRoomsForUser, getCurrentChat } from '../../services/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRooms, setCurrentChat } from '../../redux/slice/chat'
-import { getUsers } from '../../services/user';
-
 
 const ChatScreen = () => {
 
@@ -36,10 +34,7 @@ const ChatScreen = () => {
 
   useEffect(() => {
     getRooms()
-    getUsers()
   }, [])
-
-  console.log('USERS:',loggedInUserId)
 
   //create websocket on room change
   useEffect(() => {
@@ -92,7 +87,7 @@ const ChatScreen = () => {
           <MessageList>
             {
               currentChat.map((chatMsgObj, index) => {
-                const msgDirection = loggedInUserId === chatMsgObj.from_user.id ? "incoming" : 'outgoing'
+                const msgDirection = loggedInUserId && loggedInUserId === chatMsgObj.from_user.id ? "incoming" : 'outgoing'
                 return (
                   <>
                     <Message 
