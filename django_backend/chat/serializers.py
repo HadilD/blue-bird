@@ -53,7 +53,7 @@ class MessageCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = "content", "room_id"
+        fields = "content", "room_id", "from_user", "to_user"
 
 
 class MessageListSerializer(serializers.ModelSerializer):
@@ -62,10 +62,10 @@ class MessageListSerializer(serializers.ModelSerializer):
     room_id = serializers.SerializerMethodField("_room_id")
 
     def _from_user(self, obj: Message):
-        return UserListingSerializerForChat(obj.room.from_user).data
+        return UserListingSerializerForChat(obj.from_user).data
 
     def _to_user(self, obj: Message):
-        return UserListingSerializerForChat(obj.room.to_user).data
+        return UserListingSerializerForChat(obj.to_user).data
 
     def _room_id(self, obj: Message):
         return str(obj.room.room_id)
