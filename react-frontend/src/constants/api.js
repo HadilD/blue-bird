@@ -22,6 +22,8 @@ const Request = {
   LOGIN_USER: 'api/auth/login',
   REGISTER_USER: 'api/auth/register',
   REFRESH_TOKEN: 'api/auth/login/refresh',
+  GET_ALL_ROOMS_FOR_USER: 'api/chat/rooms',
+  GET_CURRENT_CHATS: 'api/chat/',
   ADMIN: 'admin',
 }
 
