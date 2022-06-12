@@ -16,11 +16,15 @@ import Login from './pages/Login'
 import About from './pages/about'
 import { useDispatch, useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
 import { Constants } from './constants/api';
 import { setLoginStatus } from './redux/slice/user'
+import ChatScreen from './pages/ChatScreen';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 import Home from './pages/home';
 import Profile from './pages/profile';
 
@@ -77,6 +81,7 @@ export default function PersistentDrawerLeft() {
   const pageName = useSelector(state => state.pageName.pageName)
   const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
@@ -99,25 +104,25 @@ export default function PersistentDrawerLeft() {
       <AppBar style={{ backgroundColor: generalStyles.primaryColor }} position="fixed" open={open}>
         {
           isUserLoggedIn &&
-          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <div style={{display: 'flex', flexDirection: 'row'}}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{marginTop: '3%'}}>
-              {pageName}
-            </Typography>
-          </div>
-          <div>
-            <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
-          </div>
-        </Toolbar>}
+          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
+                {pageName}
+              </Typography>
+            </div>
+            <div>
+              <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+            </div>
+          </Toolbar>}
       </AppBar>
       <Drawer
         sx={{
@@ -138,11 +143,24 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+        <List>
+          {['Chat'].map((text, index) => (
+            <ListItem key={text} disablePadding onClick={() => { if (text === 'Chat') navigate('/chat') }}>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
         <Routes>
           <Route path='/' element={isUserLoggedIn ? <VerticalPrototype /> : <Login />} />
+          <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
           <Route path='/home' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
