@@ -13,7 +13,7 @@ export const getUsers = async () => {
       }
     })
     console.log({data:res.data})
-    // Store.dispatch(setAllUsers(res.data))
+    Store.dispatch(setAllUsers(res.data))
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
