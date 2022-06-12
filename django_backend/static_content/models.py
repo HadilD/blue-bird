@@ -33,18 +33,10 @@ class Media(models.Model):
 
 
 class Attachment(models.Model):
+    ALLOWED_TYPES = Choices("image", "video", "audio", "application",)
     ALLOWED_FORMATS = Choices(
-        ("png", _("image/png")),
-        ("jpg", _("image/jpg")),
-        ("jpeg", _("image/jpeg")),
-        ("gif", _("image/gif")),
-        ("mp4", _("video/mp4")),
-        ("webm", _("video/webm")),
-        ("x-m4v", _("video/x-m4v")),
-        ("quicktime", _("video/quicktime")),
-        ("x-wav", _("audio/x-wav")),
-        ("mp3", _("audio/mp3")),
-        ("mpeg", _("audio/mpeg")),
+        "png", "jpg", "jpeg", "gif", "mp4", "webm", "x-m4v", "quicktime", "x-wav",
+        "mp3", "mpeg",
     )
     name = models.CharField(max_length=100, blank=False)
     media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True)
@@ -52,17 +44,12 @@ class Attachment(models.Model):
     format = models.CharField(max_length=100,
                               choices=ALLOWED_FORMATS,
                               blank=False)
-    # type = Choices(
-    #     ("image", _("image")),
-    #     ("video", _("video")),
-    #     ("audio", _("audio")),
-    #     ("application", _("application")),
-    #
-    # )
+    type = models.CharField(max_length=30,
+                            choices=ALLOWED_TYPES,
+                            blank=False)
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = "Media attachment"
-

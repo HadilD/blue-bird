@@ -16,13 +16,14 @@ class CustomSlugRelatedField(serializers.SlugRelatedField):
 
 class AttachmentSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField("get_url")
+    type = serializers.CharField(read_only=True)
 
     def get_url(self, obj: Attachment):
         return get_public_link(obj.uri)
 
     class Meta:
         model = Attachment
-        fields = ["id", "name", "format", "url", ]
+        fields = ["id", "name", "format", "url", "type"]
 
 
 class AttachmentUploadSerializer(serializers.ModelSerializer):

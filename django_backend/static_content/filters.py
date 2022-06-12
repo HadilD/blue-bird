@@ -10,18 +10,18 @@ class TagsFilter(filters.CharFilter):
         return queryset
 
 
-class AttachmentFormatFilter(filters.CharFilter):
+class TypesFilter(filters.CharFilter):
     def filter(self, queryset, value):
         if value:
-            media_types = [media_type.strip() for media_type in value.split(",")]
-            queryset = queryset.filter(attachment__format__in=media_types).distinct()
+            types = [type.strip() for type in value.split(",")]
+            queryset = queryset.filter(attachment__type__in=types).distinct()
 
         return queryset
 
 
 class MediaFilter(filters.FilterSet):
     tags = TagsFilter()
-    types = AttachmentFormatFilter()
+    types = TypesFilter()
 
     class Meta:
         model = Media
