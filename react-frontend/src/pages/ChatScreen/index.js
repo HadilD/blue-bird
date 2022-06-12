@@ -23,7 +23,7 @@ const ChatScreen = () => {
   const dispatch = useDispatch()
   const chatRooms = useSelector(state => state.chat.rooms)
   const currentChat = useSelector(state => state.chat.currentChat)
-  const loggedInUserId = useSelector(state => state.user.id)
+  const loggedInUserId = useSelector(state => state.users.id)
   const [currentWebSocket, setCurrentWebSocket] = useState(null)
   const [currentRoom, setCurrentRoom] = useState(null)
 
