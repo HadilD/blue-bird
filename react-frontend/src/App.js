@@ -25,6 +25,8 @@ import ChatScreen from './pages/ChatScreen';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Home from './pages/home';
+import Profile from './pages/profile';
 
 const drawerWidth = 240;
 
@@ -160,6 +162,8 @@ export default function PersistentDrawerLeft() {
           <Route path='/' element={isUserLoggedIn ? <VerticalPrototype /> : <Login />} />
           <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Main>
     </Box >
