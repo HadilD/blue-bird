@@ -14,6 +14,7 @@ import {
 import { getAllRoomsForUser, getCurrentChat } from '../../services/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRooms, setCurrentChat } from '../../redux/slice/chat'
+import { getUsers } from '../../services/user';
 
 
 const ChatScreen = () => {
@@ -30,17 +31,18 @@ const ChatScreen = () => {
 
   const getRooms = async() => {
     const rooms = await getAllRoomsForUser()
-    console.log('NewRooms', rooms)
     dispatch(setRooms(rooms))
   }
 
   useEffect(() => {
     getRooms()
+    getUsers()
   }, [])
+
+  console.log('USERS:',loggedInUserId)
 
   //create websocket on room change
   useEffect(() => {
-    console.log("use effect working")
     if (roomId !== null) {
       const chatSocket = new WebSocket('wss://bluebird.no-ip.org/ws/'+ roomId + '/');
       setCurrentWebSocket(chatSocket);
@@ -48,7 +50,6 @@ const ChatScreen = () => {
   }, [roomId])
 
   useEffect(()=>{
-    console.log('Current WBS:', currentWebSocket)
     if (currentWebSocket !== null){
       currentWebSocket.onopen = function(e) {
         console.log("Connection Established")
@@ -63,7 +64,6 @@ const ChatScreen = () => {
   }
 
   const classes = useStyles();
-  console.log('Chat rooms:', chatRooms)
   return (
     <div className={classes.root}>
       <MainContainer style={{height: '85vh', width: '100%', display: 'flex', flexDirection: 'row'}}>
@@ -103,7 +103,6 @@ const ChatScreen = () => {
                       sender: chatMsgObj.from_user.first_name + ' ' + chatMsgObj.from_user.last_name,
                       direction: msgDirection,
                       position: "single",
-                      sentTime: chatMsgObj.createdAt,
                     }} />
                   </>
                 )

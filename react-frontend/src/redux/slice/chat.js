@@ -11,7 +11,6 @@ export const chatSlice = createSlice({
     initialState,
     reducers: {
         setRooms: (state, action) => {
-            console.log('Action', action.payload)
             state.rooms = action.payload
         },
         setCurrentChat: (state, action) => {
