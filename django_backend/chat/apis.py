@@ -17,10 +17,10 @@ class RoomListCreateAPIView(ListCreateAPIView):
             return RoomListSerializer
 
     def get_queryset(self):
-        if self.request.method == "POST":
-            return Room.objects.filter(from_user=self.request.user).order_by("-created_at")
-        else:
-            return Room.objects.all()
+        current_user = self.request.user
+        return Room.objects.filter(from_user=current_user).order_by(
+            "-created_at"
+        ) | Room.objects.filter(to_user=current_user).order_by("-created_at")
 
     def create(self, request, *args, **kwargs):
         serializer = RoomCreateSerializer(data=request.data)
@@ -30,13 +30,17 @@ class RoomListCreateAPIView(ListCreateAPIView):
 
             if to_user == request.user:
                 raise NotAValidToUserError
-            if Room.objects.filter(from_user=request.user, to_user=to_user):
+            if Room.objects.filter(
+                from_user=request.user, to_user=to_user
+            ) | Room.objects.filter(to_user=request.user, from_user=to_user):
                 raise RoomAlreadyExistsError(to_user.id)
 
             saved_room = serializer.save(from_user=request.user)
             response = Response(data=RoomListSerializer(saved_room).data)
         else:
-            response = Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            response = Response(
+                data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
         return response
 
@@ -45,5 +49,7 @@ class MessageListApiView(RetrieveAPIView):
     queryset = Message.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
-        messages = Message.objects.filter(room__room_id=kwargs.get("room_id")).order_by("-created_at")
+        messages = Message.objects.filter(room__room_id=kwargs.get("room_id")).order_by(
+            "-created_at"
+        )
         return Response(MessageListSerializer(messages, many=True).data)

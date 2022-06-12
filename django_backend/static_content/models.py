@@ -25,6 +25,9 @@ class Media(models.Model):
     cost = models.DecimalField(decimal_places=2, max_digits=6, default=0)
     tags = models.ManyToManyField(Tag, related_name="media", null=True)
 
+    is_published = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
 
