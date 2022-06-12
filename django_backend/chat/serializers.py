@@ -70,6 +70,10 @@ class MessageListSerializer(serializers.ModelSerializer):
     def _room_id(self, obj: Message):
         return str(obj.room.room_id)
 
+    class Meta:
+        model = Message
+        fields = "content", "room_id", "from_user", "to_user", "created_at"
+
 
 class MessageDetailSerializer(serializers.ModelSerializer):
 
