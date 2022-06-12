@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useStyles from './styles'
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
@@ -13,15 +13,20 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import { getAllRoomsForUser, getCurrentChat } from '../../services/chat';
 import { useDispatch, useSelector } from 'react-redux';
-import {setRooms, setCurrentChat} from '../../redux/slice/chat'
+import { setRooms, setCurrentChat } from '../../redux/slice/chat'
 
 
 const ChatScreen = () => {
+
+  const [roomId, setRoomId] = useState(null)
 
   const dispatch = useDispatch()
   const chatRooms = useSelector(state => state.chat.rooms)
   const currentChat = useSelector(state => state.chat.currentChat)
   const loggedInUserId = useSelector(state => state.user.id)
+  const [currentWebSocket, setCurrentWebSocket] = useState(null)
+  const [currentRoom, setCurrentRoom] = useState(null)
+
 
   const getRooms = async() => {
     const rooms = await getAllRoomsForUser()
@@ -33,6 +38,30 @@ const ChatScreen = () => {
     getRooms()
   }, [])
 
+  //create websocket on room change
+  useEffect(() => {
+    console.log("use effect working")
+    if (roomId !== null) {
+      const chatSocket = new WebSocket('wss://bluebird.no-ip.org/ws/'+ roomId + '/');
+      setCurrentWebSocket(chatSocket);
+    }
+  }, [roomId])
+
+  useEffect(()=>{
+    console.log('Current WBS:', currentWebSocket)
+    if (currentWebSocket !== null){
+      currentWebSocket.onopen = function(e) {
+        console.log("Connection Established")
+      };
+    }
+  },[currentWebSocket])
+
+  if (currentWebSocket != null) {
+    currentWebSocket.onmessage = function(event) {
+      getCurrentChat({room_id: roomId})
+    }
+  }
+
   const classes = useStyles();
   console.log('Chat rooms:', chatRooms)
   return (
@@ -41,14 +70,17 @@ const ChatScreen = () => {
         <ConversationList>
           {
             chatRooms && chatRooms.map(room => {
-              console.log('Sagar Rooms: ', room)
               return (
                 <>
                   <Conversation 
                     name={`${room.to_user.first_name} ${room.to_user.last_name}`} 
                     key={room.to_user.id} 
                     info={room.latest_message.content}
-                    onClick={() => getCurrentChat({room_id: room.room_id})}
+                    onClick={() => {
+                      setCurrentRoom(room)
+                      setRoomId(room.room_id)
+                      getCurrentChat({room_id: room.room_id})
+                    }}
                   />
                   <MessageSeparator />
                 </>
@@ -78,7 +110,12 @@ const ChatScreen = () => {
               })
             }
           </MessageList>
-          <MessageInput placeholder="Type message here" />
+          <MessageInput placeholder="Type message here" onSend={(e) => {
+              currentWebSocket.send(JSON.stringify({
+                'content': e,
+                'room_id': roomId
+            }));
+          }} />
         </ChatContainer>
     </MainContainer>
     </div>
