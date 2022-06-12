@@ -25,6 +25,7 @@ const ChatScreen = () => {
     const loggedInUserId = useSelector(state => state.user)
     const [currentWebSocket, setCurrentWebSocket] = useState(null)
     const [currentRoom, setCurrentRoom] = useState(null)
+    const [fromUser, setFromUser] = useState("")
 
     const getRooms = async () => {
         const rooms = await getAllRoomsForUser()
@@ -73,6 +74,7 @@ const ChatScreen = () => {
                                             setCurrentRoom(room)
                                             setRoomId(room.room_id)
                                             getCurrentChat({ room_id: room.room_id })
+                                            setFromUser((room.to_user.id === (loggedInUserId && loggedInUserId.users && loggedInUserId.users.id)) ? room.from_user.id : room.to_user.id)
                                         }}
                                     />
                                     <MessageSeparator />
@@ -85,7 +87,7 @@ const ChatScreen = () => {
                     <MessageList>
                         {
                             currentChat.map((chatMsgObj, index) => {
-                                const msgDirection = loggedInUserId && loggedInUserId.users && loggedInUserId.users.id === chatMsgObj.from_user.id ? "incoming" : 'outgoing'
+                                const msgDirection = loggedInUserId && loggedInUserId.users && loggedInUserId.users.id === chatMsgObj.from_user.id ? "outgoing" : 'incoming'
                                 return (
                                     <>
                                         <Message
@@ -105,7 +107,9 @@ const ChatScreen = () => {
                     <MessageInput placeholder="Type message here" onSend={(e) => {
                         currentWebSocket.send(JSON.stringify({
                             'content': e,
-                            'room_id': roomId
+                            'room_id': roomId,
+                            'from_user': loggedInUserId && loggedInUserId.users && loggedInUserId.users.id,
+                            'to_user': fromUser,
                         }));
                     }} />
                 </ChatContainer>
