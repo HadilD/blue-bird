@@ -37,8 +37,8 @@ class Media(models.Model):
 class Attachment(models.Model):
     ALLOWED_TYPES = Choices("image", "video", "audio", "application",)
     ALLOWED_FORMATS = Choices(
-        "png", "jpg", "jpeg", "gif", "mp4", "webm", "x-m4v", "quicktime", "x-wav",
-        "mp3", "mpeg",
+        "png", "jpg", "jpeg", "gif", "mp4", "webm", "x-m4v", "quicktime",
+        "x-wav", "mp3", "mpeg",
     )
     name = models.CharField(max_length=100, blank=False)
     media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True)

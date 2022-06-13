@@ -20,7 +20,7 @@ class MediaList(generics.ListCreateAPIView):
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = MediaFilter
-    search_fields = ['name', 'description', 'tags__name']
+    search_fields = ["name", "description", "tags__name", "owner__name"]
 
     def create(self, request):
         serializer = MediaSerializer(data=request.data)
