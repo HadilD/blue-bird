@@ -22,7 +22,9 @@ class TypesFilter(filters.CharFilter):
 class MediaFilter(filters.FilterSet):
     tags = TagsFilter()
     types = TypesFilter()
+    min_cost = filters.NumberFilter(field_name="cost", lookup_expr="gte")
+    max_cost = filters.NumberFilter(field_name="cost", lookup_expr="lte")
 
     class Meta:
         model = Media
-        fields = ["is_enabled", "tags", "types"]
+        fields = ["is_enabled", "tags", "types", "min_cost", "max_cost", ]
