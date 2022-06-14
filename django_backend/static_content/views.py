@@ -49,8 +49,14 @@ class MediaList(generics.ListCreateAPIView):
 
 
 class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Media.objects.all()
+    queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
+
+    def delete(self, request, pk):
+        media = Media.objects.get(pk=pk)
+        media.is_enabled = False
+        media.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AttachmentCreate(generics.CreateAPIView):
@@ -108,7 +114,7 @@ class MyMediasList(generics.ListAPIView):
     """
     View for listing medias owned by the currently authenticated user.
     """
-    queryset = Media.objects.all()
+    queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
 
     def get_queryset(self):
