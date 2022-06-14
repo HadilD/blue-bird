@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from static_content.models import Media, Attachment, Tag
+from static_content.models import Media, Attachment, Tag, Order
 from static_content.s3_service import get_public_link
 from authentication.serializers import UserDetailsSerializer
 
@@ -44,7 +44,8 @@ class MediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Media
-        fields = ["id", "owner", "name", "description", "cost","is_approved", "attachments", "tags",]
+        fields = ["id", "name", "description", "cost", "owner", "created_at", "is_approved",
+                  "attachments", "tags", "was_bought", ]
 
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])
@@ -53,3 +54,10 @@ class MediaSerializer(serializers.ModelSerializer):
             t, _ = Tag.objects.get_or_create(name=tag_name)
             media.tags.add(t)
         return media
+
+
+class OrderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = "__all__"
