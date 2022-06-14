@@ -9,7 +9,6 @@ from rest_framework import filters
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-
 from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer
@@ -17,7 +16,6 @@ from static_content.serializers.serializers import MediaSerializer, AttachmentSe
 from static_content.models import Media, Attachment, Order
 from static_content.filters import MediaFilter
 from django_filters.rest_framework import DjangoFilterBackend
-
 
 
 class MediaList(generics.ListCreateAPIView):
@@ -130,6 +128,8 @@ class OrderCreate(generics.CreateAPIView):
             buyer = self.request.user
             price = media.cost
             order = Order.objects.create(media=media, buyer=buyer, price=price)
+            media.was_bought = media.was_bought + 1
+            media.save()
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
             return Response({"error": "media with id {pk} does not exist".format(pk=pk)},
@@ -157,5 +157,4 @@ class MyOrdersList(generics.ListAPIView):
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user)
 
-
-    #TODO: ask if we also need api for listing orders made to a particular user (not by)
+# TODO: ask if we also need api for listing orders made to a particular user (not by)
