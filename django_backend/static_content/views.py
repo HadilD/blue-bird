@@ -106,14 +106,14 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
         return Response(MediaSerializer(Media.objects.all(), many=True).data)
 
 
-class MyMediaList(generics.ListAPIView):
+class MyMediasList(generics.ListAPIView):
+    """
+    View for listing medias owned by the currently authenticated user.
+    """
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
 
     def get_queryset(self):
-        """
-        Returns the list of medias owned by the currently authenticated user.
-        """
         return Media.objects.filter(owner=self.request.user)
 
 
@@ -144,3 +144,18 @@ class OrderList(generics.ListAPIView):
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAdminUser]
+
+
+class MyOrdersList(generics.ListAPIView):
+    """
+    View for listing orders made by the currently authenticated user.
+    """
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        return Order.objects.filter(buyer=self.request.user)
+
+
+    #TODO: ask if we also need api for listing orders made to a particular user (not by)
