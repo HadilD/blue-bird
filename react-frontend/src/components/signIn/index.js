@@ -68,15 +68,6 @@ function SignIn (props) {
             />
             <p className={classes.errorMsg}>{errors.password && touched.password && errors.password}</p>
           </div>
-          <div className={classes.adminFormControl}>
-            <input
-              type={'checkbox'} 
-              checked={values.isAdmin} 
-              name="isAdmin" 
-              onChange={handleChange}
-            />
-            <label className={classes.adminLabel}>Are you an Administrator ?</label>
-          </div>
           <button type="submit" disabled={false} className={classes.button}>
             Submit
           </button>
