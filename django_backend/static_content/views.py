@@ -3,17 +3,21 @@ import json
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework import filters
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+
 
 from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer
-from rest_framework import generics
 
 from static_content.models import Media, Attachment, Order
 from static_content.filters import MediaFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+
 
 
 class MediaList(generics.ListCreateAPIView):
@@ -121,11 +125,17 @@ class OrderCreate(generics.CreateAPIView):
     serializer_class = OrderSerializer
 
     def create(self, request, pk):
-        media = Media.objects.get(pk=pk)
-        buyer = self.request.user
-        price = media.cost
-        order = Order.objects.create(media=media, buyer=buyer, price=price)
-        return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+        try:
+            media = Media.objects.get(pk=pk)
+            buyer = self.request.user
+            price = media.cost
+            order = Order.objects.create(media=media, buyer=buyer, price=price)
+            return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+            return Response({"error": "media with id {pk} does not exist".format(pk=pk)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        except IntegrityError:
+            return Response({"error": "order has been already placed"}, status=status.HTTP_201_CREATED)
 
 
 class OrderList(generics.ListAPIView):
