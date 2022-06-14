@@ -8,7 +8,6 @@ from rest_framework import filters
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Q
 
 from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
@@ -22,9 +21,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 class MediaList(generics.ListCreateAPIView):
     queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_class = MediaFilter
-    search_fields = ["name", "description", "tags__name", "owner__name"]
 
     def create(self, request):
         serializer = MediaSerializer(data=request.data)
