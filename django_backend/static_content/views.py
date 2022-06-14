@@ -6,17 +6,18 @@ from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 
 from static_content.s3_service import upload_file
-from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, AttachmentUploadSerializer
+from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
+    AttachmentUploadSerializer, OrderSerializer
 from rest_framework import generics
 
-from static_content.models import Media, Attachment
+from static_content.models import Media, Attachment, Order
 from static_content.filters import MediaFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
 
 class MediaList(generics.ListCreateAPIView):
-    queryset = Media.objects.all()
+    queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = MediaFilter
@@ -25,7 +26,7 @@ class MediaList(generics.ListCreateAPIView):
     def create(self, request):
         serializer = MediaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        media = serializer.save(owner=self.request.user,)
+        media = serializer.save(owner=self.request.user, )
         attachments = request.data.get("attachments")
         for id in attachments:
             try:
@@ -99,3 +100,37 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
         Media.objects.filter(id__in=media_ids).update(is_approved=approve)
 
         return Response(MediaSerializer(Media.objects.all(), many=True).data)
+
+
+class MyMediaList(generics.ListAPIView):
+    queryset = Media.objects.all()
+    serializer_class = MediaSerializer
+
+    def get_queryset(self):
+        """
+        Returns the list of medias owned by the currently authenticated user.
+        """
+        return Media.objects.filter(owner=self.request.user)
+
+
+class OrderCreate(generics.CreateAPIView):
+    """
+    View for creating orders.
+    """
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def create(self, request, pk):
+        media = Media.objects.get(pk=pk)
+        buyer = self.request.user
+        price = media.cost
+        order = Order.objects.create(media=media, buyer=buyer, price=price)
+        return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+
+
+class OrderList(generics.ListAPIView):
+    """
+    View for listing existing orders.
+    """
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
