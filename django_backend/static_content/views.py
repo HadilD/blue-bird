@@ -8,6 +8,7 @@ from rest_framework import filters
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
+from django.db.models import Q
 
 from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
@@ -163,4 +164,26 @@ class MyOrdersList(generics.ListAPIView):
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user)
 
+
 # TODO: ask if we also need api for listing orders made to a particular user (not by)
+
+
+class MediaSearch(generics.ListAPIView):
+    """
+    View for searching media
+    """
+    queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
+    serializer_class = MediaSerializer
+
+    def get_queryset(self):
+        search_key = self.request.query_params["search"]
+        search_words = [word.strip() for word in search_key.split(" ")]
+        qs = Media.objects.none()
+        for word in search_words:
+            qs = qs | Media.objects.filter(name__icontains=word, is_enabled=True) | \
+                 Media.objects.filter(description__icontains=word, is_enabled=True) | \
+                 Media.objects.filter(tags__name__icontains=word, is_enabled=True) | \
+                 Media.objects.filter(owner__first_name__icontains=word, is_enabled=True) | \
+                 Media.objects.filter(owner__last_name__icontains=word, is_enabled=True)
+
+        return qs
