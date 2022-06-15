@@ -12,7 +12,8 @@ export const getUsers = async () => {
         authorization: "Bearer " + localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
       }
     })
-    // Store.dispatch(setAllUsers(res.data))
+    console.log({data:res.data})
+    Store.dispatch(setAllUsers(res.data))
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))

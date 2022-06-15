@@ -14,6 +14,7 @@ import ProfileDetails from '../../components/profile/profileDetail';
 import user from '../../redux/slice/user';
 import { useNavigate } from 'react-router-dom';
 import PlacehoderImage from "./../../assests/placeholder.png";
+import { getUsers } from '../../services/user';
 
 const VerticalPrototype = () => {
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ const VerticalPrototype = () => {
 
     useEffect(() => {
         fetchMedia()
+        getUsers()
     }, [])
 
     const closeModal = () => {
@@ -41,7 +43,6 @@ const VerticalPrototype = () => {
         setMediaPreviewModalData(mediaItem);
     }
 
-    console.log(mediaItems[0])
 
     const classes = useStyles();
     return (

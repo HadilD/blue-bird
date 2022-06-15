@@ -5,6 +5,7 @@ import userReducer from '../slice/user'
 import uploadModalReducer from '../slice/uploadModal'
 import mediaReducer from '../slice/media'
 import error from '../slice/error'
+import chat from '../slice/chat'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,8 @@ export const store = configureStore({
       uploadModal: uploadModalReducer,
       media: mediaReducer,
       error,
+      chat,
+
   },
 })
 
