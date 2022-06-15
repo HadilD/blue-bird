@@ -20,6 +20,8 @@ const Request = {
   LOGIN_USER: 'api/auth/login',
   REGISTER_USER: 'api/auth/register',
   REFRESH_TOKEN: 'api/auth/login/refresh',
+  GET_ADMIN_MEDIA: 'api/medias/approve',
+  UPDATE_MEDIA_STATUS_ADMIN: 'api/medias/approve',
   ADMIN: 'admin',
 }
 

@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import useStyles from './styles';
-import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
+import { Select } from '@mui/material';
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
 
 
-function SearchByName () {
+function SearchByName (props) {
+    const { adminMedia } = props
     const [searchTerm, setSearchTerm] = useState('')
+    const [searchCategory, setSearchCategory] = useState('all')
     const classes = useStyles();
     
     const handleChange = e => setSearchTerm(e.target.value)
-    const handleOnClick = () => console.log('Search clicked..')
+    const handleSearchCategoryChange = (e) => {
+        setSearchCategory(e.target.value)
+        if (e.target.value === 'all') {
+            adminMedia()
+        }
+        else if (e.target.value === 'approved') {
+            adminMedia({is_approved: true})
+        } else {
+            adminMedia({is_approved: false})
+        }
+    }
 
     return (
         <div className={classes.searchContainer}>
@@ -23,17 +38,21 @@ function SearchByName () {
                     value={searchTerm}
                 />
             </div>
-            <div className={classes.searchButtonContainer}>
-                <Button 
-                    variant="contained" 
-                    disableElevation 
-                    onClick={handleOnClick}
-                    sx={{backgroundColor: '#1d3461', textTransform: 'none'}}
+            <FormControl>
+                <InputLabel id="media-categories">Categories</InputLabel>
+                <Select
+                    sx={{width: '10rem', height: '40px', fontSize: 16}}
+                    labelId="media-categories-label"
+                    id="media-categories-select"
+                    value={searchCategory}
+                    label="Categories"
+                    onChange={handleSearchCategoryChange}
                 >
-                    Search Media
-                </Button>
-            </div>
-
+                    <MenuItem value={'all'}>All</MenuItem>
+                    <MenuItem value={'approved'}>Approved</MenuItem>
+                    <MenuItem value={'notApproved'}>Disapporved</MenuItem>
+                </Select>
+            </FormControl>
         </div>
     )
 }

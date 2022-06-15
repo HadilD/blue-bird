@@ -5,6 +5,7 @@ import userReducer from '../slice/user'
 import uploadModalReducer from '../slice/uploadModal'
 import mediaReducer from '../slice/media'
 import error from '../slice/error'
+import admin from '../slice/admin'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
       uploadModal: uploadModalReducer,
       media: mediaReducer,
       error,
+      admin,
   },
 })
 

@@ -4,7 +4,10 @@ import { generalStyles } from '../../generalStyles';
 const useStyles = makeStyles(theme => ({
     mainContainer: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        width: '100%',
+        paddingLeft: '5%',
+        marginBottom: '3%',
     },
     adContainer: {
         display: 'flex',

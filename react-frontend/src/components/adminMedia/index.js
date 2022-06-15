@@ -2,8 +2,9 @@ import React from 'react'
 import useStyles from './styles'
 
 
-function AdminMedia(){
-  const approveStatus = true
+function AdminMedia(props){
+  const { name, description, cost, owner, date, is_approved, attachments, id, updateMediaStatus } = props
+  const approveStatus = is_approved
   const classes = useStyles();
   return (
     <div className={classes.mainContainer}>
@@ -16,20 +17,35 @@ function AdminMedia(){
           />
         </div>
         <div className={classes.mediaInfoContainer}>
-          <p className={classes.mediaHeading}>Ad Name</p>
-          <p className={classes.mediaDescription}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam quidem laudantium similique ab quia exercitationem suscipit incidunt mollitia beatae? Aut eaque, nisi inventore accusamus dolorem neque! Quia, nostrum nihil? Qui!
-          </p>
-          <p className={classes.mediaType}>Image</p>
-          <p className={classes.mediaPrice}>10€</p>
-          <div style={{display:'flex', flexDirection: 'row'}}>
-            <p className={classes.mediaPrice}>Status: {approveStatus ? 'Approved' : 'Not Approved'}</p>
+          <p className={classes.mediaHeading}>{name}</p>
+          <p className={classes.mediaDescription}>{description}</p>
+          <p className={classes.mediaPrice}>Cost: {cost}</p>
+          <p className={classes.mediaPrice}>Owner: {owner}</p>
+          <p className={classes.mediaPrice}>Uploaded on: {date}</p>
+          <div style={{display:'flex', flexDirection: 'row', marginTop: '3%'}}>
+            <p className={classes.mediaPrice} style={{width: '20%'}}>Status: {approveStatus ? 'Approved' : 'Not Approved'}</p>
             {
               approveStatus
               ?
-                <button type="submit" disabled={false} className={classes.disapproveButton}>Disapprove</button>
+                <button  
+                  className={classes.disapproveButton}
+                  onClick={() => updateMediaStatus({
+                    "ids": [id],
+                    "approve": false
+                  })}
+                >
+                  Disapprove
+                </button>
               :
-                <button type="submit" disabled={false} className={classes.approveButton}>Approve</button>
+                <button  
+                  className={classes.approveButton}
+                  onClick={() => updateMediaStatus({
+                    "ids": [id],
+                    "approve": true
+                  })}
+                >
+                  Approve
+                </button>
             }
             <button type="submit" disabled={false} className={classes.approveButton}>Download Media</button>
           </div>
