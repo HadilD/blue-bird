@@ -17,7 +17,7 @@ export const loginUser = async (values) => {
       Store.dispatch(setUserRole('user'))
     }
     Store.dispatch(setLoginStatus(true))
-    return res.data
+    console.log(res)
   } catch (err) {
     handleAPIError(err, 'Username or password is incorrect !')
     console.log(JSON.stringify(err))
@@ -50,7 +50,7 @@ export const registerUser = async (values) => {
 }
 
 export const refreshAccessToken = async () => {
-  try{
+  try {
     const refreshToken = localStorage.getItem(Constants.STORAGE_ITEM_REFRESH_TOKEN)
     const res = await openAxios.post(Request.REFRESH_TOKEN, { refresh: refreshToken })
     saveUserDetails(res.data)

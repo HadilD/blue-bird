@@ -17,12 +17,18 @@ import About from './pages/about'
 import Admin from './pages/admin'
 import { useDispatch, useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
 import { Constants } from './constants/api';
 import { logoutUser } from './services/auth';
 import { setLoginStatus, setUserRole } from './redux/slice/user'
+import ChatScreen from './pages/ChatScreen';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import Home from './pages/home';
+import Profile from './pages/profile';
 
 const drawerWidth = 240;
 
@@ -78,6 +84,7 @@ export default function PersistentDrawerLeft() {
   const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
   const userRole = useSelector(state => state.user.userRole)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
@@ -86,7 +93,7 @@ export default function PersistentDrawerLeft() {
       dispatch(setLoginStatus(true))
       dispatch(setUserRole(userRole))
     }
-  },[])
+  }, [])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -148,6 +155,18 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+        <List>
+          {['Chat'].map((text, index) => (
+            <ListItem key={text} disablePadding onClick={() => { if (text === 'Chat') navigate('/chat') }}>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
@@ -158,7 +177,10 @@ export default function PersistentDrawerLeft() {
               ?   <Admin />
               :  <VerticalPrototype />
             : <Login />} />
+          <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Main>
     </Box >

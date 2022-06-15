@@ -13,7 +13,10 @@ const Constants = {
 } 
 
 const Request = {
-  GET_USERS: 'users/',
+  GET_USERS: 'api/auth/me',
+  SET_USERS: 'api/auth/update',
+  UPLOAD_MEDIA: 'api/media',
+  GET_MEDIA: 'api/media',
   UPLOAD_MEDIA: 'api/medias/',
   UPLOAD_ATTACHMENT: 'api/attachments/',
   GET_MEDIA: 'api/medias',
@@ -22,6 +25,8 @@ const Request = {
   REFRESH_TOKEN: 'api/auth/login/refresh',
   GET_ADMIN_MEDIA: 'api/medias/approve',
   UPDATE_MEDIA_STATUS_ADMIN: 'api/medias/approve',
+  GET_ALL_ROOMS_FOR_USER: 'api/chat/rooms',
+  GET_CURRENT_CHATS: 'api/chat/',
   ADMIN: 'admin',
 }
 

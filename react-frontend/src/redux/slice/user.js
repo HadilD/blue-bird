@@ -4,7 +4,7 @@ const initialState = {
     isUserLoggedIn: false,
     isSignInDisplayed: false,
     userRole: null,
-    users: []
+    users: null
 }
 
 export const userSlice = createSlice({
@@ -12,7 +12,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setAllUsers: (state, action) => {
-            state.users = [...action.payload]
+            state.users = action.payload
         },
         setLoginStatus: (state, action) => {
             state.isUserLoggedIn = action.payload
