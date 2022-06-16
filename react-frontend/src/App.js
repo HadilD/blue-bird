@@ -126,6 +126,7 @@ export default function PersistentDrawerLeft() {
               {pageName}
             </Typography>
           </div>
+          <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
           {
             userRole === 'admin'
             ?
