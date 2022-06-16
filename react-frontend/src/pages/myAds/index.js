@@ -5,7 +5,7 @@ import { setPageName } from '../../redux/slice/pagename';
 import Ad from '../../components/ad'
 import { getMineMedia } from '../../services/media'
 
-function MyAds(props) {
+function MyAds() {
 
     const classes = useStyles();
     const dispatch = useDispatch();

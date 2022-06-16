@@ -30,6 +30,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Home from './pages/home';
 import Profile from './pages/profile';
+import MyOrders from './pages/myOrders';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const drawerWidth = 240;
@@ -188,6 +189,7 @@ export default function PersistentDrawerLeft() {
         <DrawerHeader />
         <Routes>
           <Route path='/myads' element={<MyAds />} />
+          <Route path='/myorders' element={<MyOrders />} />
           <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
           <Route path='/home' element={<Home />} />

@@ -7,6 +7,7 @@ import mediaReducer from '../slice/media'
 import error from '../slice/error'
 import admin from '../slice/admin'
 import chat from '../slice/chat'
+import order from '../slice/order'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
       error,
       admin,
       chat,
+      order,
   },
 })
 
