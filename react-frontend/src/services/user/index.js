@@ -1,8 +1,8 @@
-import Store from '../../redux/store/store'
-import { setAllUsers } from '../../redux/slice/user'
 import { Request } from '../../constants/api'
 import { openAxios } from '../instance'
 import { Constants } from '../../constants/api'
+import Store from '../../redux/store/store'
+import { setAllUsers } from '../../redux/slice/user'
 
 export const getUsers = async () => {
   try {

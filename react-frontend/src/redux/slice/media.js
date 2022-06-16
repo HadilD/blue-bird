@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    mediaItems: []
+    mediaItems: [],
+    myMedias: []
 }
 
 export const mediaSlice = createSlice({
@@ -11,8 +12,11 @@ export const mediaSlice = createSlice({
         setAllMediaItems: (state, action) => {
             state.mediaItems = [...action.payload]
         },
+        setMyMedias: (state, action) => {
+            state.myMedias = action.payload
+        }
     }
 })
 
-export const { setAllMediaItems } = mediaSlice.actions
+export const { setAllMediaItems, setMyMedias } = mediaSlice.actions
 export default mediaSlice.reducer

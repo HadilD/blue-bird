@@ -8,10 +8,11 @@ const useStyles = makeStyles(theme => ({
     },
     box: { 
         display: 'flex', 
-        width: '35%', 
-        height: '30rem', 
+        width: '40%', 
+        height: '35rem', 
         backgroundColor: 'white', 
-        borderRadius: 3 
+        borderRadius: '10px',
+        border: '2px solid grey'
     },
     box1: { 
         display: 'flex', 

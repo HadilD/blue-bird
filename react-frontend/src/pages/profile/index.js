@@ -1,22 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import useStyles from './styles';
+import { useDispatch } from 'react-redux';
 import { Grid } from '@mui/material';
 import ProfileDetails from '../../components/profile/profileDetail';
-
+import { setPageName } from '../../redux/slice/pagename';
 import ProfileLinks from '../../components/profile/profileLinks';
-import ProfileHeader from '../../components/profile/profileHeader';
-import { saveUserDetails } from '../../utils';
+import { useEffect } from 'react';
 
 function Profile() {
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(setPageName("My Profile"))
+    })
 
     const classes = useStyles();
 
     return (
         <div className={classes.container}>
             <Grid container spacing={2}>
-                <Grid container item xs={12}>
+                {/* <Grid container item xs={12}>
                     <ProfileHeader></ProfileHeader>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={8} md={8}>
                     <ProfileDetails />
                 </Grid>

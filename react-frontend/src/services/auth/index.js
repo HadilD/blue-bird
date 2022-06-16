@@ -17,7 +17,6 @@ export const loginUser = async (values) => {
       Store.dispatch(setUserRole('user'))
     }
     Store.dispatch(setLoginStatus(true))
-    console.log(res)
   } catch (err) {
     handleAPIError(err, 'Username or password is incorrect !')
     console.log(JSON.stringify(err))

@@ -1,28 +1,25 @@
-//https://pixabay.com/vectors/avatar-icon-placeholder-facebook-1293744/
-import { Button, Grid, Skeleton, Stack, TextField } from '@mui/material';
+import { Button, Grid, Stack, TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
+import { generalStyles } from '../../../generalStyles';
 import avatar from './avatar.png';
-import Divider from '@mui/material/Divider';
-import { Constants } from '../../../constants/api';
 import { getUsers } from '../../../services/user';
 import { setUsers } from '../../../services/user';
 
 function ProfileDetails(props) {
     const classes = useStyles();
-
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    // const [phone, setPhone] = useState('+49 461928 172893')
 
 
-    useEffect(async () => {
-        // let token = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
-        let res = await getUsers()
-        // console.log(res)
-        setName(res.first_name + " " + res.last_name)
-        setEmail(res.email)
+    useEffect(() => {
+        async function fetchUserDetails() {
+            let res = await getUsers()
+            setName(res.first_name + " " + res.last_name)
+            setEmail(res.email)
+        }
+        fetchUserDetails()
     }, [])
 
 
@@ -30,33 +27,27 @@ function ProfileDetails(props) {
 
         <Grid container className={classes.container}>
             <Grid item xs={6}>
-                <img src={avatar} className={classes.imgcls} />
+                <img src={avatar} className={classes.imgcls} alt="User profile"/>
             </Grid>
             <Grid item xs={6} className={classes.infogrid}>
                 <Stack>
-                    <div style={{ fontFamily: 'fantasy', fontSize: 21 }}>
+                    <div style={{ fontFamily: generalStyles.openSans, fontSize: 21 }}>
                         {
                             editing ?
                                 <TextField label="Name" variant="standard" type="text" value={name} onChange={(e) => { setName(e.target.value) }} /> : name
                         }
                     </div>
-                    <div style={{ fontFamily: 'cursive' }}>
+                    <div style={{ fontFamily: generalStyles.openSans, marginTop: '5%' }}>
                         {
                             editing ?
-                                <TextField label="Email" variant="standard" value={email} /> : email
+                                <TextField label="Email" variant="standard" value={email} disabled /> : email
                         }
                     </div>
-                    {/* <div style={{ fontFamily: 'cursive' }}>
-                        {
-                            editing ?
-                                <TextField label="Phone" variant="standard" value={phone} onChange={(e) => { setPhone(e.target.value) }} /> : phone
-                        }
-                    </div> */}
                     <Grid container className={classes.blinks}>
 
                         {editing ?
                             <Grid item xs={12} md={6}>
-                                <Button style={{ fontFamily: 'cursive' }}
+                                <Button style={{ fontFamily: generalStyles.openSans }}
                                     variant='contained'
                                     size='small'
                                     onClick={() => {
@@ -66,7 +57,7 @@ function ProfileDetails(props) {
                                     }}>Apply Changes</Button>
                             </Grid> :
                             <Grid item xs={12} md={6}>
-                                <Button style={{ fontFamily: 'cursive', marginRight: 'auto', fontSize: 10 }}
+                                <Button style={{ fontFamily: generalStyles.openSans, marginRight: 'auto', fontSize: 10 }}
                                     variant='contained'
                                     size='small'
                                     onClick={() => {

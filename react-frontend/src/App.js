@@ -20,6 +20,7 @@ import { generalStyles } from './generalStyles';
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
+import MyAds from './pages/myAds';
 import { Constants } from './constants/api';
 import { logoutUser } from './services/auth';
 import { setLoginStatus, setUserRole } from './redux/slice/user'
@@ -29,6 +30,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Home from './pages/home';
 import Profile from './pages/profile';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const drawerWidth = 240;
 
@@ -84,7 +86,7 @@ export default function PersistentDrawerLeft() {
   const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
   const userRole = useSelector(state => state.user.userRole)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
@@ -124,13 +126,27 @@ export default function PersistentDrawerLeft() {
               {pageName}
             </Typography>
           </div>
+          <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
           {
             userRole === 'admin'
             ?
               <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
             :
-              <div>
-                <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+              <div style={{width: '12%', display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                {
+                  pageName === 'Home'
+                  ?
+                    <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+                  :
+                    <Button variant="raised" component="span"></Button>
+                }
+                
+                <IconButton 
+                  aria-label="profile"
+                  onClick={() => navigate('/profile')} 
+                >
+                  <AccountCircleOutlinedIcon fontSize="large" sx={{color: 'white'}}/>
+                </IconButton>
               </div>
           }
 
@@ -171,16 +187,17 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <DrawerHeader />
         <Routes>
+          <Route path='/myads' element={<MyAds />} />
+          <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='/' element={
             isUserLoggedIn 
             ? userRole === 'admin'
               ?   <Admin />
               :  <VerticalPrototype />
             : <Login />} />
-          <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/home' element={<Home />} />
-          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Main>
     </Box >

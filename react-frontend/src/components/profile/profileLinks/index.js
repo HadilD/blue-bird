@@ -1,10 +1,8 @@
 import React from 'react';
 import useStyles from './styles';
 import { Button, Stack } from '@mui/material';
-
 import ChatIcon from '@mui/icons-material/Chat';
 import AdUnitsIcon from '@mui/icons-material/AdUnits';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
@@ -26,15 +24,9 @@ function ProfileLinks(props) {
                 </Button>
             </div>
             <div className={classes.msgContainer}>
-                <Button className={classes.blinks} variant="text" size='large' startIcon={<AdUnitsIcon />} >
+                <Button onClick={() => { navigate('/myads') }} className={classes.blinks} variant="text" size='large' startIcon={<AdUnitsIcon />} >
                     My Ads
                     <ArrowForwardIosIcon sx={{ marginLeft: '25px' }} />
-                </Button>
-            </div>
-            <div className={classes.msgContainer}>
-                <Button className={classes.blinks} variant="text" startIcon={<ShoppingCartIcon />} >
-                    My Cart
-                    <ArrowForwardIosIcon sx={{ marginLeft: '20px' }} />
                 </Button>
             </div>
             <div className={classes.msgContainer}>
