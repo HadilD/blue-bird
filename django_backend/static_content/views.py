@@ -24,6 +24,11 @@ class MediaList(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = MediaFilter
 
+    def get_serializer_context(self):
+        context = super(MediaList, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
     def create(self, request):
         serializer = MediaSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -45,11 +50,17 @@ class MediaList(generics.ListCreateAPIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #TODO: add search here
 
 
 class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
+
+    def get_serializer_context(self):
+        context = super(MediaDetail, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
 
     def delete(self, request, pk):
         media = Media.objects.get(pk=pk)
@@ -84,6 +95,11 @@ class AttachmentCreate(generics.CreateAPIView):
 class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
+
+    def get_serializer_context(self):
+        context = super(AttachmentDetail, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
 
 
 class NotApprovedMediaListView(generics.ListCreateAPIView):
@@ -134,8 +150,9 @@ class OrderCreate(generics.CreateAPIView):
             price = media.cost
             order = Order.objects.create(media=media, buyer=buyer, price=price)
             media.was_bought = media.was_bought + 1
+            order_serializer = OrderSerializer(order, context={"request": self.request})
             media.save()
-            return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
             return Response({"error": "media with id {pk} does not exist".format(pk=pk)},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -147,6 +164,11 @@ class OrderList(generics.ListAPIView):
     """
     View for listing existing orders.
     """
+    def get_serializer_context(self):
+        context = super(OrderList, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
@@ -156,14 +178,16 @@ class MyOrdersList(generics.ListAPIView):
     """
     View for listing orders made by the currently authenticated user.
     """
+    def get_serializer_context(self):
+        context = super(MyOrdersList, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user)
-
-
-# TODO: ask if we also need api for listing orders made to a particular user (not by)
 
 
 class MediaSearch(generics.ListAPIView):
@@ -177,11 +201,12 @@ class MediaSearch(generics.ListAPIView):
         search_key = self.request.query_params["search"]
         search_words = [word.strip() for word in search_key.split(" ")]
         qs = Media.objects.none()
+        qs2 = Media.objects.filter(is_enabled=True)
         for word in search_words:
-            qs = qs | Media.objects.filter(name__icontains=word, is_enabled=True) | \
-                 Media.objects.filter(description__icontains=word, is_enabled=True) | \
-                 Media.objects.filter(tags__name__icontains=word, is_enabled=True) | \
-                 Media.objects.filter(owner__first_name__icontains=word, is_enabled=True) | \
-                 Media.objects.filter(owner__last_name__icontains=word, is_enabled=True)
+            qs = qs | qs2.filter(name__icontains=word) | \
+                 qs2.filter(description__icontains=word) | \
+                 qs2.filter(tags__name__icontains=word) | \
+                 qs2.filter(owner__first_name__icontains=word) | \
+                 qs2.filter(owner__last_name__icontains=word)
 
         return qs
