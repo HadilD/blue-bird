@@ -30,10 +30,12 @@ class MediaList(generics.ListCreateAPIView):
         return context
 
     def create(self, request):
-        serializer = MediaSerializer(data=request.data)
+        serializer = MediaSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         media = serializer.save(owner=self.request.user, )
         attachments = request.data.get("attachments")
+        if len(attachments) == 0:
+            return Response({"error": "attachment field must not be empty"})
         for id in attachments:
             try:
                 attachment = Attachment.objects.get(id=id)
