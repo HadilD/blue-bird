@@ -126,7 +126,7 @@ export default function PersistentDrawerLeft() {
               {pageName}
             </Typography>
           </div>
-          <div style={{width: '12%', display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          {/* <div style={{width: '12%', display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
             <IconButton 
               aria-label="profile"
@@ -134,14 +134,23 @@ export default function PersistentDrawerLeft() {
             >
               <AccountCircleOutlinedIcon fontSize="large" sx={{color: 'white'}}/>
             </IconButton>
-          </div>
+          </div> */}
           {
             userRole === 'admin'
             ?
               <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
             :
-              <div>
+              // <div>
+              //   <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+              // </div>
+              <div style={{width: '12%', display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+                <IconButton 
+                  aria-label="profile"
+                  onClick={() => navigate('/profile')} 
+                >
+                  <AccountCircleOutlinedIcon fontSize="large" sx={{color: 'white'}}/>
+                </IconButton>
               </div>
           }
 
