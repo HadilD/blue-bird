@@ -112,46 +112,46 @@ export default function PersistentDrawerLeft() {
       <AppBar style={{ backgroundColor: generalStyles.primaryColor }} position="fixed" open={open}>
         {
           isUserLoggedIn &&
-          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <div style={{display: 'flex', flexDirection: 'row'}}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{marginTop: '3%'}}>
-              {pageName}
-            </Typography>
-          </div>
-          <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
-          {
-            userRole === 'admin'
-            ?
-              <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
-            :
-              <div style={{width: '12%', display:'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                {
-                  pageName === 'Home'
-                  ?
-                    <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
-                  :
-                    <Button variant="raised" component="span"></Button>
-                }
-                
-                <IconButton 
-                  aria-label="profile"
-                  onClick={() => navigate('/profile')} 
-                >
-                  <AccountCircleOutlinedIcon fontSize="large" sx={{color: 'white'}}/>
-                </IconButton>
-              </div>
-          }
+          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
+                {pageName}
+              </Typography>
+            </div>
+            <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
+            {
+              userRole === 'admin'
+                ?
+                <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
+                :
+                <div style={{ width: '12%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  {
+                    pageName === 'Home'
+                      ?
+                      <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+                      :
+                      <Button variant="raised" component="span"></Button>
+                  }
 
-        </Toolbar>}
+                  <IconButton
+                    aria-label="profile"
+                    onClick={() => navigate('/profile')}
+                  >
+                    <AccountCircleOutlinedIcon fontSize="large" sx={{ color: 'white' }} />
+                  </IconButton>
+                </div>
+            }
+
+          </Toolbar>}
       </AppBar>
       <Drawer
         sx={{
@@ -195,11 +195,11 @@ export default function PersistentDrawerLeft() {
           <Route path='/home' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/' element={
-            isUserLoggedIn 
-            ? userRole === 'admin'
-              ?   <Admin />
-              :  <VerticalPrototype />
-            : <Login />} />
+            isUserLoggedIn
+              ? userRole === 'admin'
+                ? <Admin />
+                : <VerticalPrototype />
+              : <Login />} />
         </Routes>
       </Main>
     </Box >
