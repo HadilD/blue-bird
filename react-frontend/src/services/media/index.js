@@ -1,5 +1,5 @@
 import Store from '../../redux/store/store'
-import { setAllMediaItems } from '../../redux/slice/media'
+import { setAllMediaItems, setMyMedias } from '../../redux/slice/media'
 import { Request } from '../../constants/api'
 import { protectedAxios } from '../instance'
 
@@ -43,6 +43,17 @@ export const uploadAttachmentService = async (values) => {
         'Content-Type': 'multipart/form-data',
       }
     })
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}
+
+export const getMineMedia = async () => {
+  try {
+    const res = await protectedAxios.get(Request.GET_MINE_MEDIAS);
+    Store.dispatch(setMyMedias(res.data))
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))

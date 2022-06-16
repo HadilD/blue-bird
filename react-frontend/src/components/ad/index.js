@@ -1,7 +1,8 @@
 import React from 'react'
 import useStyles from './styles'
 
-function Ad(){
+function Ad(props){
+  const {name, description, cost, created_at, is_approved, tags} = props
   const classes = useStyles();
   return (
     <div className={classes.adContainer}>
@@ -13,12 +14,14 @@ function Ad(){
         />
       </div>
       <div className={classes.mediaInfoContainer}>
-        <p className={classes.mediaHeading}>Ad Name</p>
-        <p className={classes.mediaDescription}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam quidem laudantium similique ab quia exercitationem suscipit incidunt mollitia beatae? Aut eaque, nisi inventore accusamus dolorem neque! Quia, nostrum nihil? Qui!
-        </p>
-        <p className={classes.mediaType}>Image</p>
-        <p className={classes.mediaPrice}>10€</p>
+        <p className={classes.mediaHeading}>{name}</p>
+        <p className={classes.mediaDescription}>{description}</p>
+        <p className={classes.mediaPrice}>Cost: {cost}</p>
+        <p className={classes.mediaPrice}>Created At: {created_at}</p>
+        <p className={classes.mediaPrice}>Status: {is_approved ? 'Approved' : "Not Approved"}</p>
+        {
+          tags &&  <p className={classes.mediaPrice}>Tags: {tags}</p>
+        }
       </div>
     </div>
   )
