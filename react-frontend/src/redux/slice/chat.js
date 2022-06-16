@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     rooms: [],
-    currentChat : []
-
+    currentChat: [],
+    currentRoomId: ''
 }
 
 export const chatSlice = createSlice({
@@ -15,9 +15,12 @@ export const chatSlice = createSlice({
         },
         setCurrentChat: (state, action) => {
             state.currentChat = action.payload
+        },
+        setCurrentRoomId: (state, action) => {
+            state.currentRoomId = action.payload
         }
     }
 })
 
-export const { setRooms, setCurrentChat } = chatSlice.actions
+export const { setRooms, setCurrentChat, setCurrentRoomId } = chatSlice.actions
 export default chatSlice.reducer

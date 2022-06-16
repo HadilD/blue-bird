@@ -8,7 +8,10 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import useStyles from './styles';
 import moment from "moment";
 import PlacehoderImage from "./../../assests/placeholder.png";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createRoom, getAllRoomsForUser } from '../../services/chat';
+import { setCurrentRoomId } from '../../redux/slice/chat';
+import { useNavigate } from 'react-router-dom';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -16,6 +19,8 @@ const MediaPreviewModal = (props) => {
 
     const { open, handleClose, mediaPreviewModalData } = props;
     const loggedInUserId = useSelector(state => state.user)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [activeStep, setActiveStep] = useState(0);
     const [disableContactSellerButton, setDisableContactSellerButton] = useState(true);
@@ -24,7 +29,6 @@ const MediaPreviewModal = (props) => {
 
     useEffect(() => {
         if (loggedInUserId.users.id === mediaPreviewModalData.owner.id) {
-            console.log("true")
             setDisableContactSellerButton(false)
         }
     })
@@ -41,13 +45,32 @@ const MediaPreviewModal = (props) => {
         setActiveStep(step);
     };
 
-    const contactSeller = () => {
+    const contactSeller = async () => {
+        const rooms = await getAllRoomsForUser()
+        let isRoomAvailable = false;
+        let room = null;
 
+        for (let i = 0; i < rooms.length; i++) {
+            if (mediaPreviewModalData.owner.id === rooms[i].to_user.id) {
+                isRoomAvailable = true;
+                room = rooms[i];
+                break;
+            }
+        }
+
+        if (isRoomAvailable) {
+            dispatch(setCurrentRoomId(room.room_id))
+        } else {
+            await createRoom({
+                "to_user": mediaPreviewModalData.owner.id
+            });
+        }
+
+        navigate('/chat')
     }
 
     const classes = useStyles();
     console.log({ id: loggedInUserId.users.id, mediaPreviewModalData })
-
     return (
         <Dialog
             open={open}

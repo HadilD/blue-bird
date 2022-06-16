@@ -10,7 +10,7 @@ const Constants = {
   STORAGE_ITEM_ACCESS_TOKEN: 'accessToken',
   STORAGE_ITEM_REFRESH_TOKEN: 'refreshToken',
   STORAGE_ITEM_USER_ROLE: ''
-} 
+}
 
 const Request = {
   GET_USERS: 'api/auth/me',
@@ -24,7 +24,8 @@ const Request = {
   GET_ADMIN_MEDIA: 'api/medias/approve',
   UPDATE_MEDIA_STATUS_ADMIN: 'api/medias/approve',
   GET_ALL_ROOMS_FOR_USER: 'api/chat/rooms',
-  GET_CURRENT_CHATS: 'api/chat',
+  GET_CURRENT_CHATS: 'api/chat/',
+  CREATE_ROOM: 'api/chat/rooms',
   GET_MINE_MEDIAS: 'api/medias/mine',
   ADMIN: 'admin',
 }

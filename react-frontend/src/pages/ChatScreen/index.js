@@ -13,11 +13,13 @@ import {
 } from "@chatscope/chat-ui-kit-react";
 import { getAllRoomsForUser, getCurrentChat } from '../../services/chat';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRooms, setCurrentChat } from '../../redux/slice/chat'
+import { setRooms, setCurrentChat, setCurrentRoomId } from '../../redux/slice/chat'
 
 const ChatScreen = () => {
 
-    const [roomId, setRoomId] = useState(null)
+    const roomId = useSelector(state => state.chat.currentRoomId)
+
+    // const [roomId, setRoomId] = useState(null)
 
     const dispatch = useDispatch()
     const chatRooms = useSelector(state => state.chat.rooms)
@@ -32,6 +34,12 @@ const ChatScreen = () => {
         dispatch(setRooms(rooms))
     }
 
+    // useEffect(() => {
+    //     if (roomIdRedux !== null) {
+    //         setRoomId(roomIdRedux)
+    //     }
+    // }, [roomIdRedux])
+
     useEffect(() => {
         getRooms()
     }, [])
@@ -41,6 +49,7 @@ const ChatScreen = () => {
         if (roomId !== null) {
             const chatSocket = new WebSocket('wss://bluebird.no-ip.org/ws/' + roomId + '/');
             setCurrentWebSocket(chatSocket);
+            getCurrentChat({ room_id: roomId })
         }
     }, [roomId])
 
@@ -67,13 +76,14 @@ const ChatScreen = () => {
                             return (
                                 <>
                                     <Conversation
-                                        name={`${room.to_user.first_name} ${room.to_user.last_name}`}
+                                        name={`${room.from_user.first_name} ${room.from_user.last_name}`}
                                         key={room.to_user.id}
                                         info={room.latest_message.content}
                                         onClick={() => {
                                             setCurrentRoom(room)
-                                            setRoomId(room.room_id)
-                                            getCurrentChat({ room_id: room.room_id })
+                                            // setRoomId()
+                                            dispatch(setCurrentRoomId(room.room_id))
+
                                             setFromUser((room.to_user.id === (loggedInUserId && loggedInUserId.users && loggedInUserId.users.id)) ? room.from_user.id : room.to_user.id)
                                         }}
                                     />
