@@ -10,6 +10,7 @@ import MediaPreviewModal from '../../components/previewMedia';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
 import PlacehoderImage from "./../../assests/placeholder.png";
+import { getUsers } from '../../services/user';
 
 const VerticalPrototype = () => {
     const displayUploadModal = useSelector((state) => state.uploadModal.displayUploadModal)
@@ -24,6 +25,7 @@ const VerticalPrototype = () => {
 
     useEffect(() => {
         fetchMedia()
+        getUsers()
     }, [])
 
     const closeModal = () => {
