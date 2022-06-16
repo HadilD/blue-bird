@@ -24,7 +24,7 @@ function ProfileLinks(props) {
                 </Button>
             </div>
             <div className={classes.msgContainer}>
-                <Button className={classes.blinks} variant="text" size='large' startIcon={<AdUnitsIcon />} >
+                <Button onClick={() => { navigate('/myads') }} className={classes.blinks} variant="text" size='large' startIcon={<AdUnitsIcon />} >
                     My Ads
                     <ArrowForwardIosIcon sx={{ marginLeft: '25px' }} />
                 </Button>
