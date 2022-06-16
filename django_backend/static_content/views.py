@@ -19,7 +19,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class MediaList(generics.ListCreateAPIView):
-    queryset = Media.objects.filter(is_enabled=True)
+    queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = MediaFilter
@@ -50,7 +50,23 @@ class MediaList(generics.ListCreateAPIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #TODO: add search here
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        search_key = request.query_params.get("search", None)
+        if search_key:
+            queryset = search_media(queryset, search_key)
+            serializer = self.get_serializer(queryset, many=True,
+                                             context=self.get_serializer_context())
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -164,6 +180,7 @@ class OrderList(generics.ListAPIView):
     """
     View for listing existing orders.
     """
+
     def get_serializer_context(self):
         context = super(OrderList, self).get_serializer_context()
         context.update({"request": self.request})
@@ -178,6 +195,7 @@ class MyOrdersList(generics.ListAPIView):
     """
     View for listing orders made by the currently authenticated user.
     """
+
     def get_serializer_context(self):
         context = super(MyOrdersList, self).get_serializer_context()
         context.update({"request": self.request})
@@ -190,23 +208,38 @@ class MyOrdersList(generics.ListAPIView):
         return Order.objects.filter(buyer=self.request.user)
 
 
-class MediaSearch(generics.ListAPIView):
-    """
-    View for searching media
-    """
-    queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
-    serializer_class = MediaSerializer
+# class MediaSearch(generics.ListAPIView):
+#     """
+#     View for searching media
+#     """
+#     queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
+#     serializer_class = MediaSerializer
+#
+#     def get_queryset(self):
+#         search_key = self.request.query_params["search"]
+#         search_words = [word.strip() for word in search_key.split(" ")]
+#         qs = Media.objects.none()
+#         qs2 = Media.objects.filter(is_enabled=True)
+#         for word in search_words:
+#             qs = qs | qs2.filter(name__icontains=word) | \
+#                  qs2.filter(description__icontains=word) | \
+#                  qs2.filter(tags__name__icontains=word) | \
+#                  qs2.filter(owner__first_name__icontains=word) | \
+#                  qs2.filter(owner__last_name__icontains=word)
+#
+#         return qs
 
-    def get_queryset(self):
-        search_key = self.request.query_params["search"]
-        search_words = [word.strip() for word in search_key.split(" ")]
-        qs = Media.objects.none()
-        qs2 = Media.objects.filter(is_enabled=True)
-        for word in search_words:
-            qs = qs | qs2.filter(name__icontains=word) | \
-                 qs2.filter(description__icontains=word) | \
-                 qs2.filter(tags__name__icontains=word) | \
-                 qs2.filter(owner__first_name__icontains=word) | \
-                 qs2.filter(owner__last_name__icontains=word)
 
-        return qs
+def search_media(queryset, search_key):
+    search_words = [word.strip() for word in search_key.split(" ")]
+    qs = Media.objects.none()
+    # qs2 = Media.objects.filter(is_enabled=True)
+    qs2 = queryset
+    for word in search_words:
+        qs = qs | qs2.filter(name__icontains=word) | \
+             qs2.filter(description__icontains=word) | \
+             qs2.filter(tags__name__icontains=word) | \
+             qs2.filter(owner__first_name__icontains=word) | \
+             qs2.filter(owner__last_name__icontains=word)
+
+    return qs
