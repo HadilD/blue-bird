@@ -1,14 +1,21 @@
 import Store from '../../redux/store/store'
-import { setLoginStatus } from '../../redux/slice/user'
+import { setLoginStatus, setUserRole } from '../../redux/slice/user'
 import { Request, Constants } from '../../constants/api'
 import { openAxios } from '../instance'
 import { saveUserDetails } from '../../utils'
 import { handleAPIError } from '../../utils/dialogErrorHandler'
+import jwt_decode from "jwt-decode";
 
 export const loginUser = async (values) => {
   try {
     const res = await openAxios.post(Request.LOGIN_USER, values)
     saveUserDetails(res.data)
+    let decoded = jwt_decode(res.data.access);
+    if (decoded.is_superuser){
+      Store.dispatch(setUserRole('admin'))
+    } else {
+      Store.dispatch(setUserRole('user'))
+    }
     Store.dispatch(setLoginStatus(true))
     console.log(res)
   } catch (err) {

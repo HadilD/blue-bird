@@ -17,10 +17,24 @@ const useStyles = makeStyles(theme => ({
         paddingBottom:'40px',
         position: 'relative',
     },
+    adminFormControl: {
+        display: 'flex', 
+        flexDirection: 'row',
+        marginBottom: '10px',
+        paddingBottom:'40px',
+        position: 'relative',
+    },
     label: {
         color: '#777',
         display: 'block',
         marginBottom: '5px',
+        
+    },
+    adminLabel: {
+        color: '#777',
+        display: 'inline',
+        marginLeft: '5%'
+        // marginBottom: '5px',
     },
     input: {
         border: '2px solid #f0f0f0',

@@ -2,8 +2,6 @@ import React from 'react'
 import { Formik } from 'formik';
 import { loginUser } from '../../services/auth'
 import useStyles from './styles';
-import APIEndpoint from '../../config';
-import { Request } from '../../constants/api'
 
 function SignIn (props) {
   const classes = useStyles();
@@ -13,7 +11,7 @@ function SignIn (props) {
   <div className={classes.signInContainer}>
     <h2 className={classes.heading}>Sign In</h2>
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={{ email: '', password: '', isAdmin: false }}
       validate={values => {
         const errors = {};
         if (!values.email) {
@@ -77,14 +75,6 @@ function SignIn (props) {
       )}
     </Formik>
     <p className={classes.signUpStatement}>Don't have an account ? <span className={classes.register} onClick={() => setSignInDisplay(false)}>Register with Us</span></p>
-    <p className={classes.signUpStatement}>Administrator ?  
-      <a 
-        href={APIEndpoint+Request.ADMIN} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className={classes.register}>Admin Login
-      </a>
-    </p>
   </div>
   )
 }
