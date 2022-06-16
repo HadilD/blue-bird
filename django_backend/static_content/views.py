@@ -124,6 +124,11 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
     permission_classes = IsAdminUser,
     serializer_class = MediaSerializer
 
+    def get_serializer_context(self):
+        context = super(NotApprovedMediaListView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
     def get_queryset(self):
         is_approved: str = self.request.GET.get("is_approved")
         if is_approved:
@@ -140,7 +145,7 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
 
         Media.objects.filter(id__in=media_ids).update(is_approved=approve)
 
-        return Response(MediaSerializer(Media.objects.all(), many=True).data)
+        return Response(MediaSerializer(Media.objects.all(), many=True, context=self.get_serializer_context()).data)
 
 
 class MyMediasList(generics.ListAPIView):
