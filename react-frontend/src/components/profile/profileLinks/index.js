@@ -30,6 +30,12 @@ function ProfileLinks(props) {
                 </Button>
             </div>
             <div className={classes.msgContainer}>
+                <Button onClick={() => { navigate('/myorders') }} className={classes.blinks} variant="text" size='large' startIcon={<AdUnitsIcon />} >
+                    My Orders
+                    <ArrowForwardIosIcon sx={{ marginLeft: '25px' }} />
+                </Button>
+            </div>
+            <div className={classes.msgContainer}>
                 <Button className={classes.blinks} onClick={() => {
                     logoutUser()
                     navigate('/')

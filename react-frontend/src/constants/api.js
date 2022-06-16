@@ -26,6 +26,7 @@ const Request = {
   GET_ALL_ROOMS_FOR_USER: 'api/chat/rooms',
   GET_CURRENT_CHATS: 'api/chat',
   GET_MINE_MEDIAS: 'api/medias/mine',
+  GET_MY_ORDERS: 'api/orders/mine',
   ADMIN: 'admin',
 }
 
