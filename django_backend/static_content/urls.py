@@ -1,7 +1,7 @@
 from django.urls import path
 
 from static_content.views import MediaList, MediaDetail, AttachmentCreate, AttachmentDetail, \
-    NotApprovedMediaListView, MyMediasList, OrderCreate, OrderList, MyOrdersList, MediaSearch
+    NotApprovedMediaListView, MyMediasList, OrderCreate, OrderList, MyOrdersList
 
 
 urlpatterns = [
@@ -14,5 +14,4 @@ urlpatterns = [
     path("medias/<int:pk>/create-order", OrderCreate.as_view(), name="order-create"),
     path("orders", OrderList.as_view(), name="order-list"),
     path("orders/mine", MyOrdersList.as_view(), name="my-orders"),
-    path("medias/search", MediaSearch.as_view(), name="media-search")
 ]

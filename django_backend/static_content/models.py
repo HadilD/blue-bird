@@ -24,7 +24,7 @@ class Media(models.Model):
     is_enabled = models.BooleanField(default=True)
     cost = models.DecimalField(decimal_places=2, max_digits=6, default=0)
     tags = models.ManyToManyField(Tag, related_name="media", null=True)
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=False)
     was_bought = models.IntegerField(default=0)
 
