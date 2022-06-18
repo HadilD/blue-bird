@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { setPageName } from '../../redux/slice/pagename';
 import useStyles from './styles';
-import { Typography } from '@mui/material';
+import { Pagination, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadModal from '../../components/uploadModal'
 import { setUploadModal } from '../../redux/slice/uploadModal'
@@ -11,6 +11,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
 import PlacehoderImage from "./../../assests/placeholder.png";
 import { getUsers } from '../../services/user';
+import Paginate from '../../components/paginate';
 
 const VerticalPrototype = () => {
     const displayUploadModal = useSelector((state) => state.uploadModal.displayUploadModal)
@@ -42,7 +43,7 @@ const VerticalPrototype = () => {
     return (
         <div className={classes.container}>
             <SearchBar fetchMedia={fetchMedia} />
-            <div className={classes.root}>
+            {/* <div className={classes.root}>
 
                 {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
                     return <div key={index} className={classes.imageCard} >
@@ -53,19 +54,20 @@ const VerticalPrototype = () => {
                         </div>
                     </div>
                 })}
-            </div>
+            </div> */}
             {
                 displayUploadModal &&
                 <UploadModal closeModal={closeModal} />
             }
-            {
+            {/* {
                 mediaPreviewModal &&
                 <MediaPreviewModal
                     open={mediaPreviewModal}
                     handleClose={setMediaPreviewModal}
                     mediaPreviewModalData={mediaPreviewModalData}
                 />
-            }
+            } */}
+            <Paginate itemsPerPage={10} items={mediaItems} className={classes.fpage} />
         </div >
 
 
