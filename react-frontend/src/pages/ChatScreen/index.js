@@ -34,12 +34,6 @@ const ChatScreen = () => {
         dispatch(setRooms(rooms))
     }
 
-    // useEffect(() => {
-    //     if (roomIdRedux !== null) {
-    //         setRoomId(roomIdRedux)
-    //     }
-    // }, [roomIdRedux])
-
     useEffect(() => {
         getRooms()
     }, [])
@@ -73,12 +67,14 @@ const ChatScreen = () => {
                 <ConversationList>
                     {
                         chatRooms && chatRooms.map(room => {
+                            let fullName = (loggedInUserId && loggedInUserId.users.id) === room.from_user.id ? `${room.to_user.first_name} ${room.to_user.last_name}` : `${room.from_user.first_name} ${room.from_user.last_name}`
                             return (
                                 <>
                                     <Conversation
-                                        name={`${room.from_user.first_name} ${room.from_user.last_name}`}
+                                        name={fullName}
                                         key={room.to_user.id}
                                         info={room.latest_message.content}
+                                        active={room.room_id === roomId}
                                         onClick={() => {
                                             setCurrentRoom(room)
                                             // setRoomId()
