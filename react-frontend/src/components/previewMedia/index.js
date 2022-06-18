@@ -51,7 +51,7 @@ const MediaPreviewModal = (props) => {
         let room = null;
 
         for (let i = 0; i < rooms.length; i++) {
-            if (mediaPreviewModalData.owner.id === rooms[i].to_user.id) {
+            if (mediaPreviewModalData.owner.id === rooms[i].to_user.id || mediaPreviewModalData.owner.id === rooms[i].from_user.id) {
                 isRoomAvailable = true;
                 room = rooms[i];
                 break;
@@ -80,7 +80,7 @@ const MediaPreviewModal = (props) => {
             maxWidth={"md"}
         >
             <DialogContent className={classes.dialogContent}>
-                {(mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length > 0) ? <div className={classes.imageSlider}>
+                {(mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length > 0) ? <div oncontextmenu="return false;" className={classes.imageSlider}>
                     <Paper
                         square
                         elevation={0}
