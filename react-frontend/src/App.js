@@ -133,11 +133,24 @@ export default function PersistentDrawerLeft() {
                 ?
                 <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
                 :
-                <div style={{ width: '12%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '15%'}}>
                   {
                     pageName === 'Home'
                       ?
-                      <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+                      <Button 
+                        onClick={() => dispatch(setUploadModal(true))} 
+                        sx={{
+                          textTransform: "none", 
+                          fontFamily: "Open Sans", 
+                          paddingRight: '2%', 
+                          color: 'white', 
+                          fontWeight: '600', 
+                          margin: 0,
+                          fontSize: '1rem'
+                        }}
+                      >
+                        Upload Media
+                      </Button>
                       :
                       <Button variant="raised" component="span"></Button>
                   }
