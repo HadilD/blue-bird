@@ -1,43 +1,72 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useStyles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPageName } from '../../redux/slice/pagename';
 import Ad from '../../components/ad'
+import SearchByName from '../../components/searchByName'
 import { getMineMedia } from '../../services/media'
 
 function MyAds() {
 
     const classes = useStyles();
     const dispatch = useDispatch();
-    const myMedias = useSelector(state => state.media.myMedias)
+    const allMedia = useSelector(state => state.media.myMedias)
+    const [resultMedia, setResultMedia] = useState([])
 
     useEffect(() => {
-        dispatch(setPageName("My Ads"))
+      dispatch(setPageName("My Ads"))
     })
 
-    useEffect(() => {
-        getMineMedia()
+    useEffect(async () => {
+      const res = await getMineMedia()
+      setResultMedia(res)
     }, [])
 
+    const updateSearchResult = (searchQuery, category) => {
+      let tempRes = null
+      if (searchQuery === '' ) {
+          tempRes = allMedia
+      } else {
+          tempRes = resultMedia.filter(item => {
+              return item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          })
+      }
+      if(category === 'all') {
+          setResultMedia(tempRes)
+      } else if (category === 'approved'){
+          let newTempRes = tempRes.filter(item => {
+              return item.is_approved === true
+          })
+          setResultMedia(newTempRes)
+      } else {
+          let newTempRes = tempRes.filter(item => {
+              return item.is_approved === false
+          })
+          setResultMedia(newTempRes)
+      }
+  }
+
     return (
-        <div className={classes.container}>
-            {
-                myMedias.map(myAds => {
-                    return (<Ad 
-                                key={myAds.id}
-                                id={myAds.id} 
-                                name={myAds.name}
-                                description={myAds.description}
-                                cost={myAds.cost}
-                                owner_name={`${myAds.owner.first_name} ${myAds.owner.last_name}`}
-                                owner_id={myAds.owner.id}
-                                created_at={new Date(myAds.created_at).toDateString()}
-                                is_approved={myAds.is_approved}
-                                tags={myAds.tags}
-                            />)
-                })
-            }
-        </div>
+      <div className={classes.container}>
+        <SearchByName updateResultMedia={updateSearchResult} />
+        {
+          resultMedia.map(myAds => {
+            return (
+              <Ad 
+                key={myAds.id}
+                id={myAds.id} 
+                name={myAds.name}
+                description={myAds.description}
+                cost={myAds.cost}
+                owner_name={`${myAds.owner.first_name} ${myAds.owner.last_name}`}
+                owner_id={myAds.owner.id}
+                created_at={new Date(myAds.created_at).toDateString()}
+                is_approved={myAds.is_approved}
+                tags={myAds.tags}
+              />)
+          })
+        }
+      </div>
     )
 }
 
