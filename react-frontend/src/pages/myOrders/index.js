@@ -27,14 +27,14 @@ function MyOrders() {
               <Ad 
                 key={myOrder.id}
                 id={myOrder.id} 
-                name={myOrder.name}
-                description={myOrder.description}
-                cost={myOrder.cost}
-                owner_name={`${myOrder.owner.first_name} ${myOrder.owner.last_name}`}
-                owner_id={myOrder.owner.id}
-                created_at={new Date(myOrder.created_at).toDateString()}
-                is_approved={myOrder.is_approved}
-                tags={myOrder.tags}
+                name={myOrder.media.name}
+                description={myOrder.media.description}
+                cost={myOrder.media.cost}
+                owner_name={`${myOrder.media.owner.first_name} ${myOrder.media.owner.last_name}`}
+                owner_id={myOrder.media.owner.id}
+                created_at={new Date(myOrder.media.created_at).toDateString()}
+                is_approved={myOrder.media.is_approved}
+                tags={myOrder.media.tags}
               />)
           })
         }

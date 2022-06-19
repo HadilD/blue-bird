@@ -1,5 +1,6 @@
 import React from 'react'
 import useStyles from './styles'
+import Chip from '@mui/material/Chip';
 
 function Ad(props){
   const {name, description, cost, created_at, is_approved, tags} = props
@@ -19,9 +20,15 @@ function Ad(props){
         <p className={classes.mediaPrice}>Cost: {cost}</p>
         <p className={classes.mediaPrice}>Created At: {created_at}</p>
         <p className={classes.mediaPrice}>Status: {is_approved ? 'Approved' : "Not Approved"}</p>
-        {
-          tags &&  <p className={classes.mediaPrice}>Tags: {tags}</p>
-        }
+        <div style={{display: 'flex', flexDirection: 'row', marginTop: '1%'}}>
+          {
+            tags && tags.map((tag, index) => {
+              return (
+                <Chip label={tag} key={index} sx={{marginRight: '1%'}} />
+              )
+            })
+          }
+        </div>
       </div>
     </div>
   )
