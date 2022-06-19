@@ -25,11 +25,11 @@ class AttachmentSerializer(serializers.ModelSerializer):
         model = Attachment
         fields = ["id", "name", "format", "url", "type"]
 
-    def to_representation(self, instance):
-        attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
-        if "order" not in self.context.get("request").path:
-            attachment_serializer.pop("url")
-        return attachment_serializer
+    # def to_representation(self, instance):
+    #     attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
+    #     if "order" not in self.context.get("request").path:
+    #         attachment_serializer.pop("url")
+    #     return attachment_serializer
 
 
 class AttachmentUploadSerializer(serializers.ModelSerializer):
