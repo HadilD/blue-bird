@@ -3,7 +3,7 @@ import useStyles from './styles'
 import { useDispatch, useSelector } from 'react-redux';
 import AdminMedia from '../../components/adminMedia';
 import SearchByName from '../../components/searchByName'
-import {setPageName} from '../../redux/slice/pagename'
+import { setPageName } from '../../redux/slice/pagename'
 import { getAdminMedia, adminUpdateMediaStatus } from '../../services/admin';
 
 function Admin() {
@@ -24,16 +24,16 @@ function Admin() {
 
     const updateSearchResult = (searchQuery, category) => {
         let tempRes = null
-        if (searchQuery === '' ) {
+        if (searchQuery === '') {
             tempRes = allMedia
         } else {
             tempRes = resultMedia.filter(item => {
                 return item.name.toLowerCase().includes(searchQuery.toLowerCase())
             })
         }
-        if(category === 'all') {
+        if (category === 'all') {
             setResultMedia(tempRes)
-        } else if (category === 'approved'){
+        } else if (category === 'approved') {
             let newTempRes = tempRes.filter(item => {
                 return item.is_approved === true
             })
@@ -65,7 +65,9 @@ function Admin() {
                             is_approved={mediaItem.is_approved}
                             attachments={mediaItem.attachments}
                             updateMediaStatus={updateMediaStatus}
-                            key={mediaItem.id} />
+                            key={mediaItem.id}
+                            mediaItem={mediaItem}
+                        />
                     )
                 })
             }
