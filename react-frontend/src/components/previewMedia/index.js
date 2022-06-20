@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createRoom, getAllRoomsForUser } from '../../services/chat';
 import { setCurrentRoomId } from '../../redux/slice/chat';
 import { useNavigate } from 'react-router-dom';
+import { downloadMedia } from '../../services/download';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -70,7 +71,7 @@ const MediaPreviewModal = (props) => {
     }
 
     const classes = useStyles();
-    console.log({ id: loggedInUserId.users.id, mediaPreviewModalData })
+
     return (
         <Dialog
             open={open}
@@ -173,7 +174,7 @@ const MediaPreviewModal = (props) => {
             </DialogContent>
             <DialogActions>
                 {disableContactSellerButton && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => contactSeller()} variant="contained" >Contact Seller</Button>}
-                <Button style={{ backgroundColor: "#1d3461" }} variant="contained">Download</Button>
+                {(mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length !== 0) && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => { downloadMedia(mediaPreviewModalData) }} variant="contained">Download</Button>}
                 <Button onClick={() => handleClose(!open)} autoFocus>
                     Close
                 </Button>
