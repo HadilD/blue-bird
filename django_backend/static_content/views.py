@@ -11,6 +11,7 @@ from rest_framework import generics
 from static_content.models import Media, Attachment, Order
 from static_content.filters import MediaFilter
 from static_content.s3_service import upload_file
+from static_content.permissions import MediaDetailPermission
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer
 
@@ -66,8 +67,9 @@ class MediaList(generics.ListCreateAPIView):
 
 
 class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Media.objects.filter(is_enabled=True)
+    queryset = Media.objects.filter(is_enabled=True, )
     serializer_class = MediaSerializer
+    permission_classes = [MediaDetailPermission, ]
 
     def delete(self, request, pk):
         media = Media.objects.get(pk=pk)
