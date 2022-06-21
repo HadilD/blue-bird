@@ -5,6 +5,7 @@ import AdminMedia from '../../components/adminMedia';
 import SearchByName from '../../components/searchByName'
 import { setPageName } from '../../redux/slice/pagename'
 import { getAdminMedia, adminUpdateMediaStatus } from '../../services/admin';
+import Copyright from '../../components/copyright';
 
 function Admin() {
     const classes = useStyles()
@@ -51,6 +52,7 @@ function Admin() {
     })
     return (
         <div className={classes.container}>
+            <Copyright />
             <SearchByName updateResultMedia={updateSearchResult} />
             {
                 resultMedia.map((mediaItem) => {

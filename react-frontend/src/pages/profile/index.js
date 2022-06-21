@@ -6,6 +6,7 @@ import ProfileDetails from '../../components/profile/profileDetail';
 import { setPageName } from '../../redux/slice/pagename';
 import ProfileLinks from '../../components/profile/profileLinks';
 import { useEffect } from 'react';
+import Copyright from '../../components/copyright';
 
 function Profile() {
 
@@ -18,6 +19,9 @@ function Profile() {
 
     return (
         <div className={classes.container}>
+            <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center'}}>
+                <Copyright />
+            </div>
             <Grid container spacing={2}>
                 {/* <Grid container item xs={12}>
                     <ProfileHeader></ProfileHeader>

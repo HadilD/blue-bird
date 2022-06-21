@@ -5,6 +5,7 @@ import { setPageName } from '../../redux/slice/pagename';
 import Ad from '../../components/ad'
 import SearchByName from '../../components/searchByName'
 import { getMyOrders } from '../../services/order'
+import Copyright from '../../components/copyright';
 
 function MyOrders() {
 
@@ -49,6 +50,9 @@ function MyOrders() {
 
     return (
       <div className={classes.container}>
+        <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center'}}>
+            <Copyright />
+        </div>
         <SearchByName updateResultMedia={updateSearchResult} />
         {
           resultMedia.map(myOrder => {

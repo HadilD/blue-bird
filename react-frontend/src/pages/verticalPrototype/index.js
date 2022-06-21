@@ -11,6 +11,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { fetchMedia } from '../../services/media'
 import PlacehoderImage from "./../../assests/placeholder.png";
 import { getUsers } from '../../services/user';
+import Copyright from '../../components/copyright';
 
 const VerticalPrototype = () => {
     const displayUploadModal = useSelector((state) => state.uploadModal.displayUploadModal)
@@ -41,6 +42,7 @@ const VerticalPrototype = () => {
     const classes = useStyles();
     return (
         <div className={classes.container}>
+            <Copyright />
             <SearchBar fetchMedia={fetchMedia} />
             <div className={classes.root}>
 
