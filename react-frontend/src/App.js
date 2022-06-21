@@ -14,13 +14,24 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Login from './pages/Login'
 import About from './pages/about'
+import Admin from './pages/admin'
 import { useDispatch, useSelector } from 'react-redux';
 import { generalStyles } from './generalStyles';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import VerticalPrototype from './pages/verticalPrototype';
 import { setUploadModal } from './redux/slice/uploadModal';
+import MyAds from './pages/myAds';
 import { Constants } from './constants/api';
-import { setLoginStatus } from './redux/slice/user'
+import { logoutUser } from './services/auth';
+import { setLoginStatus, setUserRole } from './redux/slice/user'
+import ChatScreen from './pages/ChatScreen';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import Home from './pages/home';
+import Profile from './pages/profile';
+import MyOrders from './pages/myOrders';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const drawerWidth = 240;
 
@@ -74,14 +85,18 @@ export default function PersistentDrawerLeft() {
   const [open, setOpen] = React.useState(false);
   const pageName = useSelector(state => state.pageName.pageName)
   const isUserLoggedIn = useSelector(state => state.user.isUserLoggedIn)
+  const userRole = useSelector(state => state.user.userRole)
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+    let userRole = localStorage.getItem(Constants.STORAGE_ITEM_USER_ROLE)
     if (accessToken) {
       dispatch(setLoginStatus(true))
+      dispatch(setUserRole(userRole))
     }
-  },[])
+  }, [])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,25 +112,46 @@ export default function PersistentDrawerLeft() {
       <AppBar style={{ backgroundColor: generalStyles.primaryColor }} position="fixed" open={open}>
         {
           isUserLoggedIn &&
-          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <div style={{display: 'flex', flexDirection: 'row'}}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{marginTop: '3%'}}>
-              {pageName}
-            </Typography>
-          </div>
-          <div>
-            <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
-          </div>
-        </Toolbar>}
+          <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
+                {pageName}
+              </Typography>
+            </div>
+            <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
+            {
+              userRole === 'admin'
+                ?
+                <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
+                :
+                <div style={{ width: '12%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  {
+                    pageName === 'Home'
+                      ?
+                      <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
+                      :
+                      <Button variant="raised" component="span"></Button>
+                  }
+
+                  <IconButton
+                    aria-label="profile"
+                    onClick={() => navigate('/profile')}
+                  >
+                    <AccountCircleOutlinedIcon fontSize="large" sx={{ color: 'white' }} />
+                  </IconButton>
+                </div>
+            }
+
+          </Toolbar>}
       </AppBar>
       <Drawer
         sx={{
@@ -136,12 +172,34 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+        <List>
+          {['Chat'].map((text, index) => (
+            <ListItem key={text} disablePadding onClick={() => { if (text === 'Chat') navigate('/chat') }}>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
         <Routes>
-          <Route path='/' element={isUserLoggedIn ? <VerticalPrototype /> : <Login />} />
+          <Route path='/myads' element={<MyAds />} />
+          <Route path='/myorders' element={<MyOrders />} />
+          <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/' element={
+            isUserLoggedIn
+              ? userRole === 'admin'
+                ? <Admin />
+                : <VerticalPrototype />
+              : <Login />} />
         </Routes>
       </Main>
     </Box >
