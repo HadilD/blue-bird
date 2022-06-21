@@ -1,6 +1,7 @@
 import React from 'react'
 import { downloadMedia } from '../../services/download'
 import useStyles from './styles'
+import PlacehoderImage from "./../../assests/placeholder.png";
 
 
 function AdminMedia(props) {
@@ -13,7 +14,7 @@ function AdminMedia(props) {
         <div className={classes.imageContainer}>
           <img
             className={classes.image}
-            src="https://picsum.photos/id/237/200/300"
+            src={`${(attachments && attachments.length !== 0 && attachments[0].url !== '') ? attachments[0].url : PlacehoderImage}`}
             alt="Media pic not found"
           />
         </div>

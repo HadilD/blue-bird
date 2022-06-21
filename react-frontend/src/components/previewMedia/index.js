@@ -174,7 +174,7 @@ const MediaPreviewModal = (props) => {
             </DialogContent>
             <DialogActions>
                 {disableContactSellerButton && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => contactSeller()} variant="contained" >Contact Seller</Button>}
-                {(mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length !== 0) && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => { downloadMedia(mediaPreviewModalData) }} variant="contained">Download</Button>}
+                {((mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length !== 0) && (mediaPreviewModalData.cost === "0.00")) && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => { downloadMedia(mediaPreviewModalData) }} variant="contained">Download</Button>}
                 <Button onClick={() => handleClose(!open)} autoFocus>
                     Close
                 </Button>

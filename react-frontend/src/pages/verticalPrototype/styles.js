@@ -38,6 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     imageProps: {
         width: "80%",
+        height: "50%",
         [theme.breakpoints.down('sm')]: {
             width: "70%",
         },
