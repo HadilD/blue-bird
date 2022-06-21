@@ -33,7 +33,6 @@ function SignUp (props) {
       }}
       
       onSubmit={(values, actions) => {
-        console.log('submit clicked:', values)
         let body = {
           'first_name': values.firstName,
           'last_name': values.lastName,
