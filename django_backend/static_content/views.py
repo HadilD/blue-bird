@@ -1,20 +1,19 @@
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework import generics
-from rest_framework import filters
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError
-
+from static_content.models import Media, Attachment, Order
+from static_content.filters import MediaFilter
 from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer
 
-from static_content.models import Media, Attachment, Order
-from static_content.filters import MediaFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -23,11 +22,6 @@ class MediaList(generics.ListCreateAPIView):
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = MediaFilter
-
-    def get_serializer_context(self):
-        context = super(MediaList, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
 
     def create(self, request):
         serializer = MediaSerializer(data=request.data, context=self.get_serializer_context())
@@ -75,11 +69,6 @@ class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
 
-    def get_serializer_context(self):
-        context = super(MediaDetail, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
-
     def delete(self, request, pk):
         media = Media.objects.get(pk=pk)
         media.is_enabled = False
@@ -114,20 +103,10 @@ class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
-    def get_serializer_context(self):
-        context = super(AttachmentDetail, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
-
 
 class NotApprovedMediaListView(generics.ListCreateAPIView):
     permission_classes = IsAdminUser,
     serializer_class = MediaSerializer
-
-    def get_serializer_context(self):
-        context = super(NotApprovedMediaListView, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
 
     def get_queryset(self):
         is_approved: str = self.request.GET.get("is_approved")
@@ -145,7 +124,7 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
 
         Media.objects.filter(id__in=media_ids).update(is_approved=approve)
 
-        return Response(MediaSerializer(Media.objects.all(), many=True, context=self.get_serializer_context()).data)
+        return Response(MediaSerializer(Media.objects.all(), many=True))
 
 
 class MyMediasList(generics.ListAPIView):
@@ -168,7 +147,10 @@ class OrderCreate(generics.CreateAPIView):
 
     def create(self, request, pk):
         try:
-            media = Media.objects.get(pk=pk)
+            media = Media.objects.filter(is_enabled=True, is_published=True).get(pk=pk)
+            if not media.is_approved:
+                return Response({"error": "media with id {pk} has not been approved by admin".format(pk=pk)},
+                                status=status.HTTP_400_BAD_REQUEST)
             buyer = self.request.user
             price = media.cost
             order = Order.objects.create(media=media, buyer=buyer, price=price)
@@ -188,11 +170,6 @@ class OrderList(generics.ListAPIView):
     View for listing existing orders.
     """
 
-    def get_serializer_context(self):
-        context = super(OrderList, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
-
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
@@ -203,11 +180,6 @@ class MyOrdersList(generics.ListAPIView):
     View for listing orders made by the currently authenticated user.
     """
 
-    def get_serializer_context(self):
-        context = super(MyOrdersList, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
-
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
@@ -215,32 +187,9 @@ class MyOrdersList(generics.ListAPIView):
         return Order.objects.filter(buyer=self.request.user)
 
 
-# class MediaSearch(generics.ListAPIView):
-#     """
-#     View for searching media
-#     """
-#     queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
-#     serializer_class = MediaSerializer
-#
-#     def get_queryset(self):
-#         search_key = self.request.query_params["search"]
-#         search_words = [word.strip() for word in search_key.split(" ")]
-#         qs = Media.objects.none()
-#         qs2 = Media.objects.filter(is_enabled=True)
-#         for word in search_words:
-#             qs = qs | qs2.filter(name__icontains=word) | \
-#                  qs2.filter(description__icontains=word) | \
-#                  qs2.filter(tags__name__icontains=word) | \
-#                  qs2.filter(owner__first_name__icontains=word) | \
-#                  qs2.filter(owner__last_name__icontains=word)
-#
-#         return qs
-
-
 def search_media(queryset, search_key):
     search_words = [word.strip() for word in search_key.split(" ")]
     qs = Media.objects.none()
-    # qs2 = Media.objects.filter(is_enabled=True)
     qs2 = queryset
     for word in search_words:
         qs = qs | qs2.filter(name__icontains=word) | \

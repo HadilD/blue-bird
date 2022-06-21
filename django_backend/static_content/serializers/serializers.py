@@ -2,10 +2,11 @@ from rest_framework import serializers
 
 from static_content.models import Media, Attachment, Tag, Order
 from static_content.s3_service import get_public_link
+
 from authentication.serializers import UserDetailsSerializer
 
 
-class CustomSlugRelatedField(serializers.SlugRelatedField):
+class TagsSlugRelatedField(serializers.SlugRelatedField):
     def to_internal_value(self, data):
         try:
             tag, is_created = self.get_queryset().get_or_create(name=data)
@@ -25,12 +26,6 @@ class AttachmentSerializer(serializers.ModelSerializer):
         model = Attachment
         fields = ["id", "name", "format", "url", "type"]
 
-    # def to_representation(self, instance):
-    #     attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
-    #     if "order" not in self.context.get("request").path:
-    #         attachment_serializer.pop("url")
-    #     return attachment_serializer
-
 
 class AttachmentUploadSerializer(serializers.ModelSerializer):
     file = serializers.FileField(allow_empty_file=False, required=True)
@@ -41,25 +36,17 @@ class AttachmentUploadSerializer(serializers.ModelSerializer):
 
 
 class MediaSerializer(serializers.ModelSerializer):
-    # attachments = AttachmentSerializer(many=True, read_only=True, source="attachment_set")
-    attachments = serializers.SerializerMethodField("get_attachments_serializer")
-    tags = CustomSlugRelatedField(many=True,
-                                  queryset=Tag.objects.all(),
-                                  slug_field="name",
-                                  required=False)
+    attachments = AttachmentSerializer(many=True, read_only=True, source="attachment_set")
+    tags = TagsSlugRelatedField(many=True,
+                                queryset=Tag.objects.all(),
+                                slug_field="name",
+                                required=False)
     owner = UserDetailsSerializer(read_only=True)
 
     class Meta:
         model = Media
         fields = ["id", "name", "description", "cost", "owner", "created_at", "is_approved",
                   "attachments", "tags", "was_bought", ]
-
-    def get_attachments_serializer(self, obj):
-        serializer_context = {'request': self.context.get('request')}
-        attachments = Attachment.objects.all().filter(media=obj)
-        attachments_serializer = AttachmentSerializer(attachments, many=True, read_only=True,
-                                                      context=serializer_context)
-        return attachments_serializer.data
 
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])
@@ -71,18 +58,8 @@ class MediaSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    # used SerializerMethodField to pass the context of OrderSerializer to MediaSerializer
-    # context cannot be passed directly to class field because __init__ has to be called first
-    media = serializers.SerializerMethodField("get_media_serializer")
+    media = MediaSerializer()
 
     class Meta:
         model = Order
         fields = ["id", "buyer", "media", "price"]
-
-    def get_media_serializer(self, obj):
-        serializer_context = {'request': self.context.get('request')}
-        media = Media.objects.all().get(pk=obj.media.pk)
-        serializer = MediaSerializer(media, context=serializer_context)
-        return serializer.data
-
-
