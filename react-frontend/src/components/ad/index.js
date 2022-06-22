@@ -4,7 +4,7 @@ import Chip from '@mui/material/Chip';
 import { generalStyles } from '../../generalStyles';
 import Button from '@mui/material/Button';
 import { downloadMedia } from '../../services/download';
-import { updateMedia } from '../../services/media'
+import { updateMedia, deleteMedia, unpublishMedia } from '../../services/media'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Alert from '@mui/material/Alert';
@@ -186,6 +186,14 @@ function Ad(props) {
     setModalState(false)
   }
 
+  const handleDelete = () => {
+    deleteMedia({id: id})
+  }
+
+  const handleUnpublish = (publish_value) => {
+    unpublishMedia({id: id, is_published: publish_value})
+  }
+
   return (
     <div className={classes.adContainer} >
       <div className={classes.imageContainer}>
@@ -220,36 +228,28 @@ function Ad(props) {
             })
           }
         </div>
-        <Button
-          variant="contained"
-          component="span"
-          sx={{
-            textTransform: "none",
-            margin: '0 1rem',
-            backgroundColor: generalStyles.primaryColor
-          }}
-          onClick={() => downloadMedia(myAd)}
-        >
-          Download Media
-        </Button>
-        {
-          updateable
-          ?
-            <Button
-              variant="contained"
-              component="span"
-              sx={{
-                textTransform: "none",
-                margin: '0 1rem',
-                backgroundColor: generalStyles.primaryColor
-              }}
-              onClick={() => setModalState(true)}
-            >
-              Update Details
-            </Button>
-          :
+        <div>
+          {
+            updateable
+            ?
+              <>
+                <Button variant="contained" component="span" sx={{textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: generalStyles.primaryColor}}
+                  onClick={() => setModalState(true)}>
+                    Update Details
+                </Button>
+                <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%',backgroundColor: generalStyles.primaryColor}}
+                  onClick={() => handleDelete()}>
+                  Delete
+                </Button>
+                <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: generalStyles.primaryColor}}
+                  onClick={() => handleUnpublish()}>
+                  Unpublish
+                </Button>
+              </>
+            :
               null
-        }
+          }
+        </div>
       </div>
     </div>
   )

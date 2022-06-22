@@ -109,7 +109,7 @@ const useStyles = makeStyles(theme => ({
         borderTopRightRadius: '10px',
         marginBottom: '3%',
         backgroundColor: generalStyles.primaryColor
-    }
+    },
 }))
 
 export default useStyles

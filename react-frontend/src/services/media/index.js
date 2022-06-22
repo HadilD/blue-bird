@@ -76,3 +76,27 @@ export const updateMedia = async (values) => {
     throw err
   }
 }
+
+export const deleteMedia = async (values) => {
+  try {
+    const media_id = values.id
+    const res = await protectedAxios.delete(Request.UPLOAD_MEDIA + '/' + media_id)
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}
+
+export const unpublishMedia = async (values) => {
+  try {
+    let body = {
+      is_published: values.is_published
+    }
+    const res = await protectedAxios.put(Request.UPLOAD_MEDIA + '/' + values.id, body)
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}
