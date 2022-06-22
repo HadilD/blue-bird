@@ -60,3 +60,19 @@ export const getMineMedia = async () => {
     throw err
   }
 }
+
+export const updateMedia = async (values) => {
+  try {
+    let body = {
+      name: values.name,
+      description: values.description,
+      cost: values.cost,
+      tags: values.tags
+    }
+    const res = await protectedAxios.put(Request.UPLOAD_MEDIA + '/' + values.id, body)
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}

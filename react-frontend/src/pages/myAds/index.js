@@ -68,6 +68,7 @@ function MyAds() {
               is_approved={myAds.is_approved}
               tags={myAds.tags}
               myAd={myAds}
+              updateable={true}
             />)
         })
       }
