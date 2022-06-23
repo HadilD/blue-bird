@@ -4,14 +4,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
 
 from static_content.models import Media, Attachment, Order
 from static_content.filters import MediaFilter
 from static_content.s3_service import upload_file
-from static_content.permissions import MediaDetailPermission
+from static_content.permissions import IsOwnerOrReadOnly
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer
 
@@ -57,9 +57,8 @@ class MediaList(generics.ListCreateAPIView):
 
         search_key = request.query_params.get("search", None)
         if search_key:
-            queryset = search_media(queryset, search_key)
-            serializer = self.get_serializer(queryset, many=True,
-                                             context=self.get_serializer_context())
+            new_queryset = search_media(queryset, search_key)
+            serializer = self.get_serializer(new_queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         serializer = self.get_serializer(queryset, many=True)
@@ -69,7 +68,7 @@ class MediaList(generics.ListCreateAPIView):
 class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Media.objects.filter(is_enabled=True, )
     serializer_class = MediaSerializer
-    permission_classes = [MediaDetailPermission, ]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def delete(self, request, pk):
         media = Media.objects.get(pk=pk)
@@ -86,6 +85,8 @@ class AttachmentCreate(generics.CreateAPIView):
         serializer = AttachmentUploadSerializer(data=request.data)
         if serializer.is_valid():
             file = request.data.get("file")
+            #
+
             file_name = request.data.get("name", file.name)
             uri = upload_file(file)
             media_id = request.data.get("media")
@@ -126,7 +127,7 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
 
         Media.objects.filter(id__in=media_ids).update(is_approved=approve)
 
-        return Response(MediaSerializer(Media.objects.all(), many=True))
+        return Response(MediaSerializer(Media.objects.all(), many=True).data)
 
 
 class MyMediasList(generics.ListAPIView):

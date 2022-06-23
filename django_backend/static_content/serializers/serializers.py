@@ -46,7 +46,7 @@ class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
         fields = ["id", "name", "description", "cost", "owner", "created_at", "is_approved",
-                  "attachments", "tags", "was_bought", ]
+                  "attachments", "tags", "was_bought", "is_published", "is_approved"]
 
     def create(self, validated_data):
         tags = validated_data.pop("tags", [])
