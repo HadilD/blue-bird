@@ -178,7 +178,7 @@ function UpdateModal(props) {
 }
 
 function Ad(props) {
-  const { name, description, cost, created_at, is_approved, tags, myAd, updateable, id, attachments } = props
+  const { name, description, cost, created_at, is_approved, tags, myAd, updateable, id, attachments, is_published } = props
 
   const classes = useStyles();
   const [modalState, setModalState] = useState(false)
@@ -192,7 +192,10 @@ function Ad(props) {
   }
 
   const handleUnpublish = (publish_value) => {
-    unpublishMedia({id: id, is_published: publish_value})
+    unpublishMedia({
+      id: id,
+      is_published: publish_value
+    })
   }
 
   return (
@@ -242,10 +245,19 @@ function Ad(props) {
                   onClick={() => handleDelete()}>
                   Delete
                 </Button>
-                <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: generalStyles.primaryColor}}
-                  onClick={() => handleUnpublish()}>
-                  Unpublish
-                </Button>
+                {
+                  is_published
+                  ?
+                    <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: '#ed6c02'}}
+                      onClick={() => handleUnpublish(false)}>
+                      Unpublish
+                    </Button>
+                  :
+                    <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: 'green'}}
+                      onClick={() => handleUnpublish(true)}>
+                      Publish
+                    </Button>
+                }
               </>
             :
               null

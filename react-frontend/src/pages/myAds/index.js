@@ -70,6 +70,7 @@ function MyAds() {
               tags={myAds.tags}
               myAd={myAds}
               attachments={myAds.attachments}
+              is_published={myAds.is_published}
               updateable={true}
             />)
         })

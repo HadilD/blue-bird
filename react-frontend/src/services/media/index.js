@@ -93,7 +93,7 @@ export const unpublishMedia = async (values) => {
     let body = {
       is_published: values.is_published
     }
-    const res = await protectedAxios.put(Request.UPLOAD_MEDIA + '/' + values.id, body)
+    const res = await protectedAxios.patch(Request.UPLOAD_MEDIA + '/' + values.id, body)
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))
