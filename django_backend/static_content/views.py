@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
 
-from static_content.models import Media, Attachment, Order
+from static_content.models import Media, Attachment, Order, Tag
 from static_content.filters import MediaFilter
 from static_content.s3_service import upload_file
 from static_content.permissions import IsOwnerOrReadOnly
@@ -70,8 +70,23 @@ class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MediaSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
+    # def update(self, request, pk, *args, **kwargs):
+    #     media = self.queryset.get(pk=pk)
+    #     tags = request.data.get("tags", [])
+    #     if tags:
+    #         for tag_name in tags:
+    #             t, _ = Tag.objects.get_or_create(name=tag_name)
+    #             media.tags.add(t)
+    #         for tag in media.tags.all():
+    #             if tag.name not in tags:
+    #                 media.tags.remove(tag)
+    #         media.save()
+    #     media.update(request, *args, **kwargs)
+    #     serializer = MediaSerializer(media)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
     def delete(self, request, pk):
-        media = Media.objects.get(pk=pk)
+        media = self.queryset.get(pk=pk)
         media.is_enabled = False
         media.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

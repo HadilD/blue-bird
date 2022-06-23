@@ -56,6 +56,20 @@ class MediaSerializer(serializers.ModelSerializer):
             media.tags.add(t)
         return media
 
+    # def update(self, instance, validated_data):
+    #     try:
+    #         tags = validated_data.pop("tags")
+    #         for tag_name in tags:
+    #             t, _ = Tag.objects.get_or_create(name=tag_name)
+    #             instance.tags.add(t)
+    #         for tag in instance.tags.all():
+    #             if tag.name not in tags:
+    #                 instance.tags.remove(tag)
+    #         instance.save()
+    #     except KeyError:
+    #         instance.save()
+    #     return instance
+
 
 class OrderSerializer(serializers.ModelSerializer):
     media = MediaSerializer()
