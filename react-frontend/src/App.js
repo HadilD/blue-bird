@@ -127,45 +127,27 @@ export default function PersistentDrawerLeft() {
                 {pageName}
               </Typography>
             </div>
-            <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
+            <Typography onClick={() => navigate('/')} style={{ cursor: "pointer" }} variant="h4" noWrap component="div">Blue Bird</Typography>
             {
               userRole === 'admin'
                 ?
                 <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
                 :
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '13%' }}>
-                  {
-                    pageName === 'Home'
-                      ?
-                      <Button
-                        onClick={() => dispatch(setUploadModal(true))}
-                        sx={{
-                          textTransform: "none",
-                          fontFamily: "Open Sans",
-                          paddingRight: '2%',
-                          color: 'white',
-                          fontWeight: '600',
-                          margin: 0,
-                          fontSize: '1rem'
-                        }}
-                      >
-                        Upload Media
-                      </Button>
-                      :
-                      <Button
-                        onClick={() => navigate('/')}
-                        sx={{
-                          textTransform: "none",
-                          fontFamily: "Open Sans",
-                          paddingRight: '2%',
-                          color: 'white',
-                          fontWeight: '600',
-                          margin: 0,
-                          fontSize: '1rem',
-                        }}>Home
-                      </Button>
-                  }
-
+                  <Button
+                    onClick={() => dispatch(setUploadModal(true))}
+                    sx={{
+                      textTransform: "none",
+                      fontFamily: "Open Sans",
+                      paddingRight: '2%',
+                      color: 'white',
+                      fontWeight: '600',
+                      margin: 0,
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Upload Media
+                  </Button>
                   <IconButton
                     aria-label="profile"
                     onClick={() => navigate('/profile')}
