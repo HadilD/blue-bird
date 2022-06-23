@@ -133,7 +133,7 @@ export default function PersistentDrawerLeft() {
                 ?
                 <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
                 :
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '15%'}}>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '13%'}}>
                   {
                     pageName === 'Home'
                       ?
@@ -152,7 +152,18 @@ export default function PersistentDrawerLeft() {
                         Upload Media
                       </Button>
                       :
-                      <Button variant="raised" component="span"></Button>
+                      <Button
+                        onClick={() => navigate('/')} 
+                        sx={{
+                          textTransform: "none", 
+                          fontFamily: "Open Sans", 
+                          paddingRight: '2%', 
+                          color: 'white', 
+                          fontWeight: '600', 
+                          margin: 0,
+                          fontSize: '1rem',
+                        }}>Home
+                      </Button>
                   }
 
                   <IconButton
@@ -205,7 +216,6 @@ export default function PersistentDrawerLeft() {
           <Route path='/myorders' element={<MyOrders />} />
           <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
-          <Route path='/home' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/' element={
             isUserLoggedIn
