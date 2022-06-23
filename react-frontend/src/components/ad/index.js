@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import PlacehoderImage from "./../../assests/placeholder.png";
 
 
 function UpdateModal(props) {
@@ -177,7 +178,7 @@ function UpdateModal(props) {
 }
 
 function Ad(props) {
-  const { name, description, cost, created_at, is_approved, tags, myAd, updateable, id } = props
+  const { name, description, cost, created_at, is_approved, tags, myAd, updateable, id, attachments } = props
 
   const classes = useStyles();
   const [modalState, setModalState] = useState(false)
@@ -199,7 +200,7 @@ function Ad(props) {
       <div className={classes.imageContainer}>
         <img
           className={classes.image}
-          src="https://picsum.photos/id/237/200/300"
+          src={`${(attachments && attachments.length !== 0 && attachments[0].url !== '') ? attachments[0].url : PlacehoderImage}`}
           alt="Media pic not found"
         />
       </div>

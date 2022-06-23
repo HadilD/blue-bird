@@ -55,6 +55,7 @@ function MyAds() {
       <SearchByName updateResultMedia={updateSearchResult} />
       {
         resultMedia.map(myAds => {
+          console.log('-----------', myAds)
           return (
             <Ad
               key={myAds.id}
@@ -68,6 +69,7 @@ function MyAds() {
               is_approved={myAds.is_approved}
               tags={myAds.tags}
               myAd={myAds}
+              attachments={myAds.attachments}
               updateable={true}
             />)
         })

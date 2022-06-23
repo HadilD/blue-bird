@@ -67,6 +67,7 @@ function MyOrders() {
                 owner_id={myOrder.media.owner.id}
                 created_at={new Date(myOrder.media.created_at).toDateString()}
                 is_approved={myOrder.media.is_approved}
+                attachments={myOrder.media.attachments}
                 tags={myOrder.media.tags}
               />)
           })
