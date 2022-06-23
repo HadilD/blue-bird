@@ -1,6 +1,7 @@
 import React from 'react'
 import { downloadMedia } from '../../services/download'
 import useStyles from './styles'
+import Chip from '@mui/material/Chip';
 import PlacehoderImage from "./../../assests/placeholder.png";
 
 
@@ -25,7 +26,15 @@ function AdminMedia(props) {
           <p className={classes.mediaPrice}>Owner: {owner}</p>
           <p className={classes.mediaPrice}>Uploaded on: {date}</p>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '3%' }}>
-            <p className={classes.mediaPrice} style={{ width: '20%' }}>Status: {approveStatus ? 'Approved' : 'Not Approved'}</p>
+          <p className={classes.mediaPrice}>Status:
+            {
+            approveStatus
+              ?
+              <Chip label={'Approved'} sx={{ marginLeft: '1%' }} color="success" />
+              :
+              <Chip label={'Not Approved'} sx={{ marginLeft: '1%' }} color="warning" />
+            }
+          </p>
             {
               approveStatus
                 ?
