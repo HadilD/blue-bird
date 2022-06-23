@@ -131,7 +131,7 @@ function UpdateModal(props) {
               }} 
             />
           </div>
-          <div className={classes.inputContainer}>
+          {/* <div className={classes.inputContainer}>
             <InputLabel>Tags</InputLabel>
             <TextField 
               variant="outlined" 
@@ -142,7 +142,7 @@ function UpdateModal(props) {
               onChange={(e)=> setTagInput(e.target.value)}
               onKeyDown={(e) => handleTagChange(e)}
             />
-          </div>
+          </div> */}
           <div>
             {
               oldTags.map((tag, index) => {
