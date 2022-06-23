@@ -138,7 +138,7 @@ class MyMediasList(generics.ListAPIView):
     serializer_class = MediaSerializer
 
     def get_queryset(self):
-        return Media.objects.filter(owner=self.request.user)
+        return self.queryset.filter(owner=self.request.user)
 
 
 class OrderCreate(generics.CreateAPIView):
