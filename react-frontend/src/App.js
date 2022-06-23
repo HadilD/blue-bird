@@ -114,7 +114,7 @@ export default function PersistentDrawerLeft() {
           isUserLoggedIn &&
           <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <IconButton
+              {/* <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
@@ -122,7 +122,7 @@ export default function PersistentDrawerLeft() {
                 sx={{ mr: 2, ...(open && { display: 'none' }) }}
               >
                 <MenuIcon />
-              </IconButton>
+              </IconButton> */}
               <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
                 {pageName}
               </Typography>
@@ -133,18 +133,18 @@ export default function PersistentDrawerLeft() {
                 ?
                 <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
                 :
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '13%'}}>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '13%' }}>
                   {
                     pageName === 'Home'
                       ?
-                      <Button 
-                        onClick={() => dispatch(setUploadModal(true))} 
+                      <Button
+                        onClick={() => dispatch(setUploadModal(true))}
                         sx={{
-                          textTransform: "none", 
-                          fontFamily: "Open Sans", 
-                          paddingRight: '2%', 
-                          color: 'white', 
-                          fontWeight: '600', 
+                          textTransform: "none",
+                          fontFamily: "Open Sans",
+                          paddingRight: '2%',
+                          color: 'white',
+                          fontWeight: '600',
                           margin: 0,
                           fontSize: '1rem'
                         }}
@@ -153,13 +153,13 @@ export default function PersistentDrawerLeft() {
                       </Button>
                       :
                       <Button
-                        onClick={() => navigate('/')} 
+                        onClick={() => navigate('/')}
                         sx={{
-                          textTransform: "none", 
-                          fontFamily: "Open Sans", 
-                          paddingRight: '2%', 
-                          color: 'white', 
-                          fontWeight: '600', 
+                          textTransform: "none",
+                          fontFamily: "Open Sans",
+                          paddingRight: '2%',
+                          color: 'white',
+                          fontWeight: '600',
                           margin: 0,
                           fontSize: '1rem',
                         }}>Home
