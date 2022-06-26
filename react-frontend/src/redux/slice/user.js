@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    users: []
+    isUserLoggedIn: false,
+    isSignInDisplayed: false,
+    userRole: null,
+    users: null
 }
 
 export const userSlice = createSlice({
@@ -9,10 +12,16 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setAllUsers: (state, action) => {
-            state.users = [...action.payload]
+            state.users = action.payload
+        },
+        setLoginStatus: (state, action) => {
+            state.isUserLoggedIn = action.payload
+        },
+        setUserRole: (state, action) => {
+            state.userRole = action.payload
         }
     }
 })
 
-export const { setAllUsers } = userSlice.actions
+export const { setAllUsers, setLoginStatus, setUserRole } = userSlice.actions
 export default userSlice.reducer

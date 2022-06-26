@@ -1,13 +1,18 @@
+import { Request } from '../../constants/api'
+import { openAxios } from '../instance'
+import { Constants } from '../../constants/api'
 import Store from '../../redux/store/store'
 import { setAllUsers } from '../../redux/slice/user'
-import { Request } from '../../constants/api'
-// import { PathPram, Request } from '../../constants/api'
-import { openAxios } from '../instance'
 
-export const getUsers = async (values) => {
+export const getUsers = async () => {
   try {
     // let body = values
-    const res = await openAxios.get(Request.GET_USERS)
+    const res = await openAxios.get(Request.GET_USERS, {
+      headers: {
+        authorization: "Bearer " + localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
+      }
+    })
+    console.log({data:res.data})
     Store.dispatch(setAllUsers(res.data))
     return res.data
   } catch (err) {
@@ -16,22 +21,12 @@ export const getUsers = async (values) => {
   }
 }
 
-export const getMedia = async (params) => {
+export const setUsers = async (first_name, last_name) => {
   try {
-    const res = await openAxios.get(Request.GET_MEDIA, { params });
-    return res.data
-  } catch (err) {
-    console.log(JSON.stringify(err))
-    throw err
-  }
-}
-
-export const uploadImageMediaService = async (values) => {
-  try {
-    let body = values
-    const res = await openAxios.post(Request.UPLOAD_MEDIA, body, {
+    let body = { first_name, last_name }
+    const res = await openAxios.put(Request.SET_USERS, body, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        authorization: "Bearer " + localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
       }
     })
     return res.data

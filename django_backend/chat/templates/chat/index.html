@@ -29,15 +29,7 @@
                             <label>Room name</label>
 
                             <div class="control">
-                                <input class="input" type="text" placeholder="Room name" id="room-name-input">
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label>Username</label>
-
-                            <div class="control">
-                                <input class="input" type="text" placeholder="Username" id="username-input">
+                                <input class="input" type="text" placeholder="Room id" id="room-id-input">
                             </div>
                         </div>
 
@@ -52,13 +44,12 @@
         </section>
 
         <script>
-            document.querySelector('#room-name-input').focus();
+            document.querySelector('#room-id-input').focus();
 
             document.querySelector('#room-name-submit').onclick = function(e) {
-                var roomName = document.querySelector('#room-name-input').value;
-                var userName = document.querySelector('#username-input').value;
+                var roomName = document.querySelector('#room-id-input').value;
 
-                window.location.replace(roomName + '/?username=' + userName);
+                window.location.replace(roomName);
             };
         </script>
     </body>

@@ -13,7 +13,7 @@ class BaseModel(models.Model):
 class Room(BaseModel):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_message")
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_message")
-    room_id = models.UUIDField(auto_created=True)
+    room_id = models.UUIDField()
 
 
 class Message(BaseModel):

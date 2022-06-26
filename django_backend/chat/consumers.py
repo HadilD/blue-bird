@@ -3,7 +3,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
-from .models import Message
+from .models import Message, Room
+from .serializers import MessageCreateSerializer, MessageListSerializer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -28,34 +29,36 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from web socket
     async def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data['message']
-        username = data['username']
-        room = data['room']
-
-        await self.save_message(username, room, message)
-
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'username': username
-            }
-        )
+        output = await self.save_message(json.loads(text_data))
+        await self.channel_layer.group_send(self.room_group_name, output)
 
     # Receive message from room group
     async def chat_message(self, event):
-        message = event['message']
-        username = event['username']
+
+        data_to_send = {**event["message"], "type": event["type"]}
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps(data_to_send))
+
+    async def chat_error(self, event):
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username
+            'message': event["message"],
         }))
 
     @sync_to_async
-    def save_message(self, username, room, message):
-        Message.objects.create(username=username, room=room, content=message)
+    def save_message(self, loaded_data):
+
+        serializer = MessageCreateSerializer(data=loaded_data)
+        if not serializer.is_valid():
+            return {
+                'type': 'chat_error',
+                'message': str(serializer.errors),
+            }
+        else:
+            saved_message = serializer.save()
+
+            return {
+                'type': 'chat_message',
+                'message': MessageListSerializer(saved_message).data,
+            }

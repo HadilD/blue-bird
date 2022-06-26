@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         justifyContent: "center",
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-        height: "330px",
+        height: "450px",
         margin: "10px 10px",
         position: "relative",
         borderRadius: "30px",
@@ -38,6 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     imageProps: {
         width: "80%",
+        height: "50%",
         [theme.breakpoints.down('sm')]: {
             width: "70%",
         },
