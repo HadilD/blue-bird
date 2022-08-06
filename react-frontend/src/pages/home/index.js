@@ -15,8 +15,7 @@ function Home() {
 
     useEffect(() => {
       async function fetchAllUsers() {
-        const response = await getUsers()
-        console.log(response)
+        await getUsers()
       }
       fetchAllUsers();
     }, [])
