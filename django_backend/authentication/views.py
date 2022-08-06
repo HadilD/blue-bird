@@ -4,7 +4,9 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from .models import User
-from .serializers import MyTokenObtainPairSerializer, UserDetailsSerializer, UserUpdateSerializer
+from .serializers import(
+    MyTokenObtainPairSerializer, UserListingSerializerForChat as UserListingSerializer, UserUpdateSerializer
+    )
 from .serializers import UserRegistrationSerializer
 
 
@@ -22,11 +24,12 @@ class UserRegistrationView(generics.CreateAPIView):
         try:
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
-            user = User.objects.create_user(email=serializer.validated_data['email'],
-                                     password=request.data['password'],
-                                     first_name=serializer.validated_data['first_name'],
-                                     last_name=serializer.validated_data['last_name'],
-                                    )
+            user = User.objects.create_user(
+                email=serializer.validated_data['email'],
+                password=request.data['password'],
+                first_name=serializer.validated_data['first_name'],
+                last_name=serializer.validated_data['last_name'],
+            )
             return Response(UserRegistrationSerializer(user).data, status=201)
         except Exception as ex:
             print(ex)
@@ -35,7 +38,7 @@ class UserRegistrationView(generics.CreateAPIView):
 
 class UserDetailsView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
-        return Response(UserDetailsSerializer(request.user).data)
+        return Response(UserListingSerializer(request.user).data)
 
 
 class UserDetailsUpdateView(generics.UpdateAPIView):
@@ -54,6 +57,6 @@ class UserDetailsUpdateView(generics.UpdateAPIView):
                 user.last_name = data["last_name"]
 
             user.save()
-            return Response(UserDetailsSerializer(user).data)
+            return Response(UserListingSerializer(user).data)
         else:
             return Response(data=str(serializer.errors))
