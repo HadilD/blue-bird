@@ -16,7 +16,7 @@ RUN pip install -r requirements.txt
 EXPOSE 8000
 
 RUN python manage.py migrate
-RUN python manage.py loaddata initial-data.json
+# RUN python manage.py loaddata initial-data.json
 RUN python manage.py collectstatic --no-input
 
 CMD gunicorn 'django_backend.wsgi:application' --bind 0.0.0.0:8000 && daphne -b 0.0.0.0 -p 8001 django_backend.asgi:application
