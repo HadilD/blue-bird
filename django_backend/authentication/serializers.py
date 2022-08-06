@@ -11,6 +11,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
         # Add custom claims
         token['email'] = user.email
+        token['is_superuser'] = user.is_superuser
         return token
 
 
@@ -28,13 +29,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
 
-class UserListingSerializerForChat(serializers.ModelSerializer):
+class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = 'id', 'email', 'first_name', 'last_name'
 
 
-class UserUpdateSerializer(serializers.ModelSerializer):
+class UserUpdateSerializer(serializers.Serializer):
+    password = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+
+
+class UserListingSerializerForChat(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = 'first_name', 'last_name', 'password'
+        fields = 'id', 'email', 'first_name', 'last_name'
