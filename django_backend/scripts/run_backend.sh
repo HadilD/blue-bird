@@ -9,5 +9,5 @@ cur_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 python ./manage.py migrate
 # env DJANGO_DISABLE_SIGNALS=True python ./manage.py loaddata fixtures/dev-environment-and-tests.json
-python ./manage.py collectstatic --no-input
+# python ./manage.py collectstatic --no-input
 gunicorn 'django_backend.wsgi:application' --bind 0.0.0.0:8000

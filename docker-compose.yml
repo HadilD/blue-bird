@@ -12,27 +12,33 @@ services:
     build: ./django_backend
     ports:
       - 8000:8000
-    # volumes:
-    #   - ./django_backend:/webapp:cached
+    volumes:
+      - ./django_backend:/webapp:cached
+    env_file:
+      - ./django_backend/django_backend/.env
     environment:
-      DB_USER: root
-      DB_PORT: 3306
-      DB_PASSWORD: root
       DB_HOST: db
       DB_NAME: gdsd
-      REDIS_HOST: redis
-      WAIT_HOSTS_TIMEOUT: 500
-      WAIT_SLEEP_INTERVAL: 50
-      WAIT_HOST_CONNECT_TIMEOUT: 50
     depends_on:
       - db
     command: ./scripts/run_backend.sh
     
-  # websocket:
-  #   depends_on:
-  #     - api
-  #   ports:
-  #     -
+  websocket:
+    build: ./django_backend
+    ports:
+      - 8001:8001
+    volumes:
+      - ./django_backend:/webapp:cached
+    env_file:
+      - ./django_backend/django_backend/.env
+    environment:
+      DB_HOST: db
+      DB_NAME: gdsd
+      REDIS_HOST: redis
+    depends_on:
+      - api
+    command: daphne -b 0.0.0.0 -p 8001 django_backend.asgi:application
+
   db:
     image: mysql:latest
     ports:
