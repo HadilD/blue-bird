@@ -5,34 +5,45 @@ services:
     ports:
       - 3000:3000
     environment:
-      - REACT_APP_API_URL=api:8000/
+      REACT_APP_API_URL: http://localhost:8000/
+    depends_on:
+      - api
   api:
     build: ./django_backend
     ports:
       - 8000:8000
-    environment:
-      - DB_HOST=database
-      - REDIS_HOST=redis
-    depends_on:
-      - database
-    entrypoint: ['./apis-wait-and-startup.sh']
     # volumes:
-      # - /Users/segullshairbutt/Desktop/Academics/GSD/GSD-Team-3/mysqld:/run/mysqld
+    #   - ./django_backend:/webapp:cached
+    environment:
+      DB_USER: root
+      DB_PORT: 3306
+      DB_PASSWORD: root
+      DB_HOST: db
+      DB_NAME: gdsd
+      REDIS_HOST: redis
+      WAIT_HOSTS_TIMEOUT: 500
+      WAIT_SLEEP_INTERVAL: 50
+      WAIT_HOST_CONNECT_TIMEOUT: 50
+    depends_on:
+      - db
+    command: ./scripts/run_backend.sh
     
   # websocket:
   #   depends_on:
   #     - api
   #   ports:
   #     -
-  database:
+  db:
     image: mysql:latest
     ports:
-      - 3306:3306
+     - 3306:3306
+    expose:
+      - 3306
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=gdsd
-    volumes:
-      - mysql_data:/var/lib/mysql
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gdsd
+    # volumes:
+    #   - ./mysql_data:/var/lib/mysql
       # - /Users/segullshairbutt/Desktop/Academics/GSD/GSD-Team-3/mysqld:/run/mysqld
   redis:
     image: redis:5
