@@ -10,6 +10,6 @@ RUN npm install --silent
 
 COPY . ./
 
-ENV REACT_APP_API_URL=https://bluebird.no-ip.org/
+# ENV REACT_APP_API_URL=https://bluebird.no-ip.org/
 
 CMD [ "npm", "start"]

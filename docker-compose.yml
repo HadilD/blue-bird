@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./react-frontend
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_API_URL=api:8000/
+  api:
+    build: ./django_backend
+    ports:
+      - 8000:8000
+    environment:
+      - DB_HOST=database
+      - REDIS_HOST=redis
+    depends_on:
+      - database
+    entrypoint: ['./apis-wait-and-startup.sh']
+    # volumes:
+      # - /Users/segullshairbutt/Desktop/Academics/GSD/GSD-Team-3/mysqld:/run/mysqld
+    
+  # websocket:
+  #   depends_on:
+  #     - api
+  #   ports:
+  #     -
+  database:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gdsd
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # - /Users/segullshairbutt/Desktop/Academics/GSD/GSD-Team-3/mysqld:/run/mysqld
+  redis:
+    image: redis:5
+    ports:
+      - 6379:6379
+
+volumes:
+  mysql_data:
