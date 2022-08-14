@@ -12,3 +12,4 @@ env
 .vscode
 
 bb_localstack_data/
+mysql_data/

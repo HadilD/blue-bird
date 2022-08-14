@@ -42,7 +42,8 @@ const ChatScreen = () => {
     //create websocket on room change
     useEffect(() => {
         if (roomId !== null) {
-            const chatSocket = new WebSocket('wss://bluebird.no-ip.org/ws/' + roomId + '/');
+            // const chatSocket = new WebSocket('ws://bluebird.no-ip.org/ws/' + roomId + '/');
+            const chatSocket = new WebSocket(process.env.REACT_APP_SOCKET_URL + roomId + '/');
             setCurrentWebSocket(chatSocket);
             getCurrentChat({ room_id: roomId })
         }

@@ -25,11 +25,11 @@ class AttachmentSerializer(serializers.ModelSerializer):
         model = Attachment
         fields = ["id", "name", "format", "url", "type"]
 
-    def to_representation(self, instance):
-        attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
-        if "order" not in self.context.get("request").path:
-            attachment_serializer.pop("url")
-        return attachment_serializer
+    # def to_representation(self, instance):
+    #     attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
+    #     if "order" not in self.context.get("request").path:
+    #         attachment_serializer.pop("url")
+    #     return attachment_serializer
 
 
 class AttachmentUploadSerializer(serializers.ModelSerializer):
@@ -43,10 +43,8 @@ class AttachmentUploadSerializer(serializers.ModelSerializer):
 class MediaSerializer(serializers.ModelSerializer):
     # attachments = AttachmentSerializer(many=True, read_only=True, source="attachment_set")
     attachments = serializers.SerializerMethodField("get_attachments_serializer")
-    tags = CustomSlugRelatedField(many=True,
-                                  queryset=Tag.objects.all(),
-                                  slug_field="name",
-                                  required=False)
+    tags = CustomSlugRelatedField(
+        many=True, queryset=Tag.objects.all(), slug_field="name",required=False)
     owner = UserDetailsSerializer(read_only=True)
 
     class Meta:
@@ -56,9 +54,9 @@ class MediaSerializer(serializers.ModelSerializer):
 
     def get_attachments_serializer(self, obj):
         serializer_context = {'request': self.context.get('request')}
-        attachments = Attachment.objects.all().filter(media=obj)
-        attachments_serializer = AttachmentSerializer(attachments, many=True, read_only=True,
-                                                      context=serializer_context)
+        attachments = obj.attachment_set.all()
+        attachments_serializer = AttachmentSerializer(
+            attachments, many=True, read_only=True, context=serializer_context)
         return attachments_serializer.data
 
     def create(self, validated_data):
