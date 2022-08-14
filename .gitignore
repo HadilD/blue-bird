@@ -10,3 +10,5 @@ build
 env
 **/.DS_Store
 .vscode
+
+bb_localstack_data/

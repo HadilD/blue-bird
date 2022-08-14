@@ -44,16 +44,15 @@ services:
   db:
     image: mysql:latest
     container_name: blue-bird_db
-    # ports:
-    #  - 3306:3306
+    ports:
+     - 3306:3306
     expose:
       - 3306
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: gdsd
-    # volumes:
-    #   - ./mysql_data:/var/lib/mysql
-      # - /Users/segullshairbutt/Desktop/Academics/GSD/GSD-Team-3/mysqld:/run/mysqld
+    volumes:
+      - ./mysql_data:/var/lib/mysql
   
   redis:
     image: redis:5
@@ -73,5 +72,22 @@ services:
       - websocket
       - frontend
 
+  localstack:
+    image: localstack/localstack:0.14
+    expose:
+      - 4566
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=eu-central-1
+      - DEBUG=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - ./localstack:/docker-entrypoint-initaws.d
+      - ./bb_localstack_data:/tmp/localstack/data
+
 volumes:
   mysql_data:
+  bb_localstack_data: 
