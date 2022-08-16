@@ -14,6 +14,7 @@ import {
 import { getAllRoomsForUser, getCurrentChat } from '../../services/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRooms, setCurrentChat, setCurrentRoomId } from '../../redux/slice/chat'
+import Copyright from '../../components/copyright';
 
 const ChatScreen = () => {
 
@@ -33,12 +34,6 @@ const ChatScreen = () => {
         const rooms = await getAllRoomsForUser()
         dispatch(setRooms(rooms))
     }
-
-    // useEffect(() => {
-    //     if (roomIdRedux !== null) {
-    //         setRoomId(roomIdRedux)
-    //     }
-    // }, [roomIdRedux])
 
     useEffect(() => {
         getRooms()
@@ -68,63 +63,70 @@ const ChatScreen = () => {
     }
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-            <MainContainer style={{ height: '85vh', width: '100%', display: 'flex', flexDirection: 'row' }}>
-                <ConversationList>
-                    {
-                        chatRooms && chatRooms.map(room => {
-                            return (
-                                <>
-                                    <Conversation
-                                        name={`${room.from_user.first_name} ${room.from_user.last_name}`}
-                                        key={room.to_user.id}
-                                        info={room.latest_message.content}
-                                        onClick={() => {
-                                            setCurrentRoom(room)
-                                            // setRoomId()
-                                            dispatch(setCurrentRoomId(room.room_id))
-
-                                            setFromUser((room.to_user.id === (loggedInUserId && loggedInUserId.users && loggedInUserId.users.id)) ? room.from_user.id : room.to_user.id)
-                                        }}
-                                    />
-                                    <MessageSeparator />
-                                </>
-                            )
-                        })
-                    }
-                </ConversationList>
-                <ChatContainer>
-                    <MessageList>
+        <>
+            <div style={{display: 'flex', justifyContent: 'center', alignContent: 'center'}}>
+                <Copyright />
+            </div>
+            <div className={classes.root}>
+                <MainContainer style={{ height: '75vh', width: '100%', display: 'flex', flexDirection: 'row' }}>
+                    <ConversationList>
                         {
-                            currentChat.map((chatMsgObj, index) => {
-                                const msgDirection = loggedInUserId && loggedInUserId.users && loggedInUserId.users.id === chatMsgObj.from_user.id ? "outgoing" : 'incoming'
+                            chatRooms && chatRooms.map(room => {
+                                let fullName = (loggedInUserId && loggedInUserId.users.id) === room.from_user.id ? `${room.to_user.first_name} ${room.to_user.last_name}` : `${room.from_user.first_name} ${room.from_user.last_name}`
                                 return (
                                     <>
-                                        <Message
-                                            key={index}
-                                            model={{
-                                                message: chatMsgObj.content,
-                                                sentTime: chatMsgObj.createdAt,
-                                                sender: chatMsgObj.from_user.first_name + ' ' + chatMsgObj.from_user.last_name,
-                                                direction: msgDirection,
-                                                position: "single",
-                                            }} />
+                                        <Conversation
+                                            name={fullName}
+                                            key={room.to_user.id}
+                                            info={room.latest_message.content}
+                                            active={room.room_id === roomId}
+                                            onClick={() => {
+                                                setCurrentRoom(room)
+                                                // setRoomId()
+                                                dispatch(setCurrentRoomId(room.room_id))
+
+                                                setFromUser((room.to_user.id === (loggedInUserId && loggedInUserId.users && loggedInUserId.users.id)) ? room.from_user.id : room.to_user.id)
+                                            }}
+                                        />
+                                        <MessageSeparator />
                                     </>
                                 )
                             })
                         }
-                    </MessageList>
-                    <MessageInput placeholder="Type message here" onSend={(e) => {
-                        currentWebSocket.send(JSON.stringify({
-                            'content': e,
-                            'room_id': roomId,
-                            'from_user': loggedInUserId && loggedInUserId.users && loggedInUserId.users.id,
-                            'to_user': fromUser,
-                        }));
-                    }} />
-                </ChatContainer>
-            </MainContainer>
-        </div>
+                    </ConversationList>
+                    <ChatContainer>
+                        <MessageList>
+                            {
+                                currentChat.map((chatMsgObj, index) => {
+                                    const msgDirection = loggedInUserId && loggedInUserId.users && loggedInUserId.users.id === chatMsgObj.from_user.id ? "outgoing" : 'incoming'
+                                    return (
+                                        <>
+                                            <Message
+                                                key={index}
+                                                model={{
+                                                    message: chatMsgObj.content,
+                                                    sentTime: chatMsgObj.createdAt,
+                                                    sender: chatMsgObj.from_user.first_name + ' ' + chatMsgObj.from_user.last_name,
+                                                    direction: msgDirection,
+                                                    position: "single",
+                                                }} />
+                                        </>
+                                    )
+                                })
+                            }
+                        </MessageList>
+                        <MessageInput placeholder="Type message here" onSend={(e) => {
+                            currentWebSocket.send(JSON.stringify({
+                                'content': e,
+                                'room_id': roomId,
+                                'from_user': loggedInUserId && loggedInUserId.users && loggedInUserId.users.id,
+                                'to_user': fromUser,
+                            }));
+                        }} />
+                    </ChatContainer>
+                </MainContainer>
+            </div>
+        </>
     )
 }
 

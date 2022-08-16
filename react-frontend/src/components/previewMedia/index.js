@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createRoom, getAllRoomsForUser } from '../../services/chat';
 import { setCurrentRoomId } from '../../redux/slice/chat';
 import { useNavigate } from 'react-router-dom';
+import { downloadMedia } from '../../services/download';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -51,7 +52,7 @@ const MediaPreviewModal = (props) => {
         let room = null;
 
         for (let i = 0; i < rooms.length; i++) {
-            if (mediaPreviewModalData.owner.id === rooms[i].to_user.id) {
+            if (mediaPreviewModalData.owner.id === rooms[i].to_user.id || mediaPreviewModalData.owner.id === rooms[i].from_user.id) {
                 isRoomAvailable = true;
                 room = rooms[i];
                 break;
@@ -70,7 +71,7 @@ const MediaPreviewModal = (props) => {
     }
 
     const classes = useStyles();
-    console.log({ id: loggedInUserId.users.id, mediaPreviewModalData })
+
     return (
         <Dialog
             open={open}
@@ -80,7 +81,7 @@ const MediaPreviewModal = (props) => {
             maxWidth={"md"}
         >
             <DialogContent className={classes.dialogContent}>
-                {(mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length > 0) ? <div className={classes.imageSlider}>
+                {(mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length > 0) ? <div oncontextmenu="return false;" className={classes.imageSlider}>
                     <Paper
                         square
                         elevation={0}
@@ -173,7 +174,7 @@ const MediaPreviewModal = (props) => {
             </DialogContent>
             <DialogActions>
                 {disableContactSellerButton && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => contactSeller()} variant="contained" >Contact Seller</Button>}
-                <Button style={{ backgroundColor: "#1d3461" }} variant="contained">Download</Button>
+                {((mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length !== 0) && (mediaPreviewModalData.cost === "0.00")) && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => { downloadMedia(mediaPreviewModalData) }} variant="contained">Download</Button>}
                 <Button onClick={() => handleClose(!open)} autoFocus>
                     Close
                 </Button>
