@@ -114,7 +114,7 @@ export default function PersistentDrawerLeft() {
           isUserLoggedIn &&
           <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <IconButton
+              {/* <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
@@ -122,26 +122,32 @@ export default function PersistentDrawerLeft() {
                 sx={{ mr: 2, ...(open && { display: 'none' }) }}
               >
                 <MenuIcon />
-              </IconButton>
+              </IconButton> */}
               <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
                 {pageName}
               </Typography>
             </div>
-            <Typography variant="h4" noWrap component="div">Blue Bird</Typography>
+            <Typography onClick={() => navigate('/')} style={{ cursor: "pointer" }} variant="h4" noWrap component="div">Blue Bird</Typography>
             {
               userRole === 'admin'
                 ?
                 <Button variant="raised" component="span" onClick={() => logoutUser()}>Logout</Button>
                 :
-                <div style={{ width: '12%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  {
-                    pageName === 'Home'
-                      ?
-                      <Button variant="raised" component="span" onClick={() => dispatch(setUploadModal(true))}>Upload</Button>
-                      :
-                      <Button variant="raised" component="span"></Button>
-                  }
-
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', minWidth: '13%' }}>
+                  <Button
+                    onClick={() => dispatch(setUploadModal(true))}
+                    sx={{
+                      textTransform: "none",
+                      fontFamily: "Open Sans",
+                      paddingRight: '2%',
+                      color: 'white',
+                      fontWeight: '600',
+                      margin: 0,
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Upload Media
+                  </Button>
                   <IconButton
                     aria-label="profile"
                     onClick={() => navigate('/profile')}
@@ -192,7 +198,6 @@ export default function PersistentDrawerLeft() {
           <Route path='/myorders' element={<MyOrders />} />
           <Route path='/chat' element={isUserLoggedIn ? <ChatScreen /> : <Login />} />
           <Route path='/about' element={<About />} />
-          <Route path='/home' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/' element={
             isUserLoggedIn

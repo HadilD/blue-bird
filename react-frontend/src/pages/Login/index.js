@@ -3,6 +3,7 @@ import useStyles from './styles';
 import SignIn from '../../components/signIn';
 import SignUp from '../../components/signUp';
 import AlertDialog from '../../errorBoundary';
+import Copyright from '../../components/copyright';
 
 function Login () {
 
@@ -12,6 +13,7 @@ function Login () {
 
 	return (
 		<div className={classes.container}>
+			<Copyright />
 			<AlertDialog />
 			{
 				signInDisplay

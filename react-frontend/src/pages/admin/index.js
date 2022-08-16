@@ -3,27 +3,48 @@ import useStyles from './styles'
 import { useDispatch, useSelector } from 'react-redux';
 import AdminMedia from '../../components/adminMedia';
 import SearchByName from '../../components/searchByName'
-import {setPageName} from '../../redux/slice/pagename'
+import { setPageName } from '../../redux/slice/pagename'
 import { getAdminMedia, adminUpdateMediaStatus } from '../../services/admin';
+import Copyright from '../../components/copyright';
 
 function Admin() {
     const classes = useStyles()
     const dispatch = useDispatch();
-    const mediaItems = useSelector(state => state.admin.adminMedia)
-    const [allMedia, setAllMedia] = useState([])
+    const allMedia = useSelector(state => state.admin.adminMedia)
+    const [resultMedia, setResultMedia] = useState([])
 
-    async function adminMedia(params=null) {
-        let res = await getAdminMedia(params)
-        setAllMedia(res)
-    }
-
-    useEffect(() => {
-        adminMedia()
+    useEffect(async () => {
+        const res = await getAdminMedia()
+        setResultMedia(res)
     }, [])
 
     const updateMediaStatus = async (body) => {
         await adminUpdateMediaStatus(body)
-        adminMedia()
+        await getAdminMedia()
+    }
+
+    const updateSearchResult = (searchQuery, category) => {
+        let tempRes = null
+        if (searchQuery === '') {
+            tempRes = allMedia
+        } else {
+            tempRes = resultMedia.filter(item => {
+                return item.name.toLowerCase().includes(searchQuery.toLowerCase())
+            })
+        }
+        if (category === 'all') {
+            setResultMedia(tempRes)
+        } else if (category === 'approved') {
+            let newTempRes = tempRes.filter(item => {
+                return item.is_approved === true
+            })
+            setResultMedia(newTempRes)
+        } else {
+            let newTempRes = tempRes.filter(item => {
+                return item.is_approved === false
+            })
+            setResultMedia(newTempRes)
+        }
     }
 
     useEffect(() => {
@@ -31,9 +52,10 @@ function Admin() {
     })
     return (
         <div className={classes.container}>
-            <SearchByName adminMedia={adminMedia} />
+            <Copyright />
+            <SearchByName updateResultMedia={updateSearchResult} />
             {
-                allMedia.map((mediaItem) => {
+                resultMedia.map((mediaItem) => {
                     return (
                         <AdminMedia
                             name={mediaItem.name}
@@ -45,7 +67,9 @@ function Admin() {
                             is_approved={mediaItem.is_approved}
                             attachments={mediaItem.attachments}
                             updateMediaStatus={updateMediaStatus}
-                            key={mediaItem.id} />
+                            key={mediaItem.id}
+                            mediaItem={mediaItem}
+                        />
                     )
                 })
             }

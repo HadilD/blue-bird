@@ -8,6 +8,8 @@ import SearchBar from '../../components/searchBar';
 import { fetchMedia } from '../../services/media'
 import { getUsers } from '../../services/user';
 import Paginate from '../../components/paginate';
+import Copyright from '../../components/copyright';
+
 
 const VerticalPrototype = () => {
     const displayUploadModal = useSelector((state) => state.uploadModal.displayUploadModal)
@@ -38,6 +40,7 @@ const VerticalPrototype = () => {
     const classes = useStyles();
     return (
         <div className={classes.container}>
+            <Copyright />
             <SearchBar fetchMedia={fetchMedia} />
             {
                 displayUploadModal &&

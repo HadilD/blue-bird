@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box'
@@ -8,16 +8,21 @@ import InputLabel from '@mui/material/InputLabel';
 import useStyles from './styles';
 import { uploadImageMediaService, uploadAttachmentService } from '../../services/media'
 import Chip from '@mui/material/Chip';
+import { generalStyles } from '../../generalStyles';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 function UploadModal(props) {
   const { closeModal } = props
   const [mediaName, setMediaName] = useState("")
   const [mediaDescription, setMediaDescription] = useState("")
-  const [mediaPrice, setMediaPrice] = useState("")
+  const [mediaPrice, setMediaPrice] = useState(0)
   const [files, setFiles] = useState(null)
   const [acceptedFileTypes, setAcceptedFilesType] = useState('.png, .jpg, .jpeg')
   const [displayMessage, setDisplayMessage] = useState(false)
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false)
+  const [fileSelectedMsg, setFileSelectedMsg] = useState(false)
+  const [uploadButtonClicked, setUploadButtonClicked] = useState(false)
+  const [displayMediaNameError, setDisplayMediaNameError] = useState(false)
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
 
@@ -27,7 +32,16 @@ function UploadModal(props) {
     setAcceptedFilesType('.png, .jpg, .jpeg')
   }
 
+  useEffect(() => {
+    if (files && files.length > 0){
+      setFileSelectedMsg(true)
+    } else {
+      setFileSelectedMsg(false)
+    }
+  }, [files])
+
   const handleMediaNameChange = (e) => {
+    setDisplayMediaNameError(false)
     setMediaName(e.target.value)
   }
 
@@ -40,8 +54,15 @@ function UploadModal(props) {
   }
 
   const handleUpload = async(e) => {
-    if (files === null) {
+    setUploadButtonClicked(true)
+    if (files===null) {
+      setUploadButtonClicked(false)
       setDisplayErrorMessage(true)
+      return
+    }
+    if (mediaName==="" || mediaName===null) {
+      setUploadButtonClicked(false)
+      setDisplayMediaNameError(true)
       return
     }
 
@@ -65,6 +86,8 @@ function UploadModal(props) {
       tags
     }
     let mediaResponse =  await uploadImageMediaService(body)
+    setFiles(null)
+    setUploadButtonClicked(false)
     if (mediaResponse) {
       setDisplayMessage(true)
       setTimeout(() => {
@@ -101,15 +124,16 @@ function UploadModal(props) {
       aria-describedby="Modal form that will be used to upload media to backend"
     >
       <Box className={classes.box}>
+        <div className={classes.boxHeader}>
+            <p className={classes.boxHeading}>Upload Media</p>
+        </div>
         <div className={classes.box1}>
-          <div style={{ borderBottom: '1px solid black', marginBottom: '5%' }}>
-            <p>Upload Media</p>
-          </div>
           <div className={classes.inputContainer}>
             <InputLabel>Media Name</InputLabel>
             <TextField 
               id="outlined-basic" 
               label="Media Name" 
+              placeholder="Enter media name.."
               variant="outlined" 
               sx={{ width: '60%' }} 
               onChange={(e) => handleMediaNameChange(e)} 
@@ -117,23 +141,49 @@ function UploadModal(props) {
           </div>
           <div className={classes.inputContainer}>
             <InputLabel>Media Description</InputLabel>
-            <TextField 
+            <TextareaAutosize
+              maxRows={4}
+              minRows={3}
+              aria-label="maximum height"
+              placeholder="Add your media description.."
+              onChange={(e) => handleMediaDescriptionChange(e)}
+              style={{ 
+                width: '60%', 
+                backgroundColor: '#FAF9F6', 
+                fontFamily: generalStyles.openSans, 
+                fontSize: '0.9rem',
+                padding: '0.7rem',
+                lineHeight: '1.6rem',
+                fontWeight: '600',
+                borderRadius: '5px',
+                outline: 'none',
+              }}
+            />
+            {/* <TextField 
               variant="outlined" 
               label="Media Description" 
-              placeholder="Media Description" 
+              placeholder="Type media details..." 
               style={{ width:'60%' }}
-              onChange={(e) => handleMediaDescriptionChange(e)} 
-            />
+              onChange={(e) => handleMediaDescriptionChange(e)}
+            /> */}
           </div>
           <div className={classes.inputContainer}>
             <InputLabel>Price</InputLabel>
             <TextField
               type={"number"} 
+              min={0}
               variant="outlined" 
               label="Price" 
               placeholder="0" 
               style={{ width:'60%' }}
-              onChange={(e) => handleMediaPriceChange(e)} 
+              onChange={(e) =>{
+                if (e.target.value < 0) {
+                  e.target.value = 0
+                  handleMediaPriceChange(e)
+                } else {
+                  handleMediaPriceChange(e)
+                }
+              }} 
             />
           </div>
           <div className={classes.inputContainer}>
@@ -141,7 +191,7 @@ function UploadModal(props) {
             <TextField 
               variant="outlined" 
               label="Tag" 
-              placeholder="Create a tag" 
+              placeholder="Create a tag and enter..." 
               style={{ width:'60%' }}
               value={tagInput}
               onChange={(e)=> setTagInput(e.target.value)}
@@ -152,17 +202,17 @@ function UploadModal(props) {
             {
               tags.map((tag, index) => {
                 return (
-                  <Chip label={tag} key={index} variant="outlined" onDelete={(e) => handleTagDelete(tag)} />
+                  <Chip label={tag} key={index} variant="outlined" onDelete={(e) => handleTagDelete(tag)} sx={{margin: '0.25rem'}} />
                 )
               })
             }
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', marginTop: '7%', marginBottom: '5%' }}>
             <div className={classes.buttonsContainer}>
               <input
                 accept={acceptedFileTypes}
                 style={{ display: 'none' }}
-                id="raised-button-file"
+                id="upload-button"
                 type="file"
                 multiple={true}
                 onChange={(e) => {
@@ -171,23 +221,52 @@ function UploadModal(props) {
                   setFiles(files)
                 }}
               />
-              <label htmlFor="raised-button-file">
-                <Button variant="raised" component="span">Select from PC</Button>
+              <label htmlFor="upload-button">
+                <Button 
+                  variant="contained" 
+                  component="span" 
+                  sx={{
+                    textTransform: "none", 
+                    backgroundColor: generalStyles.primaryColor
+                  }}
+                >
+                  Select from PC
+                </Button>
               </label>
 
               <label>
-                <Button variant="raised" component="span" onClick={e => handleUpload(e)}>Upload</Button>
+                <Button 
+                  variant="contained" 
+                  component="span" 
+                  onClick={e => handleUpload(e)} 
+                  sx={{
+                    textTransform: "none",
+                    backgroundColor: generalStyles.primaryColor
+                    }}
+                  >
+                    Upload
+                </Button>
               </label>
             </div>
           </div>
           {
             displayMessage &&
-            <Alert severity="success">Media Uploaded Successfully — check it out!</Alert>
+            <Alert severity="success">Media Uploaded Successfully — awaiting Admin approval!</Alert>
+          }
+          {
+            fileSelectedMsg && uploadButtonClicked === false 
+            ? <Alert severity="success">Files selected !!</Alert>
+            : null
+          }
+
+          {
+            displayMediaNameError &&
+            <Alert severity="warning">Media name is required !!</Alert>
           }
 
           {
             displayErrorMessage &&
-            <Alert severity="warning">Media not selected!</Alert>
+            <Alert severity="warning">Please select files for your media !!</Alert>
           }
         </div>
       </Box>

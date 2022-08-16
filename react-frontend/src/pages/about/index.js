@@ -42,7 +42,7 @@ const AboutUs = () => {
         },
         {
             name: "Mutee Ur Rehman",
-            pos: "Frontend Lead",
+            pos: "Frontend Devloper",
             link: "https://murrehman.github.io/CV/"
         },
         {
@@ -57,7 +57,7 @@ const AboutUs = () => {
         },
         {
             name: "Sagar Dhaware",
-            pos: "FrontEnd Developer",
+            pos: "Frontend Lead",
             // link: ""
         },
     ]
