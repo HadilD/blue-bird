@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { colors, Typography } from '@mui/material';
 import useStyles from './styles';
