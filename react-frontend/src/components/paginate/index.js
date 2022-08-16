@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { colors, Typography } from '@mui/material';
 import useStyles from './styles';
@@ -47,8 +46,6 @@ const PaginatedItems = ({ itemsPerPage, items }) => {
     useEffect(() => {
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-        console.log("fjklasjdfklsa", items);
         setCurrentItems(items.slice(itemOffset, endOffset));
         setPageCount(Math.ceil(items.length / itemsPerPage));
     }, [itemOffset, itemsPerPage, items]);
@@ -56,10 +53,6 @@ const PaginatedItems = ({ itemsPerPage, items }) => {
     // Invoke when user click to request another page.
     const handlePageClick = (event, page) => {
         const newOffset = (page - 1) * itemsPerPage
-        // const newOffset = (event.selected * itemsPerPage) % items.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
         setItemOffset(newOffset);
     };
 
