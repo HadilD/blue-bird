@@ -1,6 +1,5 @@
 
 import { makeStyles } from '@mui/styles';
-// import { generalStyles } from '../../generalStyles';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -19,7 +18,6 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: "column",
         },
-        // backgroundColor: generalStyles.primaryColor
     },
     imageCard: {
         width: "calc(100% / 5)",
