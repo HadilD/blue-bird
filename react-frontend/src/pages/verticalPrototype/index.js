@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { setPageName } from '../../redux/slice/pagename';
 import useStyles from './styles';
-import { Pagination, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadModal from '../../components/uploadModal'
 import { setUploadModal } from '../../redux/slice/uploadModal'
@@ -46,30 +45,10 @@ const VerticalPrototype = () => {
         <div className={classes.container}>
             <Copyright />
             <SearchBar fetchMedia={fetchMedia} />
-            {/* <div className={classes.root}>
-
-                {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
-                    return <div key={index} className={classes.imageCard} >
-                        {(mediaItem.attachments && mediaItem.attachments.length !== 0) ? <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.attachments[0].url} /> : <img alt={mediaItem.name} className={classes.imageProps} src={PlacehoderImage} />}
-                        <div className={classes.iconLabel}>
-                            <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
-                            <VisibilityIcon onClick={() => { handleMediaPreview(mediaItem) }} className={classes.viewIcon} />
-                        </div>
-                    </div>
-                })}
-            </div> */}
             {
                 displayUploadModal &&
                 <UploadModal closeModal={closeModal} />
             }
-            {/* {
-                mediaPreviewModal &&
-                <MediaPreviewModal
-                    open={mediaPreviewModal}
-                    handleClose={setMediaPreviewModal}
-                    mediaPreviewModalData={mediaPreviewModalData}
-                />
-            } */}
             <Paginate itemsPerPage={10} items={mediaItems} className={classes.fpage} />
         </div >
 
