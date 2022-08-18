@@ -1,0 +1,95 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./react-frontend
+    container_name: blue-bird_webapp
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
+  
+  api:
+    build: ./django_backend
+    container_name: blue-bird_apis
+    ports:
+      - 8000:8000
+    volumes:
+      - ./django_backend:/webapp:cached
+    env_file:
+      - ./django_backend/django_backend/.env
+    environment:
+      DB_HOST: db
+      DB_NAME: gdsd
+    depends_on:
+      - db
+      - localstack
+    command: ./scripts/run_backend.sh
+    
+  websocket:
+    build: ./django_backend
+    container_name: blue-bird_websocket
+    ports:
+      - 8001:8001
+    volumes:
+      - ./django_backend:/webapp:cached
+    env_file:
+      - ./django_backend/django_backend/.env
+    environment:
+      DB_HOST: db
+      DB_NAME: gdsd
+      REDIS_HOST: redis
+    depends_on:
+      - api
+    command: daphne -b 0.0.0.0 -p 8001 django_backend.asgi:application
+
+  db:
+    image: mysql:latest
+    container_name: blue-bird_db
+    ports:
+     - 3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gdsd
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+  
+  redis:
+    image: redis:5
+    container_name: blue-bird_redis
+    expose:
+      - 6379
+    # ports:
+    #   - 6379:6379
+
+  nginx:
+    build: ./reverse-proxy
+    container_name: blue-bird_nginx
+    ports:
+      - 80:80
+    depends_on:
+      - api
+      - websocket
+      - frontend
+
+  localstack:
+    image: localstack/localstack:0.14
+    container_name: blue-bird_localstack
+    expose:
+      - 4566
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=eu-central-1
+      - DEBUG=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - ./localstack:/docker-entrypoint-initaws.d
+      - ./bb_localstack_data:/tmp/localstack/data
+
+volumes:
+  mysql_data:
+  bb_localstack_data: 

@@ -26,4 +26,4 @@ class Message(BaseModel):
 
     def __str__(self):
         return 'Room name: %s , Message: %s , Time: %s' % (
-        self.room.room_id, self.content, self.created_at)
+            self.room.room_id, self.content, self.created_at)

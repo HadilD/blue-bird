@@ -9,3 +9,7 @@ build
 .idea
 env
 **/.DS_Store
+.vscode
+
+bb_localstack_data/
+mysql_data/

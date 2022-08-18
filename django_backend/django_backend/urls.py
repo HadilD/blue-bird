@@ -24,9 +24,11 @@ api_url = [
 ]
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('chat/',include('chat.urls')),
+    path('back/admin', admin.site.urls),
+
+    path('back/chat/', include('chat.urls')),
 
     # api urls
-    path('api/', include(api_url)),
+    path('back/api/', include(api_url)),
+
 ]

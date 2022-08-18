@@ -9,15 +9,19 @@ from botocore.exceptions import ClientError
 UPLOAD_DIRECTORY = "uploaded_data"
 
 
+s3_client = boto3.client(
+        "s3", 
+        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+        region_name=settings.AWS_S3_REGION_NAME,
+        aws_access_key_id=settings.AWS_ACCESS_KEY, 
+        aws_secret_access_key=settings.AWS_SECRET_KEY
+        )
+
 def upload_file(file_obj):
     """Upload a file to S3 bucket.
 
     :param file_obj: File Object to upload
     """
-
-    s3_client = boto3.client("s3", aws_access_key_id=settings.AWS_ACCESS_KEY,
-                             aws_secret_access_key=settings.AWS_SECRET_KEY)
-
     file_ext = file_obj.name.split(".")[-1]
     obj_name = str(uuid.uuid4()) + "." + file_ext
 
@@ -46,8 +50,6 @@ def get_public_link(s3_file_name):
 
     :param s3_file_name: name of file object which is uploaded before.
     """
-    s3_client = boto3.client("s3", aws_access_key_id=settings.AWS_ACCESS_KEY,
-                             aws_secret_access_key=settings.AWS_SECRET_KEY)
     try:
         return s3_client.generate_presigned_url("get_object", Params={
             "Bucket": settings.AWS_BUCKET_NAME, "Key": f"{UPLOAD_DIRECTORY}/{s3_file_name}"}, ExpiresIn=3600)
