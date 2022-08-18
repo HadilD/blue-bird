@@ -38,4 +38,4 @@ docker-compose build
 
 # TODOs are following:
 # Changing the HOST_URL, MESSAGING_PATH of react application to remote one e-g IP
-# Changing the 
+# Load initial data to make it run smoothly
