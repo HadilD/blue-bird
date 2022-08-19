@@ -1,14 +1,6 @@
-
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(theme => ({
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        margin: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     root: {
         display: "flex",
         flexWrap: "wrap",
@@ -18,6 +10,7 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: "column",
         },
+        marginBottom: '3rem'
     },
     imageCard: {
         width: "calc(100% / 5)",
@@ -26,7 +19,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
         justifyContent: "center",
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-        height: "450px",
+        height: "330px",
         margin: "10px 10px",
         position: "relative",
         borderRadius: "30px",
@@ -37,7 +30,6 @@ const useStyles = makeStyles(theme => ({
     },
     imageProps: {
         width: "80%",
-        height: "50%",
         [theme.breakpoints.down('sm')]: {
             width: "70%",
         },
@@ -55,7 +47,12 @@ const useStyles = makeStyles(theme => ({
     viewIcon: {
         cursor: "pointer",
     },
+    fpage: {
+        color: "blue",
+        display: "inline",
 
+
+    },
 }))
 
 export default useStyles
