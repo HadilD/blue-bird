@@ -53,9 +53,9 @@ class MediaList(generics.ListCreateAPIView):
                 media.delete()
                 return Response({"error": "attachment with id {id} does not exist".format(id=id)},
                                 status=status.HTTP_400_BAD_REQUEST)
-            attachment_tags = get_tags(get_labels(read_image(attachment.uri)))
-            tags.extend(attachment_tags)
-            media.tags.extend(tags)
+            # attachment_tags = get_tags(get_labels(read_image(attachment.uri)))
+            # tags.extend(attachment_tags)
+            # media.tags.extend(tags)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
