@@ -31,7 +31,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["https://bluebird.no-ip.org"]
+CSRF_TRUSTED_ORIGINS = [config("HOST_URL")]
 
 
 # Application definition
@@ -173,6 +173,7 @@ AWS_SECRET_KEY = config("AWS_SECRET_KEY")
 AWS_BUCKET_NAME = config("AWS_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
 AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
+AWS_S3_DOWNLOAD_ENDPOINT_URL = config("AWS_S3_DOWNLOAD_ENDPOINT_URL")
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

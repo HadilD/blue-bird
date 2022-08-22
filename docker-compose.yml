@@ -20,6 +20,9 @@ services:
     environment:
       DB_HOST: db
       DB_NAME: gdsd
+      HOST_URL: http://localhost
+      AWS_S3_DOWNLOAD_ENDPOINT_URL: http://localhost/
+      AWS_S3_ENDPOINT_URL: http://localstack:4566/
     depends_on:
       - db
       - localstack
@@ -38,6 +41,7 @@ services:
       DB_HOST: db
       DB_NAME: gdsd
       REDIS_HOST: redis
+      HOST_URL: http://localhost
     depends_on:
       - api
     command: daphne -b 0.0.0.0 -p 8001 django_backend.asgi:application
@@ -45,8 +49,8 @@ services:
   db:
     image: mysql:latest
     container_name: blue-bird_db
-    ports:
-     - 3306:3306
+    # ports:
+    #  - 3306:3306
     expose:
       - 3306
     environment:
@@ -60,8 +64,8 @@ services:
     container_name: blue-bird_redis
     expose:
       - 6379
-    # ports:
-    #   - 6379:6379
+    ports:
+      - 6379:6379
 
   nginx:
     build: ./reverse-proxy
