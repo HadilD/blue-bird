@@ -3,6 +3,8 @@ services:
   frontend:
     build: ./react-frontend
     container_name: blue-bird_webapp
+    environment:
+      HOST_IP: ${HOST_IP}
     ports:
       - 3000:3000
     depends_on:
@@ -20,8 +22,8 @@ services:
     environment:
       DB_HOST: db
       DB_NAME: gdsd
-      HOST_URL: http://localhost
-      AWS_S3_DOWNLOAD_ENDPOINT_URL: http://localhost/
+      HOST_URL: ${HOST_URL}
+      AWS_S3_DOWNLOAD_ENDPOINT_URL: ${AWS_S3_DOWNLOAD_ENDPOINT_URL}
       AWS_S3_ENDPOINT_URL: http://localstack:4566/
     depends_on:
       - db
