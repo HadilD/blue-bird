@@ -13,4 +13,6 @@ env
 
 bb_localstack_data/
 mysql_data/
-init.sh
+*.sh
+
+django_backend/info
