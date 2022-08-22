@@ -1,6 +1,7 @@
 import json
 
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework import generics
@@ -9,9 +10,10 @@ from rest_framework import filters
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-from static_content.s3_service import upload_file
+from static_content.s3_service import upload_file, read_image
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer
+from static_content.rekognition_service import get_labels, get_tags
 
 from static_content.models import Media, Attachment, Order
 from static_content.filters import MediaFilter
@@ -34,6 +36,7 @@ class MediaList(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         media = serializer.save(owner=self.request.user, )
         attachments = request.data.get("attachments")
+        tags = []
         if len(attachments) == 0:
             return Response({"error": "attachment field must not be empty"})
         for id in attachments:
@@ -50,7 +53,9 @@ class MediaList(generics.ListCreateAPIView):
                 media.delete()
                 return Response({"error": "attachment with id {id} does not exist".format(id=id)},
                                 status=status.HTTP_400_BAD_REQUEST)
-
+            attachment_tags = get_tags(get_labels(read_image(attachment.uri)))
+            tags.extend(attachment_tags)
+            media.tags.extend(tags)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
@@ -250,3 +255,5 @@ def search_media(queryset, search_key):
              qs2.filter(owner__last_name__icontains=word)
 
     return qs
+
+
