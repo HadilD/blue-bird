@@ -45,6 +45,20 @@ def delete_remote_file(uri):
     except ClientError as e:
         logging.error(e)
 
+s3_download_client = boto3.client(
+        "s3", 
+        endpoint_url=settings.AWS_S3_DOWNLOAD_ENDPOINT_URL,
+        region_name=settings.AWS_S3_REGION_NAME,
+        aws_access_key_id=settings.AWS_ACCESS_KEY, 
+        aws_secret_access_key=settings.AWS_SECRET_KEY
+        )
+
+def read_image(uri):
+    key = f"{UPLOAD_DIRECTORY}/{uri}"
+    s3 = boto3.resource('s3')
+    image = s3.Object(bucket_name=settings.AWS_BUCKET_NAME, key=key)
+    img_data = image.get().get('Body').read()
+    return Image.open(io.BytesIO(img_data))
 
 def get_public_link(s3_file_name):
     """Getting a publicly accessible link to an asset.
