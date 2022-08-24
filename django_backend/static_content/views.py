@@ -258,7 +258,11 @@ def search_media(queryset, search_key):
     return qs
 
 
-class media_ratings_list(generics.ListAPIView):
+class RatingsList(generics.ListCreateAPIView):
+    """
+    View for listing and creating ratings.
+    """
+
     queryset = Ratings.objects.all()
     serializer_class = RatingsSerializer
     permission_classes = [IsAuthenticated]
@@ -266,15 +270,6 @@ class media_ratings_list(generics.ListAPIView):
     def get_queryset(self):
         media = Media.objects.get(pk=self.kwargs['pk'])
         return Ratings.objects.filter(media=media)
-
-
-class CreateRating(generics.CreateAPIView):
-    """
-    View for giving ratings.
-    """
-    queryset = Ratings.objects.all()
-    serializer_class = RatingsSerializer
-    permission_classes = [IsAuthenticated]
 
     def create(self, request, pk):
         try:
