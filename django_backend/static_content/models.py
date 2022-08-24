@@ -4,6 +4,8 @@ from model_utils import Choices
 from django.utils.translation import gettext_lazy as _
 from django_backend import settings
 
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -66,3 +68,17 @@ class Order(models.Model):
     class Meta:
         unique_together = ("buyer", "media",)
 
+class Ratings(models.Model):
+    stars = models.IntegerField(
+        default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(1)
+        ]
+     )
+    media = models.ForeignKey(Media, on_delete=models.CASCADE)
+    given_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    feedback = models.CharField(blank=False, max_length=500)
+    
+    class Meta:
+        verbose_name = "Ratings"
