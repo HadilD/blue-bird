@@ -1,8 +1,9 @@
+from itertools import permutations
 import json
 
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import filters
@@ -12,10 +13,10 @@ from django.db import IntegrityError
 
 from static_content.s3_service import upload_file, read_image
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
-    AttachmentUploadSerializer, OrderSerializer
+    AttachmentUploadSerializer, OrderSerializer, RatingsSerializer
 from static_content.rekognition_service import get_labels, get_tags
 
-from static_content.models import Media, Attachment, Order
+from static_content.models import Media, Attachment, Order, Ratings
 from static_content.filters import MediaFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -257,3 +258,49 @@ def search_media(queryset, search_key):
     return qs
 
 
+class RatingsList(generics.ListCreateAPIView):
+    """
+    View for listing and creating ratings.
+    """
+
+    queryset = Ratings.objects.all()
+    serializer_class = RatingsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        media = Media.objects.get(pk=self.kwargs['pk'])
+        return Ratings.objects.filter(media=media)
+
+    def create(self, request, pk):
+        try:
+            media = Media.objects.get(pk=pk)
+            given_by = self.request.user
+            stars = request.data.get("stars")
+            feedback = request.data.get("feedback")
+            rating = Ratings.objects.create(media=media, given_by=given_by, stars=stars, feedback=feedback)
+            rating_serializer = RatingsSerializer(rating, context={"request": self.request})
+            rating.save()
+            return Response(rating_serializer.data, status=status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+            return Response({"error": "media with id {pk} does not exist".format(pk=pk)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        
+class DeleteRating(generics.DestroyAPIView):
+    """
+    View for deleting ratings.
+    """
+    queryset = Ratings.objects.all()
+    serializer_class = RatingsSerializer
+    permission_classes = [IsAuthenticated,
+                            #IsAdminUser
+                        ]
+
+    def delete(self, request, pk):
+        try:
+            rating = Ratings.objects.get(pk=pk)
+            rating.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ObjectDoesNotExist:
+            return Response({"error": "rating with id {pk} does not exist".format(pk=pk)},
+                            status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,7 @@
+from dataclasses import field
 from rest_framework import serializers
 
-from static_content.models import Media, Attachment, Tag, Order
+from static_content.models import Media, Attachment, Ratings, Tag, Order
 from static_content.s3_service import get_public_link
 from authentication.serializers import UserDetailsSerializer
 
@@ -83,4 +84,7 @@ class OrderSerializer(serializers.ModelSerializer):
         serializer = MediaSerializer(media, context=serializer_context)
         return serializer.data
 
-
+class RatingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ratings
+        fields = '__all__'
