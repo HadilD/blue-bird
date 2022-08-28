@@ -105,10 +105,12 @@ class AttachmentCreate(generics.CreateAPIView):
             file_name = request.data.get("name", file.name)
 
             labels = []
-            try:
-                labels = get_labels(file.read())
-            except Exception as e:
-                print(e)
+            # only images are uploaded for fetching the labels
+            if "image" in file.content_type:
+                try:
+                    labels = get_labels(file.read())
+                except Exception as e:
+                    print(e)
             uri = upload_file(file)
             media_id = request.data.get("media")
             if media_id:
