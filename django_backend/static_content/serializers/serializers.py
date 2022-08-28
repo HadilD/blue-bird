@@ -24,7 +24,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attachment
-        fields = ["id", "name", "format", "url", "type"]
+        fields = ["id", "name", "format", "url", "type", "labels"]
 
     # def to_representation(self, instance):
     #     attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
