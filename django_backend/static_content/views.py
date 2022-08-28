@@ -1,3 +1,4 @@
+from cProfile import label
 from itertools import permutations
 import json
 
@@ -11,7 +12,7 @@ from rest_framework import filters
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-from static_content.s3_service import upload_file, read_image
+from static_content.s3_service import upload_file, read_image, get_public_link
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer, RatingsSerializer
 from static_content.rekognition_service import get_labels, get_tags
@@ -102,15 +103,23 @@ class AttachmentCreate(generics.CreateAPIView):
         if serializer.is_valid():
             file = request.data.get("file")
             file_name = request.data.get("name", file.name)
+
+            labels = []
+            try:
+                labels = get_labels(file.read())
+            except Exception as e:
+                print(e)
             uri = upload_file(file)
             media_id = request.data.get("media")
             if media_id:
-                attachment = Attachment.objects.create(name=file_name, format=file.content_type.split("/")[1],
-                                                       uri=uri, media=Media.objects.get(id=media_id),
-                                                       type=file.content_type.split("/")[0])
+                attachment = Attachment.objects.create(
+                    name=file_name, format=file.content_type.split("/")[1], uri=uri, 
+                    media=Media.objects.get(id=media_id), type=file.content_type.split("/")[0],
+                    labels=labels
+                    )
             else:
                 attachment = Attachment.objects.create(name=file_name, format=file.content_type.split("/")[1],
-                                                       uri=uri, type=file.content_type.split("/")[0])
+                                                       uri=uri, type=file.content_type.split("/")[0], labels=labels)
             return Response({"id": attachment.id}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

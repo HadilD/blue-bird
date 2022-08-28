@@ -52,6 +52,7 @@ class Attachment(models.Model):
     type = models.CharField(max_length=30,
                             choices=ALLOWED_TYPES,
                             blank=False)
+    labels = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.name
