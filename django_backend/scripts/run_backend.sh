@@ -9,5 +9,5 @@ cur_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 python ./manage.py migrate
 python ./manage.py loaddata fixtures/initial.json
-python ./manage.py collectstatic --no-input
+# python ./manage.py collectstatic --no-input
 gunicorn 'django_backend.wsgi:application' --timeout 600 --bind 0.0.0.0:8000
