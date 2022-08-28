@@ -14,6 +14,7 @@ urlpatterns = [
     path("medias/<int:pk>/create-order", OrderCreate.as_view(), name="order-create"),
     path("orders", OrderList.as_view(), name="order-list"),
     path("orders/mine", MyOrdersList.as_view(), name="my-orders"),
+    
     path('media/<int:pk>/ratings', RatingsList.as_view(), name="ratings"),
     path('ratings/<int:pk>', DeleteRating.as_view(), name="delete-rating"),
 ]

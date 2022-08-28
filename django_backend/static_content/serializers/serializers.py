@@ -47,11 +47,12 @@ class MediaSerializer(serializers.ModelSerializer):
     tags = CustomSlugRelatedField(
         many=True, queryset=Tag.objects.all(), slug_field="name",required=False)
     owner = UserDetailsSerializer(read_only=True)
+    ratings = serializers.SerializerMethodField()
 
     class Meta:
         model = Media
-        fields = ["id", "name", "description", "cost", "owner", "created_at", "is_approved",
-                  "attachments", "tags", "was_bought", ]
+        fields = ["id", "name", "description", "cost", "owner", "created_at", "is_approved", "was_bought",
+                  "attachments", "tags", "ratings"]
 
     def get_attachments_serializer(self, obj):
         serializer_context = {'request': self.context.get('request')}
@@ -67,6 +68,9 @@ class MediaSerializer(serializers.ModelSerializer):
             t, _ = Tag.objects.get_or_create(name=tag_name)
             media.tags.add(t)
         return media
+
+    def get_ratings(self, obj: Media):
+        return RatingsSerializer(obj.ratings_set.all(), many=True).data
 
 
 class OrderSerializer(serializers.ModelSerializer):

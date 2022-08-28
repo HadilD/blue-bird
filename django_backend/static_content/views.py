@@ -292,9 +292,7 @@ class DeleteRating(generics.DestroyAPIView):
     """
     queryset = Ratings.objects.all()
     serializer_class = RatingsSerializer
-    permission_classes = [IsAuthenticated,
-                            #IsAdminUser
-                        ]
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         try:
