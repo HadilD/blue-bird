@@ -1,6 +1,7 @@
 from cProfile import label
 from itertools import permutations
 import json
+from copy import deepcopy
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -12,7 +13,7 @@ from rest_framework import filters
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-from static_content.s3_service import upload_file, read_image, get_public_link
+from static_content.s3_service import upload_file
 from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
     AttachmentUploadSerializer, OrderSerializer, RatingsSerializer
 from static_content.rekognition_service import get_labels, get_tags
@@ -107,8 +108,9 @@ class AttachmentCreate(generics.CreateAPIView):
             labels = []
             # only images are uploaded for fetching the labels
             if "image" in file.content_type:
+                copied_file = deepcopy(file)
                 try:
-                    labels = get_labels(file.read())
+                    labels = get_labels(copied_file.read())
                 except Exception as e:
                     print(e)
             uri = upload_file(file)
