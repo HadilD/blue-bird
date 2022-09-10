@@ -18,10 +18,18 @@ function MyOrders() {
         dispatch(setPageName("My Orders"))
     })
 
-    useEffect( async () => {
+    const getMyMedia = async () => {
         const res = await getMyOrders()
         setResultMedia(res)
+      }
+
+    useEffect( async () => {
+        getMyMedia()
     }, [])
+
+    useEffect(() => {
+        setResultMedia(allMedia)
+      },[allMedia])
 
     
     const updateSearchResult = (searchQuery, category) => {
