@@ -37,7 +37,7 @@ function MyOrders() {
       if (searchQuery === '' ) {
           tempRes = allMedia
       } else {
-          tempRes = resultMedia.filter(item => {
+          tempRes = allMedia.filter(item => {
               return item.media.name.toLowerCase().includes(searchQuery.toLowerCase())
           })
       }

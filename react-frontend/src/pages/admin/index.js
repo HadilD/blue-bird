@@ -32,7 +32,7 @@ function Admin() {
         if (searchQuery === '') {
             tempRes = allMedia
         } else {
-            tempRes = resultMedia.filter(item => {
+            tempRes = allMedia.filter(item => {
                 return item.name.toLowerCase().includes(searchQuery.toLowerCase())
             })
         }

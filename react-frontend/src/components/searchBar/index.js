@@ -25,6 +25,7 @@ function SearchBar(props) {
         }
     }
     const handleSearchCategoryChange = e => setSearchCategory(e.target.value)
+    
     const handleOnClick = () => {
         if (prevSearchTerm !== searchTerm || prevSearchCategory !== searchCategory) {
             setPrevSearchTerm(searchTerm)
