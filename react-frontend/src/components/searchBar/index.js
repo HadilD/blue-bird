@@ -12,11 +12,23 @@ function SearchBar(props) {
     const { fetchMedia } = {...props}
     const [searchCategory, setSearchCategory] = useState('all')
     const [searchTerm, setSearchTerm] = useState('')
+    const [prevSearchTerm, setPrevSearchTerm] = useState(null)
     const classes = useStyles();
     
-    const handleChange = e => setSearchTerm(e.target.value)
+    const handleChange = e => {
+        setSearchTerm(e.target.value)
+        if (e.target.value === '') {
+            setPrevSearchTerm('')
+            fetchMedia('', searchCategory)
+        }
+    }
     const handleSearchCategoryChange = e => setSearchCategory(e.target.value)
-    const handleOnClick = () => fetchMedia(searchTerm, searchCategory)
+    const handleOnClick = () => {
+        if (prevSearchTerm !== searchTerm) {
+            setPrevSearchTerm(searchTerm)
+            fetchMedia(searchTerm, searchCategory)
+        }
+    }
 
     return (
         <div className={classes.searchContainer}>
@@ -28,6 +40,11 @@ function SearchBar(props) {
                     className={classes.searchInput} 
                     type="text"
                     value={searchTerm}
+                    onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                            handleOnClick()
+                        }
+                    }}
                 />
             </div>
             
