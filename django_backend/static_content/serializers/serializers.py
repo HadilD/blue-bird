@@ -82,6 +82,12 @@ class OrderSerializer(serializers.ModelSerializer):
         return serializer.data
 
 class RatingsSerializer(serializers.ModelSerializer):
+    given_by = serializers.SerializerMethodField()
+    
     class Meta:
         model = Ratings
         fields = '__all__'
+
+    def get_given_by(self, obj):
+        if obj.given_by:
+            return UserDetailsSerializer(obj.given_by).data
