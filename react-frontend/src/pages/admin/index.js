@@ -18,6 +18,10 @@ function Admin() {
         setResultMedia(res)
     }, [])
 
+    useEffect(() => {
+        setResultMedia(allMedia)
+    }, [allMedia])
+
     const updateMediaStatus = async (body) => {
         await adminUpdateMediaStatus(body)
         await getAdminMedia()
