@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from model_utils import Choices
 from django.utils.translation import gettext_lazy as _
@@ -29,6 +31,7 @@ class Media(models.Model):
     is_published = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=False)
     was_bought = models.IntegerField(default=0)
+    editor_choice = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -83,3 +86,18 @@ class Ratings(models.Model):
     
     class Meta:
         verbose_name = "Ratings"
+
+@receiver(post_save, sender=Order)
+def check_editors_choice(sender, **kwargs):
+    media: Media = kwargs['instance'].media
+    if media.was_bought >= 2:
+        total_len = 0
+        avg = 0
+        for rating in media.ratings_set.all():
+            avg += rating.stars
+            total_len += 1
+        if total_len > 0:
+            avg = avg / total_len
+        if avg >= 4:
+            media.editor_choice = True
+            media.save()

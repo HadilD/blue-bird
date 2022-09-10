@@ -44,8 +44,20 @@ class MediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Media
-        fields = ["id", "name", "description", "cost", "owner", "created_at", "is_approved", "was_bought",
-                  "attachments", "tags", "ratings"]
+        fields = [
+            "id", 
+            "name", 
+            "description", 
+            "cost", "owner", 
+            "created_at", 
+            "is_approved", 
+            "was_bought", 
+            "is_published", 
+            "editor_choice",
+            "attachments", 
+            "tags", 
+            "ratings",
+        ]
 
     def get_attachments_serializer(self, obj):
         serializer_context = {'request': self.context.get('request')}
@@ -83,7 +95,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class RatingsSerializer(serializers.ModelSerializer):
     given_by = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Ratings
         fields = '__all__'
