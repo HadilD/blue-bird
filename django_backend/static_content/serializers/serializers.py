@@ -9,7 +9,7 @@ from authentication.serializers import UserDetailsSerializer
 class CustomSlugRelatedField(serializers.SlugRelatedField):
     def to_internal_value(self, data):
         try:
-            tag, is_created = self.get_queryset().get_or_create(name=data)
+            tag, _ = self.get_queryset().get_or_create(name=data)
             return tag
         except (TypeError, ValueError):
             self.fail("invalid")
@@ -26,12 +26,6 @@ class AttachmentSerializer(serializers.ModelSerializer):
         model = Attachment
         fields = ["id", "name", "format", "url", "type", "labels"]
 
-    # def to_representation(self, instance):
-    #     attachment_serializer = super(AttachmentSerializer, self).to_representation(instance)
-    #     if "order" not in self.context.get("request").path:
-    #         attachment_serializer.pop("url")
-    #     return attachment_serializer
-
 
 class AttachmentUploadSerializer(serializers.ModelSerializer):
     file = serializers.FileField(allow_empty_file=False, required=True)
@@ -42,7 +36,6 @@ class AttachmentUploadSerializer(serializers.ModelSerializer):
 
 
 class MediaSerializer(serializers.ModelSerializer):
-    # attachments = AttachmentSerializer(many=True, read_only=True, source="attachment_set")
     attachments = serializers.SerializerMethodField("get_attachments_serializer")
     tags = CustomSlugRelatedField(
         many=True, queryset=Tag.objects.all(), slug_field="name",required=False)

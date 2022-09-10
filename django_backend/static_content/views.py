@@ -122,9 +122,14 @@ class AttachmentCreate(generics.CreateAPIView):
                     labels=labels
                     )
             else:
-                attachment = Attachment.objects.create(name=file_name, format=file.content_type.split("/")[1],
-                                                       uri=uri, type=file.content_type.split("/")[0], labels=labels)
-            return Response({"id": attachment.id}, status=status.HTTP_201_CREATED)
+                attachment = Attachment.objects.create(
+                    name=file_name, 
+                    format=file.content_type.split("/")[1],
+                    uri=uri, 
+                    type=file.content_type.split("/")[0], 
+                    labels=labels
+                )
+            return Response(AttachmentSerializer(attachment).data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
