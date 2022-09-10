@@ -13,19 +13,22 @@ function SearchBar(props) {
     const [searchCategory, setSearchCategory] = useState('all')
     const [searchTerm, setSearchTerm] = useState('')
     const [prevSearchTerm, setPrevSearchTerm] = useState(null)
+    const [prevSearchCategory, setPrevSearchCategory] = useState(null)
     const classes = useStyles();
     
     const handleChange = e => {
         setSearchTerm(e.target.value)
         if (e.target.value === '') {
             setPrevSearchTerm('')
+            setPrevSearchCategory(searchCategory)
             fetchMedia('', searchCategory)
         }
     }
     const handleSearchCategoryChange = e => setSearchCategory(e.target.value)
     const handleOnClick = () => {
-        if (prevSearchTerm !== searchTerm) {
+        if (prevSearchTerm !== searchTerm || prevSearchCategory !== searchCategory) {
             setPrevSearchTerm(searchTerm)
+            setPrevSearchCategory(searchCategory)
             fetchMedia(searchTerm, searchCategory)
         }
     }
