@@ -18,10 +18,18 @@ function MyOrders() {
         dispatch(setPageName("My Orders"))
     })
 
-    useEffect( async () => {
+    const getMyMedia = async () => {
         const res = await getMyOrders()
         setResultMedia(res)
+      }
+
+    useEffect( async () => {
+        getMyMedia()
     }, [])
+
+    useEffect(() => {
+        setResultMedia(allMedia)
+      },[allMedia])
 
     
     const updateSearchResult = (searchQuery, category) => {
@@ -29,7 +37,7 @@ function MyOrders() {
       if (searchQuery === '' ) {
           tempRes = allMedia
       } else {
-          tempRes = resultMedia.filter(item => {
+          tempRes = allMedia.filter(item => {
               return item.media.name.toLowerCase().includes(searchQuery.toLowerCase())
           })
       }

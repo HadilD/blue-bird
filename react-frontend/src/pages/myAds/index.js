@@ -18,17 +18,25 @@ function MyAds() {
     dispatch(setPageName("My Ads"))
   })
 
-  useEffect(async () => {
+  const getMyMedia = async () => {
     const res = await getMineMedia()
     setResultMedia(res)
+  }
+
+  useEffect(() => {
+    getMyMedia()
   }, [])
+
+  useEffect(() => {
+    setResultMedia(allMedia)
+  },[allMedia])
 
   const updateSearchResult = (searchQuery, category) => {
     let tempRes = null
     if (searchQuery === '') {
       tempRes = allMedia
     } else {
-      tempRes = resultMedia.filter(item => {
+      tempRes = allMedia.filter(item => {
         return item.name.toLowerCase().includes(searchQuery.toLowerCase())
       })
     }

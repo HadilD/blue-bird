@@ -7,7 +7,7 @@ import { protectedAxios } from '../instance'
 export const fetchMedia = async (searchTerm = null, category = null) => {
     let params = {}
     if (searchTerm !== null && searchTerm !== '') params['search'] = searchTerm
-    // if (category !== 'all' && category !== null) params['type'] = category
+    if (category !== 'all' && category !== null) params['types'] = category
     await getMedia(params)
 }
 
@@ -94,6 +94,7 @@ export const unpublishMedia = async (values) => {
       is_published: values.is_published
     }
     const res = await protectedAxios.patch(Request.UPLOAD_MEDIA + '/' + values.id, body)
+    getMineMedia()
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))

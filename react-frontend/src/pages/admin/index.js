@@ -18,6 +18,10 @@ function Admin() {
         setResultMedia(res)
     }, [])
 
+    useEffect(() => {
+        setResultMedia(allMedia)
+    }, [allMedia])
+
     const updateMediaStatus = async (body) => {
         await adminUpdateMediaStatus(body)
         await getAdminMedia()
@@ -28,7 +32,7 @@ function Admin() {
         if (searchQuery === '') {
             tempRes = allMedia
         } else {
-            tempRes = resultMedia.filter(item => {
+            tempRes = allMedia.filter(item => {
                 return item.name.toLowerCase().includes(searchQuery.toLowerCase())
             })
         }

@@ -12,10 +12,25 @@ function SearchByName (props) {
     const { updateResultMedia } = props
     const [searchTerm, setSearchTerm] = useState('')
     const [searchCategory, setSearchCategory] = useState('all')
+    const [prevSearchTerm, setPrevSearchTerm] = useState(null)
+    const [prevSearchCategory, setPrevSearchCategory] = useState(null)
     const classes = useStyles();
     
     const handleOnClick = () => {
-        updateResultMedia(searchTerm, searchCategory)
+        if (prevSearchTerm !== searchTerm || prevSearchCategory !== searchCategory) {
+            setPrevSearchTerm(searchTerm)
+            setPrevSearchCategory(searchCategory)
+            updateResultMedia(searchTerm, searchCategory)
+        }
+    }
+
+    const handleChange = e => {
+        setSearchTerm(e.target.value)
+        if (e.target.value === '') {
+            setPrevSearchTerm('')
+            setPrevSearchCategory(searchCategory)
+            updateResultMedia('', searchCategory)
+        }
     }
 
     return (
@@ -24,15 +39,15 @@ function SearchByName (props) {
                 <SearchIcon sx={{fontSize:30, color: "#D3D3D3", paddingLeft: '5px'}} />
                 <input 
                     placeholder='Search by name' 
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value)
-                        if (e.target.value === '') {
-                            updateResultMedia('', searchCategory)
-                        }
-                    }} 
+                    onChange={handleChange} 
                     className={classes.searchInput} 
                     type="text"
                     value={searchTerm}
+                    onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                            handleOnClick()
+                        }
+                    }}
                 />
             </div>
             <FormControl>
