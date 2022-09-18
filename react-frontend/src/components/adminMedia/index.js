@@ -1,12 +1,26 @@
-import React from 'react'
-import { downloadMedia } from '../../services/download'
-import useStyles from './styles'
+import React, { useEffect, useState } from 'react'
+
 import Chip from '@mui/material/Chip';
 import PlacehoderImage from "./../../assests/placeholder.png";
-
+import { downloadMedia } from '../../services/download'
+import useStyles from './styles'
 
 function AdminMedia(props) {
   const { name, description, cost, owner, date, is_approved, attachments, id, updateMediaStatus, mediaItem } = props
+
+  const [attachmentLables, setAttachmentLabels] =  useState([]);
+
+  useEffect(() => {
+    let labels = [];
+    attachments && attachments.length && attachments.forEach(element => {
+      element.labels && element.labels.map((label, index) => {
+          labels.push(label);
+      })
+     })
+     setAttachmentLabels(labels)
+  }, [])
+  
+  console.log(attachmentLables)
   const approveStatus = is_approved
   const classes = useStyles();
   return (
@@ -25,6 +39,13 @@ function AdminMedia(props) {
           <p className={classes.mediaPrice}>Cost: {cost}</p>
           <p className={classes.mediaPrice}>Owner: {owner}</p>
           <p className={classes.mediaPrice}>Uploaded on: {date}</p>
+          <div className={classes.labelsContainer}>
+            {
+              attachmentLables && attachmentLables.map((label, index) => {
+                return <Chip label={label} style={{marginRight: 5}} />
+              })
+            }
+          </div>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '3%' }}>
           <p className={classes.mediaPrice}>Status:
             {

@@ -1,5 +1,5 @@
-import { makeStyles } from '@mui/styles';
 import { generalStyles } from '../../generalStyles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(theme => ({
     mainContainer: {
@@ -86,6 +86,9 @@ const useStyles = makeStyles(theme => ({
         display: 'block',
         fontSize: '16px',
         width: '20%',
+    },
+    labelsContainer:{
+        margin: "20px 0px"
     }
 }))
 
