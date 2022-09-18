@@ -67,7 +67,8 @@ function MyOrders() {
             return (
               <Ad 
                 key={myOrder.id}
-                id={myOrder.id} 
+                id={myOrder.id}
+                mediaId={myOrder.media.id}
                 name={myOrder.media.name}
                 description={myOrder.media.description}
                 cost={myOrder.media.cost}
@@ -77,6 +78,7 @@ function MyOrders() {
                 is_approved={myOrder.media.is_approved}
                 attachments={myOrder.media.attachments}
                 tags={myOrder.media.tags}
+                adObj={myOrder}
               />)
           })
         }

@@ -28,6 +28,7 @@ const Request = {
   CREATE_ROOM: 'api/chat/rooms',
   GET_MINE_MEDIAS: 'api/medias/mine',
   GET_MY_ORDERS: 'api/orders/mine',
+  CREATE_RATINGS: 'api/media',
   ADMIN: 'admin',
 }
 

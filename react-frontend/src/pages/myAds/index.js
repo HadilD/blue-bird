@@ -63,7 +63,6 @@ function MyAds() {
       <SearchByName updateResultMedia={updateSearchResult} />
       {
         resultMedia.map(myAds => {
-          console.log('-----------', myAds)
           return (
             <Ad
               key={myAds.id}

@@ -16,6 +16,7 @@ export const fetchMedia = async (searchTerm = null, category = null) => {
 const getMedia = async (params) => {
   try {
     const res = await protectedAxios.get(Request.GET_MEDIA, { params });
+    console.log(res.data)
     Store.dispatch(setAllMediaItems(res.data))
     return res.data
   } catch (err) {
@@ -95,6 +96,20 @@ export const unpublishMedia = async (values) => {
     }
     const res = await protectedAxios.patch(Request.UPLOAD_MEDIA + '/' + values.id, body)
     getMineMedia()
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}
+
+export const createRatings = async (values) => {
+  try {
+    let body = {
+      stars: values.stars,
+      feedback: values.feedback
+    }
+    const res = await protectedAxios.post(Request.CREATE_RATINGS + '/' + values.id + '/ratings', body)
     return res.data
   } catch (err) {
     console.log(JSON.stringify(err))

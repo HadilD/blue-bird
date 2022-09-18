@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useStyles from './styles'
+import { useSelector } from 'react-redux';
 import Chip from '@mui/material/Chip';
 import { generalStyles } from '../../generalStyles';
 import Button from '@mui/material/Button';
 import { downloadMedia } from '../../services/download';
 import { updateMedia, deleteMedia, unpublishMedia } from '../../services/media'
+import Rating from '@mui/material/Rating';
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Alert from '@mui/material/Alert';
@@ -12,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import PlacehoderImage from "./../../assests/placeholder.png";
+import {createRatings} from '../../services/media'
 
 
 function UpdateModal(props) {
@@ -178,10 +181,39 @@ function UpdateModal(props) {
 }
 
 function Ad(props) {
-  const { name, description, cost, created_at, is_approved, tags, myAd, updateable, id, attachments, is_published } = props
+  const { name, description, cost, created_at, is_approved, tags, myAd, updateable, id, attachments, is_published, mediaId, adObj } = props
 
   const classes = useStyles();
   const [modalState, setModalState] = useState(false)
+  const [ratings, setRatings] = useState(0)
+  const [feedback, setFeedback] = useState('')
+  const [feedBackErr, setFeedBackErr] = useState(false)
+  const loggedInUser = useSelector(state => state.user)
+
+
+  useEffect(() => {
+    if (!updateable) {
+      let ratingsList = adObj.media.ratings
+      if (ratingsList.length) {
+        ratingsList.forEach((rating) => {
+          if (rating.given_by.id === loggedInUser.users.id) {
+            setRatings(rating.star)
+            setFeedback(rating.feedback)
+          }      
+        })
+      }
+    }
+  }, [])
+
+  const handleFeedbackSubmit = () => {
+    if (ratings !== 0) {
+      createRatings({stars: ratings, feedback:feedback, id: mediaId})
+      setRatings(0)
+      setFeedback('')
+    } else {
+      setFeedBackErr(true)
+    }
+  }
 
   const handleModalClose = () => {
     setModalState(false)
@@ -260,7 +292,36 @@ function Ad(props) {
                 }
               </>
             :
-              null
+              <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Rating
+                  name="simple-controlled"
+                  value={ratings}
+                  onChange={(event, newValue) => {
+                    setFeedBackErr(false)
+                    setRatings(newValue);
+                }}/>
+                {
+                  feedBackErr && <p style={{color: 'red'}}>*Ratings required</p>
+                }
+                <TextField 
+                  id="outlined-basic" 
+                  label="Feedback" 
+                  placeholder="Enter your feedback"
+                  variant="outlined" 
+                  sx={{ width: '60%', marginTop: '2%' }} 
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)} 
+                />
+                <Button 
+                  variant="contained" 
+                  disableElevation 
+                  onClick={handleFeedbackSubmit}
+                  sx={{backgroundColor: '#1d3461', textTransform: 'none', marginTop: '2%', width: '20%'}}
+                >
+                  Submit Feedback
+                </Button>
+              </div>
+            
           }
         </div>
       </div>

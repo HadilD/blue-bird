@@ -13,6 +13,7 @@ import { createRoom, getAllRoomsForUser } from '../../services/chat';
 import { setCurrentRoomId } from '../../redux/slice/chat';
 import { useNavigate } from 'react-router-dom';
 import { downloadMedia } from '../../services/download';
+import Rating from '@mui/material/Rating';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -25,6 +26,8 @@ const MediaPreviewModal = (props) => {
 
     const [activeStep, setActiveStep] = useState(0);
     const [disableContactSellerButton, setDisableContactSellerButton] = useState(true);
+    const [avgRating, setAvgRating] = useState(0)
+    const [numRating, setNumRating] = useState(0)
     const maxSteps = mediaPreviewModalData.attachments.length;
     const theme = useTheme();
 
@@ -33,6 +36,19 @@ const MediaPreviewModal = (props) => {
             setDisableContactSellerButton(false)
         }
     })
+
+    useEffect(() => {
+        let ratings = mediaPreviewModalData.ratings
+        let sumRatings = 0
+        if (ratings.length) {
+            ratings.forEach((rating) => {
+                sumRatings += rating.stars
+            })
+        }
+        let avgRating = parseInt(sumRatings/ratings.length)
+        setAvgRating(avgRating)
+        setNumRating(ratings.length)
+    }, [])
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -169,6 +185,10 @@ const MediaPreviewModal = (props) => {
                         </div>}
                         <br />
                         <Typography>{`Cost: ${mediaPreviewModalData.cost === "0.00" ? "Free" : mediaPreviewModalData.cost}`}</Typography>
+                        <Typography style={{display:'flex', flexDirection: 'row'}}>
+                            <Rating name="read-only" value={avgRating} readOnly />
+                            <p style={{margin: 0}}>({numRating})</p>
+                        </Typography>
                     </div>
                 </div>
             </DialogContent>
