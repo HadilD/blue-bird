@@ -4,6 +4,7 @@ import Chip from '@mui/material/Chip';
 import PlacehoderImage from "./../../assests/placeholder.png";
 import { downloadMedia } from '../../services/download'
 import useStyles from './styles'
+import { BadWords } from '../../constants/api'
 
 function AdminMedia(props) {
   const { name, description, cost, owner, date, is_approved, attachments, id, updateMediaStatus, mediaItem } = props
@@ -14,13 +15,12 @@ function AdminMedia(props) {
     let labels = [];
     attachments && attachments.length && attachments.forEach(element => {
       element.labels && element.labels.map((label, index) => {
-          labels.push(label);
+          labels.push(label.toLowerCase());
       })
      })
      setAttachmentLabels(labels)
   }, [])
-  
-  console.log(attachmentLables)
+
   const approveStatus = is_approved
   const classes = useStyles();
   return (
@@ -42,7 +42,13 @@ function AdminMedia(props) {
           <div className={classes.labelsContainer}>
             {
               attachmentLables && attachmentLables.map((label, index) => {
-                return <Chip label={label} style={{marginRight: 5}} />
+                return (
+                  BadWords.includes(label)
+                  ?
+                    <Chip label={label} style={{marginRight: 5}} color="error" />
+                  :
+                    <Chip label={label} style={{marginRight: 5}} />
+                )
               })
             }
           </div>
