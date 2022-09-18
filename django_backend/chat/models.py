@@ -18,6 +18,8 @@ class Room(BaseModel):
 
 class Message(BaseModel):
     content = models.TextField()
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
