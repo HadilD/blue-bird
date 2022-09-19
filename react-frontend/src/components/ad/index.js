@@ -269,18 +269,18 @@ function Ad(props) {
             updateable
             ?
               <>
-                <Button variant="contained" component="span" sx={{textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: generalStyles.primaryColor}}
+                <Button variant="contained" component="span" sx={{textTransform: "none", marginRight: '1rem', width: '20%', backgroundColor: generalStyles.primaryColor}}
                   onClick={() => setModalState(true)}>
                     Update Details
                 </Button>
-                <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%',backgroundColor: generalStyles.primaryColor}}
+                <Button variant="contained" component="span" sx={{ textTransform: "none", marginRight: '1rem', width: '20%',backgroundColor: generalStyles.primaryColor}}
                   onClick={() => handleDelete()}>
                   Delete
                 </Button>
                 {
                   is_published
                   ?
-                    <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: '#ed6c02'}}
+                    <Button variant="contained" component="span" sx={{ textTransform: "none", marginRight: '1rem', width: '20%', backgroundColor: '#ed6c02'}}
                       onClick={() => handleUnpublish(false)}>
                       Unpublish
                     </Button>
