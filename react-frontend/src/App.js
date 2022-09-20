@@ -23,7 +23,7 @@ import { setUploadModal } from './redux/slice/uploadModal';
 import MyAds from './pages/myAds';
 import { Constants } from './constants/api';
 import { logoutUser } from './services/auth';
-import { setLoginStatus, setUserRole } from './redux/slice/user'
+import { setLoginStatus, setUserRole, setAllUsers } from './redux/slice/user'
 import ChatScreen from './pages/ChatScreen';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -32,6 +32,7 @@ import Home from './pages/home';
 import Profile from './pages/profile';
 import MyOrders from './pages/myOrders';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import jwt_decode from "jwt-decode";
 
 const drawerWidth = 240;
 
@@ -93,6 +94,8 @@ export default function PersistentDrawerLeft() {
     let accessToken = localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
     let userRole = localStorage.getItem(Constants.STORAGE_ITEM_USER_ROLE)
     if (accessToken) {
+      let decoded = jwt_decode(accessToken);
+      dispatch(setAllUsers({id: decoded.user_id, email: decoded.email, first_name: '', last_name: ''}))
       dispatch(setLoginStatus(true))
       dispatch(setUserRole(userRole))
     }
