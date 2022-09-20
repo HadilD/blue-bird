@@ -4,6 +4,13 @@ import { useSelector } from 'react-redux';
 import Chip from '@mui/material/Chip';
 import { generalStyles } from '../../generalStyles';
 import Button from '@mui/material/Button';
+
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import { downloadMedia } from '../../services/download';
 import { updateMedia, deleteMedia, unpublishMedia } from '../../services/media'
 import Rating from '@mui/material/Rating';
@@ -185,6 +192,8 @@ function Ad(props) {
 
   const classes = useStyles();
   const [modalState, setModalState] = useState(false)
+  const [showRatings, setShowRatings] = useState(0)
+  const [showFeedback, setShowFeedback] = useState('')
   const [ratings, setRatings] = useState(0)
   const [feedback, setFeedback] = useState('')
   const [feedBackErr, setFeedBackErr] = useState(false)
@@ -197,8 +206,8 @@ function Ad(props) {
       if (ratingsList.length) {
         ratingsList.forEach((rating) => {
           if (rating.given_by.id === loggedInUser.users.id) {
-            setRatings(rating.star)
-            setFeedback(rating.feedback)
+            setShowRatings(rating.stars)
+            setShowFeedback(rating.feedback)
           }      
         })
       }
@@ -210,6 +219,7 @@ function Ad(props) {
       createRatings({stars: ratings, feedback:feedback, id: mediaId})
       setRatings(0)
       setFeedback('')
+      alert('Feedback submitted successfully')
     } else {
       setFeedBackErr(true)
     }
@@ -292,35 +302,105 @@ function Ad(props) {
                 }
               </>
             :
-              <div style={{display: 'flex', flexDirection: 'column'}}>
-                <Rating
-                  name="simple-controlled"
-                  value={ratings}
-                  onChange={(event, newValue) => {
-                    setFeedBackErr(false)
-                    setRatings(newValue);
-                }}/>
-                {
-                  feedBackErr && <p style={{color: 'red'}}>*Ratings required</p>
-                }
-                <TextField 
-                  id="outlined-basic" 
-                  label="Feedback" 
-                  placeholder="Enter your feedback"
-                  variant="outlined" 
-                  sx={{ width: '60%', marginTop: '2%' }} 
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)} 
-                />
-                <Button 
-                  variant="contained" 
-                  disableElevation 
-                  onClick={handleFeedbackSubmit}
-                  sx={{backgroundColor: '#1d3461', textTransform: 'none', marginTop: '2%', width: '20%'}}
-                >
-                  Submit Feedback
-                </Button>
-              </div>
+              <>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Show your feedback</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <Rating name="read-only" value={showRatings ? showRatings : 0} readOnly />
+                        <TextField 
+                          id="outlined-basic" 
+                          label="Feedback" 
+                          placeholder="Enter your feedback"
+                          variant="outlined"
+                          disabled
+                          sx={{ width: '60%', marginTop: '2%' }} 
+                          value={showFeedback} 
+                        />
+                        </div>
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Give Feedback</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <Rating
+                          name="simple-controlled"
+                          value={ratings}
+                          onChange={(event, newValue) => {
+                            setFeedBackErr(false)
+                            setRatings(newValue);
+                        }}/>
+                        {
+                          feedBackErr && <p style={{color: 'red'}}>*Ratings required</p>
+                        }
+                        <TextField 
+                          id="outlined-basic" 
+                          label="Feedback" 
+                          placeholder="Enter your feedback"
+                          variant="outlined" 
+                          sx={{ width: '60%', marginTop: '2%' }} 
+                          value={feedback}
+                          onChange={(e) => setFeedback(e.target.value)} 
+                        />
+                        <Button 
+                          variant="contained" 
+                          disableElevation 
+                          onClick={handleFeedbackSubmit}
+                          sx={{backgroundColor: '#1d3461', textTransform: 'none', marginTop: '2%', width: '20%'}}
+                        >
+                          Submit Feedback
+                        </Button>
+                      </div>
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
+              </>
+
+              // <div style={{display: 'flex', flexDirection: 'column'}}>
+              //   <Rating
+              //     name="simple-controlled"
+              //     value={ratings}
+              //     onChange={(event, newValue) => {
+              //       setFeedBackErr(false)
+              //       setRatings(newValue);
+              //   }}/>
+              //   {
+              //     feedBackErr && <p style={{color: 'red'}}>*Ratings required</p>
+              //   }
+              //   <TextField 
+              //     id="outlined-basic" 
+              //     label="Feedback" 
+              //     placeholder="Enter your feedback"
+              //     variant="outlined" 
+              //     sx={{ width: '60%', marginTop: '2%' }} 
+              //     value={feedback}
+              //     onChange={(e) => setFeedback(e.target.value)} 
+              //   />
+              //   <Button 
+              //     variant="contained" 
+              //     disableElevation 
+              //     onClick={handleFeedbackSubmit}
+              //     sx={{backgroundColor: '#1d3461', textTransform: 'none', marginTop: '2%', width: '20%'}}
+              //   >
+              //     Submit Feedback
+              //   </Button>
+              // </div>
             
           }
         </div>
