@@ -14,6 +14,7 @@ import { setCurrentRoomId } from '../../redux/slice/chat';
 import { useNavigate } from 'react-router-dom';
 import { downloadMedia } from '../../services/download';
 import Rating from '@mui/material/Rating';
+import StarsIcon from '@mui/icons-material/Stars';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -179,7 +180,7 @@ const MediaPreviewModal = (props) => {
                         {(mediaPreviewModalData && mediaPreviewModalData.tags.length > 0) && <div className={classes.tags}>
                             {
                                 mediaPreviewModalData.tags.map((tag, index) => {
-                                    return <Chip label={tag} key={index} className={classes.chip} />
+                                    return <Chip label={tag} key={index} className={classes.chip} variant="outlined" />
                                 })
                             }
                         </div>}
@@ -189,6 +190,15 @@ const MediaPreviewModal = (props) => {
                             <Rating name="read-only" value={avgRating} readOnly />
                             <p style={{margin: 0}}>({numRating})</p>
                         </Typography>
+                        {
+                            mediaPreviewModalData.editor_choice
+                            ?
+                                <Typography>
+                                    <Chip icon={<StarsIcon />} label="Editor's Choice" variant="filled" color="warning" size="small" />
+                                </Typography>
+                            :
+                                null
+                        }
                     </div>
                 </div>
             </DialogContent>

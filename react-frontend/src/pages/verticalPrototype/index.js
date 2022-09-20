@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { setPageName } from '../../redux/slice/pagename';
 import useStyles from './styles';
-import { Typography } from '@mui/material';
+import { Typography, Chip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadModal from '../../components/uploadModal'
 import { setUploadModal } from '../../redux/slice/uploadModal'
@@ -12,6 +12,7 @@ import { fetchMedia } from '../../services/media'
 import PlacehoderImage from "./../../assests/placeholder.png";
 import { getUsers } from '../../services/user';
 import Copyright from '../../components/copyright';
+import StarsIcon from '@mui/icons-material/Stars';
 
 const VerticalPrototype = () => {
     const displayUploadModal = useSelector((state) => state.uploadModal.displayUploadModal)
@@ -47,13 +48,27 @@ const VerticalPrototype = () => {
             <div className={classes.root}>
 
                 {(mediaItems && mediaItems.length !== 0) && mediaItems.map((mediaItem, index) => {
+                   
                     return <div key={index} className={classes.imageCard} >
                         {(mediaItem.attachments && mediaItem.attachments.length !== 0) ? <img alt={mediaItem.name} className={classes.imageProps} src={mediaItem.attachments[0].url} /> : <img alt={mediaItem.name} className={classes.imageProps} src={PlacehoderImage} />}
                         <div className={classes.iconLabel}>
-                            <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
-                            <VisibilityIcon onClick={() => { handleMediaPreview(mediaItem) }} className={classes.viewIcon} />
+                            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '3%'}}>
+                                <Typography className={classes.mediaName} >{mediaItem.name}</Typography>
+                                <VisibilityIcon onClick={() => { handleMediaPreview(mediaItem) }} className={classes.viewIcon} />
+                            </div>
+                            {
+                                mediaItem.editor_choice
+                                ?
+                                    <Typography sx={{display:'block'}}>
+                                        <Chip icon={<StarsIcon />} label="Editor's Choice" variant="filled" color="warning" size="small" />
+                                    </Typography>
+                                :
+                                    null
+                            }
                         </div>
+                  
                     </div>
+                     
                 })}
             </div>
             {
