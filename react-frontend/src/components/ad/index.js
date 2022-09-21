@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import useStyles from './styles'
-import { useSelector } from 'react-redux';
-import Chip from '@mui/material/Chip';
-import { generalStyles } from '../../generalStyles';
-import Button from '@mui/material/Button';
+import { deleteMedia, unpublishMedia, updateMedia } from '../../services/media'
 
 import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-import { downloadMedia } from '../../services/download';
-import { updateMedia, deleteMedia, unpublishMedia } from '../../services/media'
-import Rating from '@mui/material/Rating';
-import Modal from '@mui/material/Modal'
-import Box from '@mui/material/Box'
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Alert from '@mui/material/Alert';
-import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InputLabel from '@mui/material/InputLabel';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Modal from '@mui/material/Modal'
 import PlacehoderImage from "./../../assests/placeholder.png";
+import Rating from '@mui/material/Rating';
+import TextField from '@mui/material/TextField';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Typography from '@mui/material/Typography';
 import {createRatings} from '../../services/media'
-
+import { downloadMedia } from '../../services/download';
+import { generalStyles } from '../../generalStyles';
+import { useSelector } from 'react-redux';
+import useStyles from './styles'
 
 function UpdateModal(props) {
   const {name, description, cost, tags, onCloseModal, id} = props
@@ -278,29 +276,29 @@ function Ad(props) {
           {
             updateable
             ?
-              <>
-                <Button variant="contained" component="span" sx={{textTransform: "none", marginRight: '1rem', width: '20%', backgroundColor: generalStyles.primaryColor}}
+              <div className={classes.buttonCont}>
+                <Button variant="contained" component="span" sx={{textTransform: "none", backgroundColor: generalStyles.primaryColor}}
                   onClick={() => setModalState(true)}>
                     Update Details
                 </Button>
-                <Button variant="contained" component="span" sx={{ textTransform: "none", marginRight: '1rem', width: '20%',backgroundColor: generalStyles.primaryColor}}
+                <Button variant="contained" component="span" sx={{ textTransform: "none", backgroundColor: generalStyles.primaryColor}}
                   onClick={() => handleDelete()}>
                   Delete
                 </Button>
                 {
                   is_published
                   ?
-                    <Button variant="contained" component="span" sx={{ textTransform: "none", marginRight: '1rem', width: '20%', backgroundColor: '#ed6c02'}}
+                    <Button variant="contained" component="span" sx={{ textTransform: "none", backgroundColor: '#ed6c02'}}
                       onClick={() => handleUnpublish(false)}>
                       Unpublish
                     </Button>
                   :
-                    <Button variant="contained" component="span" sx={{ textTransform: "none", margin: '0 1rem', width: '20%', backgroundColor: 'green'}}
+                    <Button variant="contained" component="span" sx={{ textTransform: "none", backgroundColor: 'green'}}
                       onClick={() => handleUnpublish(true)}>
                       Publish
                     </Button>
                 }
-              </>
+              </div>
             :
               <>
                 <Accordion>

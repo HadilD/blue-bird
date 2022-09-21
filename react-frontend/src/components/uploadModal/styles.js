@@ -1,5 +1,5 @@
-import { makeStyles } from '@mui/styles';
 import { generalStyles } from '../../generalStyles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(theme => ({
     uploadModalContainer: {
@@ -16,7 +16,15 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#FAF9F6',
         border: '2px solid grey',
         overflowX: 'hidden',
-        paddingBottom: '2%'
+        paddingBottom: '2%',
+        [theme.breakpoints.down('md')]: {
+            width: 'auto',
+         }
+    },
+    preLine: {
+        [theme.breakpoints.down('md')]: {
+           whiteSpace: 'pre-line'
+         }
     },
     box1: { 
         display: 'flex', 

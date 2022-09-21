@@ -8,14 +8,18 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center"
     },
     imageSlider: {
-        width: "50%"
+        width: "45%"
     },
     imageDetails: {
-        width: "50%"
+        width: "45%"
     },
     dialogContent: {
         display: "flex",
-        minHeight: "400px"
+        justifyContent: "space-evenly",
+        minHeight: "400px",
+        [theme.breakpoints.down('md')]: {
+            justifyContent: "space-between",
+        }
     },
     mediaName: {
         fontWeight: "bold",
@@ -35,6 +39,7 @@ const useStyles = makeStyles(theme => ({
     tags: {
         display: "flex",
         justifyContent: "flex-start",
+        flexWrap: 'wrap'
     },
     chip: {
         margin: "0px 5px 5px 0px"

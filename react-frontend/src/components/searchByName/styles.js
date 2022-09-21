@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles(theme => ({
     searchContainer: {
         display: 'flex', 
-        flexDirection: 'row', 
+        flexDirection: 'column', 
         width: '100%', 
         justifyContent: 'center', 
         alignItems: 'center', 
@@ -18,7 +18,10 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center', 
         border: '2px solid #f0f0f0', 
         borderRadius: '5px', 
-        width: '30%'
+        width: '30%',
+        [theme.breakpoints.down('md')]: {
+            width: '90%',
+        }
     },
     searchInput: { 
         border: 0,
@@ -36,6 +39,17 @@ const useStyles = makeStyles(theme => ({
     searchButtonContainer: {
         marginLeft: '2%', 
         marginRight: '2%'
+    },
+    categoryButtonCont: {
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        margin: 20,
+        width: '40%',
+        [theme.breakpoints.down('md')]: {
+            width: '90%',
+        }
+    },
+    categorySelector: {
     }
 }))
 

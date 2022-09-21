@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
+import { BadWords } from '../../constants/api'
+import { Button } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import PlacehoderImage from "./../../assests/placeholder.png";
 import { downloadMedia } from '../../services/download'
 import useStyles from './styles'
-import { BadWords } from '../../constants/api'
 
 function AdminMedia(props) {
   const { name, description, cost, owner, date, is_approved, attachments, id, updateMediaStatus, mediaItem } = props
@@ -45,47 +46,49 @@ function AdminMedia(props) {
                 return (
                   BadWords.includes(label)
                   ?
-                    <Chip label={label} style={{marginRight: 5}} color="error" />
+                    <Chip label={label} style={{margin: 2}} color="error" />
                   :
-                    <Chip label={label} style={{marginRight: 5}} />
+                    <Chip label={label} style={{margin: 2}} />
                 )
               })
             }
           </div>
-          <div style={{ display: 'flex', flexDirection: 'row', marginTop: '3%' }}>
-          <p className={classes.mediaPrice}>Status:
-            {
-            approveStatus
-              ?
-              <Chip label={'Approved'} sx={{ marginLeft: '1%' }} color="success" />
-              :
-              <Chip label={'Not Approved'} sx={{ marginLeft: '1%' }} color="warning" />
-            }
-          </p>
-            {
+          <div >
+            <p className={classes.mediaPrice}>Status:
+              {
               approveStatus
                 ?
-                <button
-                  className={classes.disapproveButton}
-                  onClick={() => updateMediaStatus({
-                    "ids": [id],
-                    "approve": false
-                  })}
-                >
-                  Disapprove
-                </button>
+                <Chip label={'Approved'} sx={{ marginLeft: '1%' }} color="success" />
                 :
-                <button
-                  className={classes.approveButton}
-                  onClick={() => updateMediaStatus({
-                    "ids": [id],
-                    "approve": true
-                  })}
-                >
-                  Approve
-                </button>
-            }
-            <button type="submit" disabled={false} onClick={() => downloadMedia(mediaItem)} className={classes.approveButton}>Download Media</button>
+                <Chip label={'Not Approved'} sx={{ marginLeft: '1%' }} color="warning" />
+              }
+            </p>
+            <div className={classes.buttonCont}>
+                {
+                  approveStatus
+                    ?
+                    <Button
+                      className={classes.disapproveButton}
+                      onClick={() => updateMediaStatus({
+                        "ids": [id],
+                        "approve": false
+                      })}
+                    >
+                      Disapprove
+                    </Button>
+                    :
+                    <Button
+                      className={classes.approveButton}
+                      onClick={() => updateMediaStatus({
+                        "ids": [id],
+                        "approve": true
+                      })}
+                    >
+                      Approve
+                    </Button>
+                }
+                <button type="submit" disabled={false} onClick={() => downloadMedia(mediaItem)} className={classes.approveButton}>Download Media</button>
+              </div>
           </div>
         </div>
       </div>

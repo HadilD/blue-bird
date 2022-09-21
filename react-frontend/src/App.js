@@ -1,38 +1,38 @@
 import * as React from 'react';
+
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Route, Routes, useNavigate } from 'react-router-dom'
+import { setAllUsers, setLoginStatus, setUserRole } from './redux/slice/user'
 import { styled, useTheme } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
+
+import About from './pages/about'
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Admin from './pages/admin'
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import MenuIcon from '@mui/icons-material/Menu';
+import ChatScreen from './pages/ChatScreen';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import Login from './pages/Login'
-import About from './pages/about'
-import Admin from './pages/admin'
-import { useDispatch, useSelector } from 'react-redux';
-import { generalStyles } from './generalStyles';
-import { Routes, Route, useNavigate } from 'react-router-dom'
-import VerticalPrototype from './pages/verticalPrototype';
-import { setUploadModal } from './redux/slice/uploadModal';
-import MyAds from './pages/myAds';
 import { Constants } from './constants/api';
-import { logoutUser } from './services/auth';
-import { setLoginStatus, setUserRole, setAllUsers } from './redux/slice/user'
-import ChatScreen from './pages/ChatScreen';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import Login from './pages/Login'
 import MailIcon from '@mui/icons-material/Mail';
-import Home from './pages/home';
-import Profile from './pages/profile';
+import MuiAppBar from '@mui/material/AppBar';
+import MyAds from './pages/myAds';
 import MyOrders from './pages/myOrders';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Profile from './pages/profile';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import VerticalPrototype from './pages/verticalPrototype';
+import { generalStyles } from './generalStyles';
 import jwt_decode from "jwt-decode";
+import { logoutUser } from './services/auth';
+import { setUploadModal } from './redux/slice/uploadModal';
 
 const drawerWidth = 240;
 
@@ -108,7 +108,7 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  console.log({width: window.innerWidth})
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -116,21 +116,13 @@ export default function PersistentDrawerLeft() {
         {
           isUserLoggedIn &&
           <Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {/* <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{ mr: 2, ...(open && { display: 'none' }) }}
-              >
-                <MenuIcon />
-              </IconButton> */}
-              <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
-                {pageName}
-              </Typography>
-            </div>
-            <Typography onClick={() => navigate('/')} style={{ cursor: "pointer" }} variant="h4" noWrap component="div">Blue Bird</Typography>
+               { !(window.innerWidth < 600) && <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <Typography variant="h6" noWrap component="div" sx={{ marginTop: '3%' }}>
+                  {pageName}
+                </Typography>
+                </div>
+            }
+            <Typography onClick={() => navigate('/')} style={{ cursor: "pointer", fontSize: (window.innerWidth < 600) ? '1.125rem' : '2.125rem' }} noWrap component="div">Blue Bird</Typography>
             {
               userRole === 'admin'
                 ?
@@ -148,6 +140,7 @@ export default function PersistentDrawerLeft() {
                       margin: 0,
                       fontSize: '1rem'
                     }}
+                    style={{width: '130px'}}
                   >
                     Upload Media
                   </Button>

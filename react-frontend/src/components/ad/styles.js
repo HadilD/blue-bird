@@ -1,17 +1,17 @@
-import { makeStyles } from '@mui/styles';
 import { generalStyles } from '../../generalStyles';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(theme => ({
     adContainer: {
         display: 'flex',
-        flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         marginTop: '1rem',
         marginBottom: '1rem',
-        width: '90%',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        paddingBottom: '2%',
-        marginBottom: '5%',
+        [theme.breakpoints.down('md')]: {
+           flexDirection: 'column',
+           width: '100%'
+        }
     },
     imageContainer: {
         width: '20%',
@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '5px',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
         marginRight: '5%',
+        [theme.breakpoints.down('md')]: {
+            width: 'auto',
+         }
     },
     image: {
         maxWidth: '100%',
@@ -28,7 +31,9 @@ const useStyles = makeStyles(theme => ({
     },
     mediaInfoContainer: {
         width: '70%',
-        marginLeft: '1%',
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+         }
     },
     mediaHeading: {
         fontFamily: generalStyles.openSans,
@@ -44,7 +49,6 @@ const useStyles = makeStyles(theme => ({
         fontSize: '0.75rem',
         margin: 0,
         padding: 0,
-        marginTop: '0.5rem'
     },
     mediaType: {
         fontFamily: generalStyles.openSans,
@@ -61,7 +65,6 @@ const useStyles = makeStyles(theme => ({
         fontSize: '1rem',
         margin: 0,
         padding: 0,
-        marginTop: '0.5rem',
         fontWeight: 500,
     },
     uploadModalContainer: {
@@ -116,6 +119,14 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '3%',
         backgroundColor: generalStyles.primaryColor
     },
+    buttonCont: {
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+         },
+        width: '30%',
+        display: 'flex',
+        justifyContent: 'space-between',
+    }
 }))
 
 export default useStyles

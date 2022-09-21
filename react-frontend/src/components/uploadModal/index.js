@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import Modal from '@mui/material/Modal'
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box'
+import { uploadAttachmentService, uploadImageMediaService } from '../../services/media'
+
 import Alert from '@mui/material/Alert';
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import useStyles from './styles';
-import { uploadImageMediaService, uploadAttachmentService } from '../../services/media'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import { generalStyles } from '../../generalStyles';
+import InputLabel from '@mui/material/InputLabel';
+import Modal from '@mui/material/Modal'
+import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import { generalStyles } from '../../generalStyles';
+import useStyles from './styles';
 
 function UploadModal(props) {
   const { closeModal } = props
@@ -140,7 +141,7 @@ function UploadModal(props) {
             />
           </div>
           <div className={classes.inputContainer}>
-            <InputLabel>Media Description</InputLabel>
+            <InputLabel className={classes.preLine}>{`Media Description`}</InputLabel>
             <TextareaAutosize
               maxRows={4}
               minRows={3}

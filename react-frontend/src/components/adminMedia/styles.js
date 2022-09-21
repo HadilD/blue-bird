@@ -11,9 +11,18 @@ const useStyles = makeStyles(theme => ({
     },
     adContainer: {
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         flexDirection: 'row',
         marginTop: '1rem',
         marginBottom: '1rem',
+        [theme.breakpoints.down('md')]: {
+            flexDirection: 'column',
+        }
+    },
+    buttonCont: {
+        display: 'flex',
+        margin: '10px 0px'
     },
     imageContainer: {
         width: '20%',
@@ -21,6 +30,9 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '5px',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
         marginRight: '5%',
+        [theme.breakpoints.down('md')]: {
+            width: 'auto',
+        }
     },
     image: {
         width: '100%',
@@ -30,6 +42,9 @@ const useStyles = makeStyles(theme => ({
     },
     mediaInfoContainer: {
         width: '70%',
+        [theme.breakpoints.down('md')]: {
+            width: 'auto',
+        }
     },
     mediaHeading: {
         fontFamily: generalStyles.openSans,
@@ -62,7 +77,6 @@ const useStyles = makeStyles(theme => ({
         fontSize: '1.25rem',
         margin: 0,
         padding: 0,
-        marginTop: '0.5rem',
         fontWeight: 500,
     },
     approveButton: {
@@ -75,17 +89,23 @@ const useStyles = makeStyles(theme => ({
         display: 'block',
         fontSize: '16px',
         width: '20%',
+        [theme.breakpoints.down('md')]: {
+            width: 'auto',
+        }
     },
     disapproveButton: {
         cursor: 'pointer',
         backgroundColor: '#e74c3c',
         border: '2px solid #e74c3c',
         borderRadius: '4px',
-        marginLeft: '5%',
         color: '#fff',
         display: 'block',
         fontSize: '16px',
         width: '20%',
+        [theme.breakpoints.down('md')]: {
+            width: 'auto',
+            marginLeft: '0%',
+        }
     },
     labelsContainer:{
         margin: "20px 0px"

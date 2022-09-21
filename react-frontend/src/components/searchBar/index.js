@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import useStyles from './styles';
-import { Select } from '@mui/material';
+
+import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-
+import { Select } from '@mui/material';
+import useStyles from './styles';
 
 function SearchBar(props) {
     const { fetchMedia } = {...props}
@@ -51,33 +51,35 @@ function SearchBar(props) {
                     }}
                 />
             </div>
-            
-            <FormControl>
-                <InputLabel id="media-categories">Categories</InputLabel>
-                <Select
-                    sx={{width: '120px', height: '40px', fontSize: 16}}
-                    labelId="media-categories-label"
-                    id="media-categories-select"
-                    value={searchCategory}
-                    label="Categories"
-                    onChange={handleSearchCategoryChange}
-                >
-                    <MenuItem value={'all'}>All</MenuItem>
-                    <MenuItem value={'image'}>Image</MenuItem>
-                    <MenuItem value={'video'}>Video</MenuItem>
-                    <MenuItem value={'audio'}>Audio</MenuItem>
-                </Select>
-            </FormControl>
-            <div className={classes.searchButtonContainer}>
-                <Button 
-                    variant="contained" 
-                    disableElevation 
-                    onClick={handleOnClick}
-                    sx={{backgroundColor: '#1d3461', textTransform: 'none'}}
-                >
-                    Search Media
-                </Button>
+            <div className={classes.categoryButtonCont}>
+                <FormControl className={classes.categorySelector}>
+                    <InputLabel id="media-categories">Categories</InputLabel>
+                    <Select
+                        sx={{width: '120px', height: '40px', fontSize: 16}}
+                        labelId="media-categories-label"
+                        id="media-categories-select"
+                        value={searchCategory}
+                        label="Categories"
+                        onChange={handleSearchCategoryChange}
+                    >
+                        <MenuItem value={'all'}>All</MenuItem>
+                        <MenuItem value={'image'}>Image</MenuItem>
+                        <MenuItem value={'video'}>Video</MenuItem>
+                        <MenuItem value={'audio'}>Audio</MenuItem>
+                    </Select>
+                </FormControl>
+                <div className={classes.searchButtonContainer}>
+                    <Button 
+                        variant="contained" 
+                        disableElevation 
+                        onClick={handleOnClick}
+                        sx={{backgroundColor: '#1d3461', textTransform: 'none'}}
+                    >
+                        Search Media
+                    </Button>
+                </div>
             </div>
+           
 
         </div>
     )
