@@ -1,7 +1,7 @@
-import { Request } from '../../constants/api'
-import { openAxios } from '../instance'
 import { Constants } from '../../constants/api'
+import { Request } from '../../constants/api'
 import Store from '../../redux/store/store'
+import { openAxios } from '../instance'
 import { setAllUsers } from '../../redux/slice/user'
 
 export const getUsers = async () => {
@@ -12,7 +12,6 @@ export const getUsers = async () => {
         authorization: "Bearer " + localStorage.getItem(Constants.STORAGE_ITEM_ACCESS_TOKEN)
       }
     })
-    console.log({data:res.data})
     Store.dispatch(setAllUsers(res.data))
     return res.data
   } catch (err) {
