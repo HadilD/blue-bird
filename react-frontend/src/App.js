@@ -108,7 +108,7 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  console.log({width: window.innerWidth})
+  
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
