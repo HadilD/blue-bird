@@ -50,6 +50,7 @@ const useStyles = makeStyles(theme => ({
         position: "absolute",
         bottom: 25,
         display: "flex",
+        flexDirection: 'column',
         justifyContent: "space-between",
         width: "80%",
     },
