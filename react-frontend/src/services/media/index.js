@@ -1,8 +1,8 @@
-import Store from '../../redux/store/store'
 import { setAllMediaItems, setMyMedias } from '../../redux/slice/media'
-import { Request } from '../../constants/api'
-import { protectedAxios } from '../instance'
 
+import { Request } from '../../constants/api'
+import Store from '../../redux/store/store'
+import { protectedAxios } from '../instance'
 
 export const fetchMedia = async (searchTerm = null, category = null) => {
     let params = {}
@@ -16,7 +16,6 @@ export const fetchMedia = async (searchTerm = null, category = null) => {
 const getMedia = async (params) => {
   try {
     const res = await protectedAxios.get(Request.GET_MEDIA, { params });
-    console.log(res.data)
     Store.dispatch(setAllMediaItems(res.data))
     return res.data
   } catch (err) {

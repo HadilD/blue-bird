@@ -377,37 +377,6 @@ function Ad(props) {
                   <Alert severity="success">Feedback submitted successfully !</Alert>
                 } 
               </>
-
-              // <div style={{display: 'flex', flexDirection: 'column'}}>
-              //   <Rating
-              //     name="simple-controlled"
-              //     value={ratings}
-              //     onChange={(event, newValue) => {
-              //       setFeedBackErr(false)
-              //       setRatings(newValue);
-              //   }}/>
-              //   {
-              //     feedBackErr && <p style={{color: 'red'}}>*Ratings required</p>
-              //   }
-              //   <TextField 
-              //     id="outlined-basic" 
-              //     label="Feedback" 
-              //     placeholder="Enter your feedback"
-              //     variant="outlined" 
-              //     sx={{ width: '60%', marginTop: '2%' }} 
-              //     value={feedback}
-              //     onChange={(e) => setFeedback(e.target.value)} 
-              //   />
-              //   <Button 
-              //     variant="contained" 
-              //     disableElevation 
-              //     onClick={handleFeedbackSubmit}
-              //     sx={{backgroundColor: '#1d3461', textTransform: 'none', marginTop: '2%', width: '20%'}}
-              //   >
-              //     Submit Feedback
-              //   </Button>
-              // </div>
-            
           }
         </div>
       </div>
