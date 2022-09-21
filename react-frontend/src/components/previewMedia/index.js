@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, MobileStepper, Paper, Typography, DialogContentText  } from '@mui/material'
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, MobileStepper, Paper, Typography, DialogContentText, Alert  } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import SwipeableViews from 'react-swipeable-views';
@@ -36,6 +36,7 @@ const MediaPreviewModal = (props) => {
     const [avgRating, setAvgRating] = useState(0)
     const [numRating, setNumRating] = useState(0)
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
     const maxSteps = mediaPreviewModalData.attachments.length;
     const theme = useTheme();
 
@@ -104,14 +105,13 @@ const MediaPreviewModal = (props) => {
 
     const handleDialogCloseAndSubmit = async () => {
         setDialogOpen(false);
-        try {
-            const orderRes = await createOrder(mediaPreviewModalData.id)
-            downloadMedia(mediaPreviewModalData)
-            if (orderRes.hasOwnProperty('error')) {
-                throw 'Media is already bought by you cannot buy again.'
-            }
-        } catch (err) {
-            alert(err)
+        const orderRes = await createOrder(mediaPreviewModalData.id)
+        downloadMedia(mediaPreviewModalData)
+        if (orderRes.hasOwnProperty('error')) {
+            setShowAlert(true)
+            setTimeout(() => {
+                setShowAlert(false)
+            }, 2000)
         }
     }
 
@@ -230,6 +230,9 @@ const MediaPreviewModal = (props) => {
                     </div>
                 </div>
             </DialogContent>
+            {
+                showAlert && <Alert severity="error">Media is already bought by you cannot buy again.</Alert>
+            }
             <DialogActions>
                 {disableContactSellerButton 
                     ? 

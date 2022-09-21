@@ -195,6 +195,7 @@ function Ad(props) {
   const [ratings, setRatings] = useState(0)
   const [feedback, setFeedback] = useState('')
   const [feedBackErr, setFeedBackErr] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   const loggedInUser = useSelector(state => state.user)
 
 
@@ -217,7 +218,10 @@ function Ad(props) {
       createRatings({stars: ratings, feedback:feedback, id: mediaId})
       setRatings(0)
       setFeedback('')
-      alert('Feedback submitted successfully')
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false)
+      }, 2000)
     } else {
       setFeedBackErr(true)
     }
@@ -365,9 +369,13 @@ function Ad(props) {
                           Submit Feedback
                         </Button>
                       </div>
-                            </Typography>
-                          </AccordionDetails>
-                        </Accordion>
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+                {
+                  showAlert &&
+                  <Alert severity="success">Feedback submitted successfully !</Alert>
+                } 
               </>
           }
         </div>
