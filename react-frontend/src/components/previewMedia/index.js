@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, MobileStepper, Paper, Typography } from '@mui/material'
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, MobileStepper, Paper, Typography, DialogContentText  } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import SwipeableViews from 'react-swipeable-views';
@@ -10,13 +10,19 @@ import moment from "moment";
 import PlacehoderImage from "./../../assests/placeholder.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { createRoom, getAllRoomsForUser } from '../../services/chat';
+import { createOrder } from '../../services/order'
 import { setCurrentRoomId } from '../../redux/slice/chat';
 import { useNavigate } from 'react-router-dom';
 import { downloadMedia } from '../../services/download';
 import Rating from '@mui/material/Rating';
 import StarsIcon from '@mui/icons-material/Stars';
+import Slide from '@mui/material/Slide';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
 const MediaPreviewModal = (props) => {
 
@@ -29,6 +35,7 @@ const MediaPreviewModal = (props) => {
     const [disableContactSellerButton, setDisableContactSellerButton] = useState(true);
     const [avgRating, setAvgRating] = useState(0)
     const [numRating, setNumRating] = useState(0)
+    const [dialogOpen, setDialogOpen] = useState(false)
     const maxSteps = mediaPreviewModalData.attachments.length;
     const theme = useTheme();
 
@@ -85,6 +92,27 @@ const MediaPreviewModal = (props) => {
         }
 
         navigate('/chat')
+    }
+
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+      };
+    
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+    };
+
+    const handleDialogCloseAndSubmit = async () => {
+        setDialogOpen(false);
+        try {
+            const orderRes = await createOrder(mediaPreviewModalData.id)
+            downloadMedia(mediaPreviewModalData)
+            if (orderRes.hasOwnProperty('error')) {
+                throw 'Media is already bought by you cannot buy again.'
+            }
+        } catch (err) {
+            alert(err)
+        }
     }
 
     const classes = useStyles();
@@ -203,7 +231,33 @@ const MediaPreviewModal = (props) => {
                 </div>
             </DialogContent>
             <DialogActions>
-                {disableContactSellerButton && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => contactSeller()} variant="contained" >Contact Seller</Button>}
+                {disableContactSellerButton 
+                    ? 
+                        <>
+                            <Button style={{ backgroundColor: "#1d3461" }} onClick={() => handleDialogOpen()} variant="contained" >Create Order</Button>
+                            <Dialog
+                                open={dialogOpen}
+                                TransitionComponent={Transition}
+                                keepMounted
+                                onClose={handleDialogClose}
+                                aria-describedby="alert-dialog-slide-description"
+                            >
+                                <DialogTitle>{"Create Order"}</DialogTitle>
+                                <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    Are you sure want to create an order and buy media?
+                                </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                <Button onClick={handleDialogClose}>Disagree</Button>
+                                <Button onClick={handleDialogCloseAndSubmit}>Agree</Button>
+                                </DialogActions>
+                            </Dialog>
+                            <Button style={{ backgroundColor: "#1d3461" }} onClick={() => contactSeller()} variant="contained" >Contact Seller</Button>
+                        </>
+                    :
+                        null
+                    }
                 {((mediaPreviewModalData && mediaPreviewModalData.attachments && mediaPreviewModalData.attachments.length !== 0) && (mediaPreviewModalData.cost === "0.00")) && <Button style={{ backgroundColor: "#1d3461" }} onClick={() => { downloadMedia(mediaPreviewModalData) }} variant="contained">Download</Button>}
                 <Button onClick={() => handleClose(!open)} autoFocus>
                     Close

@@ -483,6 +483,7 @@ const Request = {
   GET_ALL_ROOMS_FOR_USER: 'api/chat/rooms',
   GET_CURRENT_CHATS: 'api/chat/',
   CREATE_ROOM: 'api/chat/rooms',
+  CREATE_ORDER: 'api/medias',
   GET_MINE_MEDIAS: 'api/medias/mine',
   GET_MY_ORDERS: 'api/orders/mine',
   CREATE_RATINGS: 'api/media',

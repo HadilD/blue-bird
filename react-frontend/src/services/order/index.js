@@ -13,3 +13,14 @@ export const getMyOrders = async () => {
       throw err
     }
   }
+
+export const createOrder = async (mediaId) => {
+  try {
+    const res = await protectedAxios.post(Request.CREATE_ORDER + '/' + mediaId + '/create-order', {})
+    console.log('OrderResponse:', res.data)
+    return res.data
+  } catch (err) {
+    console.log(JSON.stringify(err))
+    throw err
+  }
+}
