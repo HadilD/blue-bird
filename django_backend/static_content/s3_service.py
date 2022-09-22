@@ -1,22 +1,32 @@
 import logging
 import uuid
-import boto3
-from django.conf import settings
-from botocore.exceptions import ClientError
-from PIL import Image
 import io
 
+from PIL import Image
+
+import boto3
+from botocore.exceptions import ClientError
+
+from django.conf import settings
 
 UPLOAD_DIRECTORY = "uploaded_data"
 
-
 s3_client = boto3.client(
-        "s3", 
-        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
-        region_name=settings.AWS_S3_REGION_NAME,
-        aws_access_key_id=settings.AWS_ACCESS_KEY, 
-        aws_secret_access_key=settings.AWS_SECRET_KEY
-        )
+    "s3",
+    endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+    region_name=settings.AWS_S3_REGION_NAME,
+    aws_access_key_id=settings.AWS_ACCESS_KEY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY
+)
+
+s3_download_client = boto3.client(
+    "s3",
+    endpoint_url=settings.AWS_S3_DOWNLOAD_ENDPOINT_URL,
+    region_name=settings.AWS_S3_REGION_NAME,
+    aws_access_key_id=settings.AWS_ACCESS_KEY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY
+)
+
 
 def upload_file(file_obj):
     """Upload a file to S3 bucket.
@@ -36,10 +46,10 @@ def upload_file(file_obj):
 
 
 def delete_remote_file(uri):
-    s3_client = boto3.client("s3", aws_access_key_id=settings.AWS_ACCESS_KEY,
-                             aws_secret_access_key=settings.AWS_SECRET_KEY)
+    s3_delete_client = boto3.client("s3", aws_access_key_id=settings.AWS_ACCESS_KEY,
+                                    aws_secret_access_key=settings.AWS_SECRET_KEY)
     try:
-        s3_client.delete_object(Bucket=settings.AWS_BUCKET_NAME, Key=f"{UPLOAD_DIRECTORY}/{uri}")
+        s3_delete_client.delete_object(Bucket=settings.AWS_BUCKET_NAME, Key=f"{UPLOAD_DIRECTORY}/{uri}")
         logging.info("File deleted with name: {}".format(uri))
 
     except ClientError as e:
@@ -53,14 +63,6 @@ def read_image(uri):
     img_data = image.get().get('Body').read()
     return Image.open(io.BytesIO(img_data))
 
-
-s3_download_client = boto3.client(
-        "s3", 
-        endpoint_url=settings.AWS_S3_DOWNLOAD_ENDPOINT_URL,
-        region_name=settings.AWS_S3_REGION_NAME,
-        aws_access_key_id=settings.AWS_ACCESS_KEY, 
-        aws_secret_access_key=settings.AWS_SECRET_KEY
-        )
 
 def get_public_link(s3_file_name):
     """Getting a publicly accessible link to an asset.
