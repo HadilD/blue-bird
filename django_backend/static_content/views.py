@@ -1,45 +1,69 @@
-from cProfile import label
-from itertools import permutations
 import json
 from copy import deepcopy
 
 from rest_framework import status
-from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
-from rest_framework import filters
 
 from django.core.exceptions import ObjectDoesNotExist
+from django_filters.rest_framework import DjangoFilterBackend
 from django.db import IntegrityError
 
 from static_content.s3_service import upload_file
-from static_content.serializers.serializers import MediaSerializer, AttachmentSerializer, \
-    AttachmentUploadSerializer, OrderSerializer, RatingsSerializer
+from static_content.serializers.serializers import (MediaSerializer, AttachmentSerializer,
+                                                    AttachmentUploadSerializer, OrderSerializer, RatingsSerializer)
 from static_content.rekognition_service import get_labels, get_tags
 
-from static_content.models import Media, Attachment, Order, Ratings
+from static_content.models import (Media, Attachment, Order, Ratings)
 from static_content.filters import MediaFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class MediaList(generics.ListCreateAPIView):
+    """
+    A class for creating and retrieving all media objects.
+
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+        filter_backends : list of FilterBackends classes
+            A list of filter backend classes that should be used for filtering the queryset.
+        filterset_class : FilterSet
+            A custom filter class that should be used for filtering media objects.
+
+    Methods:
+    -------
+        get_serializer_context():
+            Overrides the default behavior of the method to return extra context.
+        create():
+            Overrides the default behavior of the method to create a media object.
+        list():
+            Overrides the default behavior of the method to return media objects.
+    """
     queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
     serializer_class = MediaSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = MediaFilter
 
     def get_serializer_context(self):
+        """
+        Overrides the original method to include the request object in the serializer context.
+        """
         context = super(MediaList, self).get_serializer_context()
         context.update({"request": self.request})
         return context
 
     def create(self, request):
+        """
+        Overrides the original method, mainly to associate media objects with attachments upon creation.
+        """
         serializer = MediaSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         media = serializer.save(owner=self.request.user, )
         attachments = request.data.get("attachments")
-        tags = []
         if len(attachments) == 0:
             return Response({"error": "attachment field must not be empty"})
         for id in attachments:
@@ -56,12 +80,12 @@ class MediaList(generics.ListCreateAPIView):
                 media.delete()
                 return Response({"error": "attachment with id {id} does not exist".format(id=id)},
                                 status=status.HTTP_400_BAD_REQUEST)
-            # attachment_tags = get_tags(get_labels(read_image(attachment.uri)))
-            # tags.extend(attachment_tags)
-            # media.tags.extend(tags)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
+        """
+        Overrides the original methods, mainly to include filtering and search behavior.
+        """
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -80,15 +104,42 @@ class MediaList(generics.ListCreateAPIView):
 
 
 class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    """
+    A class for retrieving, updating, or deleting a single media object.
+
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+
+    Methods:
+    -------
+        get_serializer_context():
+            Overrides the default behavior of the method to return extra context.
+        delete():
+            Overrides the default behavior of the method to delete a media object.
+    """
+
     queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
 
     def get_serializer_context(self):
+        """
+        Overrides the original method to include the request object in the serializer context.
+        """
         context = super(MediaDetail, self).get_serializer_context()
         context.update({"request": self.request})
         return context
 
     def delete(self, request, pk):
+        """
+        Overrides the original method to change it's behavior because objects are not actually deleted from the
+        database they are merely disabled (to deal with buyers of the media having access to it even after the
+        owner deletes it).
+        """
         media = Media.objects.get(pk=pk)
         media.is_enabled = False
         media.save()
@@ -96,10 +147,29 @@ class MediaDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AttachmentCreate(generics.CreateAPIView):
+    """
+    A class for creating attachment objects.
+
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+
+    Methods:
+    -------
+        create():
+            Overrides the default behavior of the method to create an attachment object.
+    """
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
     def create(self, request):
+        """
+        Overrides the default behavior of the create() method to insure the attachment's format is supported,
+        to store it on S3, and to generate labels for it using AWS Rekognition.
+        """
         serializer = AttachmentUploadSerializer(data=request.data)
         if serializer.is_valid():
             file = request.data.get("file")
@@ -135,10 +205,29 @@ class AttachmentCreate(generics.CreateAPIView):
 
 
 class AttachmentDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    """
+    A class for retrieving, deleting, and uploading a single attachment.
+
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+
+    Methods:
+    -------
+        get_serializer_context():
+            Overrides the default behavior of the method to return extra context.
+    """
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
     def get_serializer_context(self):
+        """
+            Overrides the original method to include the request object in the serializer context.
+        """
         context = super(AttachmentDetail, self).get_serializer_context()
         context.update({"request": self.request})
         return context
@@ -175,22 +264,53 @@ class NotApprovedMediaListView(generics.ListCreateAPIView):
 class MyMediasList(generics.ListAPIView):
     """
     View for listing medias owned by the currently authenticated user.
+
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+    Methods:
+    -------
+        get_queryset():
+            Overrides the default behavior of the method to return extra context.
     """
     queryset = Media.objects.filter(is_enabled=True)
     serializer_class = MediaSerializer
 
     def get_queryset(self):
+        """
+        Returns all media objects belonging the currently authenticated user.
+        The reason this filtering cannot be done by merely setting the queryset variable above is because
+        the above query is created only once. On the other hand, this method is called every single time a user
+        sends a request to this endpoint.
+        """
         return Media.objects.filter(owner=self.request.user)
 
 
 class OrderCreate(generics.CreateAPIView):
     """
     View for creating orders.
+
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+    Methods:
+    -------
+        create():
+            Overrides the default behavior of the method to create an order.
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     def create(self, request, pk):
+        """
+        Needed to override default behavior of the method to update the count of orders on a media object.
+        """
         try:
             media = Media.objects.get(pk=pk)
             buyer = self.request.user
@@ -210,61 +330,85 @@ class OrderCreate(generics.CreateAPIView):
 class OrderList(generics.ListAPIView):
     """
     View for listing existing orders.
-    """
 
-    def get_serializer_context(self):
-        context = super(OrderList, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+        permission_classes : list of Permission classes for authorizing access only to admins.
+
+    Methods:
+    -------
+        get_serializer_context():
+            Overrides the default behavior of the method to return extra context.
+    """
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
 
+    def get_serializer_context(self):
+        """
+        Overrides the default behavior of the method to return extra context.
+        """
+        context = super(OrderList, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
 
 class MyOrdersList(generics.ListAPIView):
     """
     View for listing orders made by the currently authenticated user.
-    """
 
-    def get_serializer_context(self):
-        context = super(MyOrdersList, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
+    Attributes:
+    ----------
+        queryset : QuerySet
+            The queryset that should be used for returning objects from this view.
+        serializer_class : Serializer
+            The serializer class that should be used for validating and deserializing input, and for serializing output.
+        permission_classes : list of Permission classes for authorizing access only to admins.
+
+    Methods:
+    -------
+        get_serializer_context():
+            Overrides the default behavior of the method to return extra context.
+        get_queryset():
+            Overrides the default behavior of the method to return extra context.
+    """
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     def get_queryset(self):
+        """
+        Returns all orders owned by the currently authenticated user.
+        """
         return Order.objects.filter(buyer=self.request.user)
 
-
-# class MediaSearch(generics.ListAPIView):
-#     """
-#     View for searching media
-#     """
-#     queryset = Media.objects.filter(is_enabled=True, is_approved=True, is_published=True)
-#     serializer_class = MediaSerializer
-#
-#     def get_queryset(self):
-#         search_key = self.request.query_params["search"]
-#         search_words = [word.strip() for word in search_key.split(" ")]
-#         qs = Media.objects.none()
-#         qs2 = Media.objects.filter(is_enabled=True)
-#         for word in search_words:
-#             qs = qs | qs2.filter(name__icontains=word) | \
-#                  qs2.filter(description__icontains=word) | \
-#                  qs2.filter(tags__name__icontains=word) | \
-#                  qs2.filter(owner__first_name__icontains=word) | \
-#                  qs2.filter(owner__last_name__icontains=word)
-#
-#         return qs
+    def get_serializer_context(self):
+        """
+        Overrides the original method to include the request object in the serializer context.
+        """
+        context = super(MyOrdersList, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
 
 
 def search_media(queryset, search_key):
+    """
+    A function that filters a queryset based on a search key.
+
+    Parameters
+    ----------
+        queryset : QuerySet
+        The queryset to be filtered
+        search_key : str
+        The search key
+    """
     search_words = [word.strip() for word in search_key.split(" ")]
     qs = Media.objects.none()
-    # qs2 = Media.objects.filter(is_enabled=True)
     qs2 = queryset
     for word in search_words:
         qs = qs | qs2.filter(name__icontains=word) | \
