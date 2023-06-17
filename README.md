@@ -1,2 +1,2 @@
 # Blue Bird
-It's a course project
+A platform for selling and sharing digital media. 
